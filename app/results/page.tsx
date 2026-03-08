@@ -36,9 +36,9 @@ export default async function ResultsPage({ searchParams }: PageProps) {
   if (!employer) {
     return (
       <div className="flex flex-col min-h-screen">
-        <header className="border-b border-gray-200 bg-white">
-          <div className="max-w-2xl mx-auto px-4 py-4">
-            <Link href="/" className="text-xl font-bold text-gray-900">LMIA Check</Link>
+        <header className="bg-white border-b-[3px] border-red-600">
+          <div className="max-w-2xl mx-auto px-4 h-14 flex items-center">
+            <Link href="/" className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</Link>
           </div>
         </header>
         <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8">
@@ -63,10 +63,10 @@ export default async function ResultsPage({ searchParams }: PageProps) {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-gray-900">LMIA Check</Link>
-          <Link href="/about" className="text-sm text-blue-700 hover:text-blue-900 underline">About</Link>
+      <header className="bg-white border-b-[3px] border-red-600 sticky top-0 z-10">
+        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</Link>
+          <Link href="/about" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">About</Link>
         </div>
       </header>
 
@@ -75,7 +75,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
         <div className="mb-4 flex items-center gap-2 flex-wrap">
           <Link
             href="/"
-            className="text-sm text-blue-700 hover:text-blue-900 underline flex items-center gap-1"
+            className="text-sm text-red-600 hover:text-red-800 font-semibold flex items-center gap-1"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <polyline points="15 18 9 12 15 6"/>

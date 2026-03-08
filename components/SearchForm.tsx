@@ -71,7 +71,7 @@ export default function SearchForm({
           value={employer}
           onChange={(e) => setEmployer(e.target.value)}
           placeholder="e.g. Sunrise Senior Care"
-          className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white"
+          className="w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50"
           autoComplete="organization"
           inputMode="text"
         />
@@ -89,7 +89,7 @@ export default function SearchForm({
             value={city}
             onChange={(e) => setCity(e.target.value)}
             placeholder="e.g. Toronto"
-            className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white"
+            className="w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50"
             inputMode="text"
           />
         </div>
@@ -103,7 +103,7 @@ export default function SearchForm({
             name="province"
             value={province}
             onChange={(e) => setProvince(e.target.value)}
-            className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white appearance-none"
+            className="w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 appearance-none"
           >
             <option value="">Any province</option>
             {PROVINCES.map((p) => (
@@ -118,8 +118,8 @@ export default function SearchForm({
       <button
         type="submit"
         disabled={!canSubmit}
-        className="w-full sm:w-auto px-8 py-3 bg-blue-700 text-white text-base font-semibold rounded-lg
-          hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2
+        className="w-full px-8 py-3 bg-red-600 text-white text-base font-bold rounded-lg
+          hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
           disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[44px]
           flex items-center justify-center gap-2"
       >
