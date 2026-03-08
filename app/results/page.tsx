@@ -7,6 +7,7 @@ import MatchedData from '@/components/MatchedData'
 import NextSteps from '@/components/NextSteps'
 import EmailCapture from '@/components/EmailCapture'
 import ShareComponent from '@/components/ShareComponent'
+import FeedbackForm from '@/components/FeedbackForm'
 import Footer from '@/components/Footer'
 import SearchForm from '@/components/SearchForm'
 import type { Metadata } from 'next'
@@ -115,6 +116,9 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
         {/* Share */}
         <ShareComponent riskResult={result.risk} />
+
+        {/* Feedback */}
+        <FeedbackForm employerQuery={employer} />
 
         {/* Search again — bottom CTA */}
         <div className="mt-8 pt-6 border-t border-gray-200">

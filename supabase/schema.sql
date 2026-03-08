@@ -173,6 +173,27 @@ CREATE POLICY "Allow select on search_subscriptions"
   TO anon
   USING (true);
 
+-- ============================================================
+-- Feedback table — user-submitted data quality reports
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS feedback (
+  id              SERIAL PRIMARY KEY,
+  feedback_type   VARCHAR(30) NOT NULL,  -- 'missing_employer' | 'suggestion'
+  message         TEXT NOT NULL,
+  employer_query  VARCHAR(255),          -- pre-filled from the search that triggered feedback
+  email           VARCHAR(255),          -- optional, for follow-up
+  created_at      TIMESTAMP DEFAULT NOW()
+);
+
+-- RLS for feedback table
+ALTER TABLE feedback ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow insert on feedback"
+  ON feedback FOR INSERT
+  TO anon
+  WITH CHECK (true);
+
 -- Note: If you set SUPABASE_SERVICE_KEY in your .env.local, the above
 -- RLS policies are bypassed and you don't need to worry about them.
 -- Service role key is recommended for write operations in production.

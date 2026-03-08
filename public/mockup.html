@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LMIA Check — Refined Mockup</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #e8edf2; }
+
+  .page-label {
+    text-align: center; padding: 28px 16px 20px;
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #64748b;
+  }
+  .divider { border: none; border-top: 2px dashed #cbd5e1; margin: 0 0 8px; }
+  .pb { padding-bottom: 48px; }
+
+  /* ── NAV ── */
+  .nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 56px; background: #fff;
+    border-bottom: 3px solid #dc2626;
+  }
+  .nav-brand { display: flex; align-items: center; gap: 8px; color: #111; font-size: 17px; font-weight: 800; letter-spacing: -0.5px; }
+  .maple-sm { width: 24px; height: 24px; flex-shrink: 0; }
+  .maple-lg { width: 72px; height: 72px; margin: 0 auto 14px; display: block; }
+  .nav a { color: #6b7280; font-size: 13px; text-decoration: none; font-weight: 500; }
+
+  /* ── HOMEPAGE ── */
+  .hero {
+    background: linear-gradient(170deg, #fff 55%, #fff5f5 100%);
+    padding: 40px 24px 28px; text-align: center;
+  }
+  .hero-flag { font-size: 30px; margin-bottom: 14px; }
+  .hero-h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.8px; line-height: 1.2; color: #111; margin-bottom: 10px; }
+  .hero-h1 em { color: #dc2626; font-style: normal; }
+  .hero-sub { color: #6b7280; font-size: 14px; line-height: 1.65; max-width: 340px; margin: 0 auto; }
+
+  .stats-bar {
+    display: flex; margin: 20px 16px 0;
+    background: #fff; border-radius: 14px;
+    border: 1.5px solid #e5e7eb; overflow: hidden;
+  }
+  .stat { flex: 1; padding: 14px 10px; text-align: center; border-right: 1.5px solid #e5e7eb; }
+  .stat:last-child { border-right: none; }
+  .stat-num { font-size: 20px; font-weight: 800; color: #dc2626; letter-spacing: -0.5px; }
+  .stat-lbl { font-size: 11px; color: #9ca3af; margin-top: 2px; font-weight: 500; }
+
+  .search-card {
+    margin: 14px 16px 0; background: #fff; border-radius: 16px;
+    padding: 22px 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    border: 1.5px solid #f3f4f6;
+  }
+  .field { margin-bottom: 14px; }
+  .field:last-of-type { margin-bottom: 0; }
+  .field label { display: block; font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 5px; }
+  .field label .opt { font-weight: 400; font-size: 12px; color: #9ca3af; }
+  .field input, .field select {
+    width: 100%; padding: 11px 14px; border: 1.5px solid #e5e7eb;
+    border-radius: 8px; font-size: 15px; color: #111;
+    background: #f9fafb; outline: none;
+  }
+  .field input::placeholder { color: #9ca3af; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .btn { width: 100%; padding: 14px; background: #dc2626; color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 16px; }
+  .secure-note { text-align: center; margin-top: 12px; font-size: 12px; color: #9ca3af; }
+
+  /* ── RESULTS WRAPPER ── */
+  .rw { background: #f8fafc; min-height: 100vh; }
+  .rw-inner { max-width: 480px; margin: 0 auto; padding: 16px 16px 48px; }
+
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 20px; }
+  .breadcrumb a { color: #dc2626; text-decoration: none; font-weight: 600; }
+  .breadcrumb span { color: #374151; font-weight: 600; }
+  .breadcrumb .sep { color: #cbd5e1; }
+
+  /* ── VERDICT — refined left-border style ── */
+  .verdict {
+    background: #fff; border-radius: 14px;
+    padding: 20px 20px 20px 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: 1px solid #f1f5f9;
+    border-left: 5px solid;
+    margin-bottom: 14px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .verdict-green { border-left-color: #16a34a; }
+  .verdict-red   { border-left-color: #dc2626; }
+  .verdict-yellow { border-left-color: #d97706; }
+
+  .verdict-icon-wrap {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0; margin-top: 2px;
+  }
+  .verdict-icon-green  { background: #dcfce7; }
+  .verdict-icon-red    { background: #fee2e2; }
+  .verdict-icon-yellow { background: #fef3c7; }
+
+  .verdict-content {}
+  .verdict-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; padding: 3px 10px; border-radius: 20px;
+    margin-bottom: 6px;
+  }
+  .badge-green  { background: #dcfce7; color: #166534; }
+  .badge-red    { background: #fee2e2; color: #991b1b; }
+  .badge-yellow { background: #fef3c7; color: #92400e; }
+
+  .verdict-title { font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 5px; letter-spacing: -0.3px; }
+  .verdict-body  { font-size: 14px; color: #6b7280; line-height: 1.55; }
+
+  /* ── RECORD CARD ── */
+  .card {
+    background: #fff; border-radius: 14px; padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border: 1px solid #f1f5f9; margin-bottom: 14px;
+  }
+  .card-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #94a3b8; margin-bottom: 14px; }
+  .employer-name { font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .sbox { border-radius: 10px; padding: 12px 14px; border: 1px solid; }
+  .sbox-green { background: #f0fdf4; border-color: #bbf7d0; }
+  .sbox-red   { background: #fff1f2; border-color: #fecdd3; }
+  .sbox-lbl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .sbox-lbl-green { color: #16a34a; }
+  .sbox-lbl-red   { color: #dc2626; }
+  .sbox-val { font-size: 26px; font-weight: 800; line-height: 1; }
+  .sbox-val-green { color: #14532d; }
+  .sbox-val-red   { color: #7f1d1d; font-size: 16px; padding-top: 4px; }
+  .sbox-sub { font-size: 11px; margin-top: 3px; color: #86efac; }
+
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+  .dk { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #94a3b8; margin-bottom: 3px; }
+  .dv { font-size: 14px; color: #0f172a; font-weight: 500; }
+
+  /* ── ALERT BOX ── */
+  .alert {
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 14px;
+    border: 1px solid;
+  }
+  .alert-red   { background: #fff1f2; border-color: #fecdd3; }
+  .alert-title { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+  .alert-title-red { color: #dc2626; }
+  .alert-body  { font-size: 14px; line-height: 1.55; }
+  .alert-body-red { color: #7f1d1d; }
+  .alert-body strong { color: #dc2626; }
+
+  /* ── ACTIONS ── */
+  .actions-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .action-btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px; border: 1.5px solid #e5e7eb; border-radius: 9px;
+    font-size: 13px; font-weight: 600; color: #374151; background: #fff;
+    cursor: pointer; text-decoration: none;
+  }
+
+  /* notify row */
+  .notify-row { display: flex; gap: 8px; margin-top: 12px; }
+  .notify-input { flex: 1; padding: 10px 12px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; color: #111; background: #f9fafb; outline: none; }
+  .notify-input::placeholder { color: #9ca3af; }
+  .notify-btn { padding: 10px 16px; background: #111; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+
+  /* ── STEPS ── */
+  .step-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+  .step-item:last-child { margin-bottom: 0; }
+  .step-dot { width: 20px; height: 20px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #16a34a; flex-shrink: 0; margin-top: 1px; }
+  .step-text { font-size: 14px; color: #374151; line-height: 1.45; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+  1. HOMEPAGE
+══════════════════════════════ -->
+<p class="page-label">Homepage</p>
+
+<div class="pb" style="background:#fff">
+  <nav class="nav">
+    <div class="nav-brand">🍁 LMIA Check</div>
+    <a href="#">About</a>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-flag">🇨🇦</div>
+    <h1 class="hero-h1">Don't pay until you<br><em>verify</em> the employer.</h1>
+    <p class="hero-sub">Check any Canadian employer against the official government LMIA database. Free. Takes 10 seconds.</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num">11K+</div><div class="stat-lbl">Employers</div></div>
+    <div class="stat"><div class="stat-num">1,262</div><div class="stat-lbl">Violators tracked</div></div>
+    <div class="stat"><div class="stat-num">Free</div><div class="stat-lbl">Always</div></div>
+  </div>
+
+  <div class="search-card">
+    <div class="field">
+      <label>Employer name <span style="color:#ef4444">*</span></label>
+      <input type="text" placeholder="e.g. Sunrise Senior Care">
+    </div>
+    <div class="field-row">
+      <div class="field" style="margin-bottom:0">
+        <label>City <span class="opt">optional</span></label>
+        <input type="text" placeholder="e.g. Toronto">
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>Province <span class="opt">optional</span></label>
+        <select><option>Any province</option></select>
+      </div>
+    </div>
+    <button class="btn">Check This Employer</button>
+    <p class="secure-note">🔒 No data stored · No login required</p>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+  2. RESULTS — VERIFIED
+══════════════════════════════ -->
+<p class="page-label">Results — Verified</p>
+
+<div class="rw pb">
+  <nav class="nav">
+    <div class="nav-brand">🍁 LMIA Check</div>
+    <a href="#">About</a>
+  </nav>
+
+  <div class="rw-inner">
+    <div class="breadcrumb">
+      <a href="#">← Search again</a>
+      <span class="sep">|</span>
+      <span>Cougar Helicopters</span>
+    </div>
+
+    <!-- Verdict — refined left-border style -->
+    <div class="verdict verdict-green">
+      <div class="verdict-icon-wrap verdict-icon-green">✓</div>
+      <div class="verdict-content">
+        <div class="verdict-badge badge-green">● Verified</div>
+        <div class="verdict-title">Legitimate employer</div>
+        <div class="verdict-body">Found in official Canadian government LMIA records. No violations detected.</div>
+      </div>
+    </div>
+
+    <!-- Record -->
+    <div class="card">
+      <div class="card-title">Government Record</div>
+      <div class="employer-name">Cougar Helicopters Inc.</div>
+      <div class="stats-row">
+        <div class="sbox sbox-green">
+          <div class="sbox-lbl sbox-lbl-green">Approved Positions</div>
+          <div class="sbox-val sbox-val-green">1</div>
+          <div class="sbox-sub">Workers approved</div>
+        </div>
+        <div class="sbox sbox-green">
+          <div class="sbox-lbl sbox-lbl-green">Approved LMIAs</div>
+          <div class="sbox-val sbox-val-green">1</div>
+          <div class="sbox-sub">Applications</div>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div><div class="dk">Address</div><div class="dv">St. John's, NL A1A 0R7</div></div>
+        <div><div class="dk">Province</div><div class="dv">Newfoundland and Labrador</div></div>
+        <div><div class="dk">Program Stream</div><div class="dv">High Wage</div></div>
+        <div><div class="dk">Data Quarter</div><div class="dv">Q3 2025 (Jul–Sep 2025)</div></div>
+      </div>
+    </div>
+
+    <!-- Notify + Share -->
+    <div class="card">
+      <div class="card-title">Get notified if status changes</div>
+      <div style="font-size:13px;color:#6b7280;margin-bottom:2px;">We'll email you when the government updates this employer's record.</div>
+      <div class="notify-row">
+        <input class="notify-input" type="email" placeholder="your@email.com">
+        <button class="notify-btn">Notify me</button>
+      </div>
+      <div class="actions-row">
+        <a class="action-btn" href="#">🔗 Copy link</a>
+        <a class="action-btn" href="#">💬 WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- Next steps -->
+    <div class="card">
+      <div class="card-title">What to do next</div>
+      <div class="step-item"><div class="step-dot">✓</div><div class="step-text">Request a copy of the LMIA approval letter from your employer</div></div>
+      <div class="step-item"><div class="step-dot">✓</div><div class="step-text">Use a licensed RCIC to process your application</div></div>
+      <div class="step-item"><div class="step-dot">✓</div><div class="step-text">Never pay fees directly to a recruiter</div></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ══════════════════════════════
+  3. RESULTS — BANNED
+══════════════════════════════ -->
+<p class="page-label">Results — Banned</p>
+
+<div class="rw pb">
+  <nav class="nav">
+    <div class="nav-brand">🍁 LMIA Check</div>
+    <a href="#">About</a>
+  </nav>
+
+  <div class="rw-inner">
+    <div class="breadcrumb">
+      <a href="#">← Search again</a>
+      <span class="sep">|</span>
+      <span>Agventure Fields</span>
+    </div>
+
+    <!-- Verdict -->
+    <div class="verdict verdict-red">
+      <div class="verdict-icon-wrap verdict-icon-red">✕</div>
+      <div class="verdict-content">
+        <div class="verdict-badge badge-red">● Banned</div>
+        <div class="verdict-title">Non-compliant employer</div>
+        <div class="verdict-body">This employer has been sanctioned by ESDC and is prohibited from hiring foreign workers.</div>
+      </div>
+    </div>
+
+    <!-- Record -->
+    <div class="card">
+      <div class="card-title">Violation Record</div>
+      <div class="employer-name">Agventure Fields Inc.</div>
+      <div class="stats-row">
+        <div class="sbox sbox-red">
+          <div class="sbox-lbl sbox-lbl-red">Decision Date</div>
+          <div class="sbox-val sbox-val-red">March 15, 2024</div>
+        </div>
+        <div class="sbox sbox-red">
+          <div class="sbox-lbl sbox-lbl-red">Penalty</div>
+          <div class="sbox-val sbox-val-red">$25,500 + 2-year ban</div>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div style="grid-column:span 2">
+          <div class="dk">Violation Reasons</div>
+          <div class="dv">Abuse of position of authority · Failure to provide adequate living conditions</div>
+        </div>
+        <div><div class="dk">Address</div><div class="dv">Leamington, ON</div></div>
+        <div><div class="dk">Status</div><div class="dv" style="color:#dc2626;font-weight:700">Ineligible</div></div>
+      </div>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert alert-red">
+      <div class="alert-title alert-title-red">⚠️ What to do</div>
+      <div class="alert-body alert-body-red">Do not pay any money. Report suspected fraud to ESDC at <strong>1-800-367-5693</strong> (toll-free, multilingual).</div>
+    </div>
+
+    <!-- Share -->
+    <div class="card">
+      <div class="card-title">Share this warning</div>
+      <div class="actions-row">
+        <a class="action-btn" href="#">🔗 Copy link</a>
+        <a class="action-btn" href="#">💬 WhatsApp</a>
+        <a class="action-btn" href="#">📘 Facebook</a>
+        <a class="action-btn" href="#">✉️ Email</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
