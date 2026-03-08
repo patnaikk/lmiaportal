@@ -20,11 +20,11 @@ export default function HomePage() {
       <div className="bg-gradient-to-b from-white to-red-50 text-center pt-10 pb-7 px-4">
         <div className="text-4xl mb-3">🇨🇦</div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight mb-3">
-          Don&apos;t pay until you<br />
-          <em className="not-italic text-red-600">verify</em> the employer.
+          Got a Canadian job offer?<br />
+          <em className="not-italic text-red-600">Check the employer first.</em>
         </h1>
         <p className="text-gray-500 text-[15px] leading-relaxed max-w-sm mx-auto">
-          Check any Canadian employer against the official government LMIA database. Free. Takes 10 seconds.
+          Charging workers for LMIAs or job offers is illegal in Canada. Verify any employer against official government records — free, in 10 seconds.
         </p>
       </div>
 
