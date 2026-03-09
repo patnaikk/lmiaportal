@@ -47,7 +47,10 @@ export default function Footer() {
             </a>
           </span>
           <Link href="/about" className="underline hover:text-gray-600">
-            About this tool
+            About
+          </Link>
+          <Link href="/updates" className="underline hover:text-gray-600">
+            What's new
           </Link>
         </div>
       </div>
