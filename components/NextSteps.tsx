@@ -33,7 +33,6 @@ export default function NextSteps({ result }: Props) {
       { icon: '⚠', text: 'Review the violation details shown — understand what rule they broke and when' },
       { icon: '⚠', text: 'Contact the employer directly to verify all offer details independently' },
       { icon: '⚠', text: 'Consider consulting a licensed RCIC before proceeding' },
-      { icon: '⚠', text: 'Do not pay any fees until all details are independently confirmed' },
     ]
   } else if (risk === 'YELLOW' && reason === 'pr_only_stream') {
     steps = [
