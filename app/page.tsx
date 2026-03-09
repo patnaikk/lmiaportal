@@ -54,6 +54,41 @@ export default function HomePage() {
         </div>
       </main>
 
+      {/* How it works */}
+      <div className="max-w-2xl mx-auto w-full px-4 py-6">
+        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest text-center mb-5">How it works</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="flex sm:flex-col items-start sm:items-center gap-3 sm:gap-2 sm:text-center">
+            <div className="text-2xl flex-shrink-0">🔍</div>
+            <div>
+              <p className="text-sm font-semibold text-gray-800">1. Type the employer name</p>
+              <p className="text-xs text-gray-500 mt-0.5">From your job offer or recruitment message</p>
+            </div>
+          </div>
+          <div className="flex sm:flex-col items-start sm:items-center gap-3 sm:gap-2 sm:text-center">
+            <div className="text-2xl flex-shrink-0">📋</div>
+            <div>
+              <p className="text-sm font-semibold text-gray-800">2. We check government records</p>
+              <p className="text-xs text-gray-500 mt-0.5">Official ESDC data — updated quarterly</p>
+            </div>
+          </div>
+          <div className="flex sm:flex-col items-start sm:items-center gap-3 sm:gap-2 sm:text-center">
+            <div className="text-2xl flex-shrink-0">🛡️</div>
+            <div>
+              <p className="text-sm font-semibold text-gray-800">3. Get a clear result</p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                <span className="text-green-600 font-medium">GREEN</span> = approved &nbsp;
+                <span className="text-red-600 font-medium">RED</span> = banned &nbsp;
+                <span className="text-gray-500 font-medium">GREY</span> = not found
+              </p>
+            </div>
+          </div>
+        </div>
+        <p className="text-center text-xs text-gray-400 mt-5 pt-4 border-t border-gray-100">
+          No signup. No tracking. No ads. Uses publicly available Government of Canada data.
+        </p>
+      </div>
+
       <Footer />
     </div>
   )
