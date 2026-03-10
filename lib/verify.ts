@@ -30,7 +30,10 @@ export async function verifyEmployer(
       violatorMatches = data as ViolatorRecord[]
     }
   } catch {
-    // RPC not available yet — fall back to ilike
+    // RPC not available — skip to ILIKE below
+  }
+  // Always run ILIKE contains search as a supplement (catches partial matches like "amazon")
+  if (violatorMatches.length === 0) {
     const { data } = await supabase
       .from('violators')
       .select('*')
@@ -88,7 +91,10 @@ export async function verifyEmployer(
       positiveMatches = data as PositiveLmia[]
     }
   } catch {
-    // RPC not available — fall back to ilike
+    // RPC not available — skip to ILIKE below
+  }
+  // Always run ILIKE contains search as a supplement (catches partial matches like "amazon")
+  if (positiveMatches.length === 0) {
     const { data } = await supabase
       .from('positive_lmia')
       .select('*')

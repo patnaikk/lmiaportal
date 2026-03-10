@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import FraudWarningBanner from '@/components/FraudWarningBanner'
 
 export const metadata: Metadata = {
   title: 'LMIA Check — Verify a Canadian employer before you pay',
@@ -25,6 +26,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </head>
       <body className="min-h-screen flex flex-col">
+        <FraudWarningBanner />
         {children}
       </body>
     </html>

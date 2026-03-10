@@ -8,6 +8,7 @@ import NextSteps from '@/components/NextSteps'
 import EmailCapture from '@/components/EmailCapture'
 import ShareComponent from '@/components/ShareComponent'
 import FeedbackForm from '@/components/FeedbackForm'
+import RedFlagChecklist from '@/components/RedFlagChecklist'
 import Footer from '@/components/Footer'
 import SearchForm from '@/components/SearchForm'
 import type { Metadata } from 'next'
@@ -110,6 +111,42 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
         {/* Next steps */}
         <NextSteps result={result} />
+
+        {/* Numbered company hint — shown when no results found */}
+        {result.risk === 'GREY' && (
+          <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+            <p className="text-sm font-semibold text-amber-900 mb-1.5">
+              Is your employer a numbered company?
+            </p>
+            <p className="text-sm text-amber-800 leading-relaxed mb-3">
+              Many Canadian businesses file LMIAs under a numbered legal name (e.g.{' '}
+              <span className="font-mono font-semibold">1234567 BC Ltd.</span>) that is completely
+              different from the name on your job offer. Check your T4, pay stub, or offer letter
+              signature line for the legal name — then search again.
+            </p>
+            <div className="text-xs text-amber-700 space-y-1">
+              <p>
+                <span className="font-semibold">Example:</span> &ldquo;Tim Hortons&rdquo; may file as{' '}
+                <span className="font-mono font-semibold">9363-2891 Québec Inc.</span>
+              </p>
+              <p>
+                <span className="font-semibold">Example:</span> &ldquo;Kanwar Walia Farms&rdquo; files as{' '}
+                <span className="font-mono font-semibold">1254586 BC Ltd.</span>
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Red Flag Employer Checklist */}
+        <RedFlagChecklist
+          employerAddress={
+            result.positiveMatches[0]
+              ? [result.positiveMatches[0].address, result.positiveMatches[0].city, result.positiveMatches[0].province]
+                  .filter(Boolean)
+                  .join(', ')
+              : undefined
+          }
+        />
 
         {/* Email notification capture */}
         <EmailCapture
