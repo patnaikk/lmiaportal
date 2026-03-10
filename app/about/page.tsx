@@ -32,38 +32,60 @@ export default function AboutPage() {
           <p className="text-gray-400 text-sm font-medium">March 2026 · Free, forever</p>
         </div>
 
-        {/* Heartfelt story */}
+        {/* Intro */}
         <section className="space-y-5 text-[15px] text-gray-700 leading-relaxed">
           <p>
-            Every year, thousands of people leave their families, their homes, and everything familiar — chasing the
-            promise of a better life in Canada.
+            Moving to Canada to work is a life-changing decision. Whether you are a nurse, a caregiver, a farm worker,
+            or a driver, you are putting your future into the hands of a Canadian employer.
           </p>
           <p>
-            They&apos;re nurses, caregivers, farm workers, cooks, drivers. They save for years. They borrow from
-            relatives. And they hand over <strong className="text-gray-900">$5,000, $10,000, sometimes $20,000 CAD</strong> to
-            recruiters who promise them a job backed by an official Labour Market Impact Assessment — an LMIA.
+            Because this is such a significant step, you deserve to know exactly who you are working with. The Canadian
+            government keeps detailed records of employers — who has been approved for a Labour Market Impact Assessment
+            (LMIA) and who has been flagged for failing to meet the rules of the Temporary Foreign Worker Program.
           </p>
           <p>
-            Then the recruiter disappears. The LMIA was fake. The employer doesn&apos;t exist. The money is gone.
-            And they&apos;re left in a foreign country with nothing but debt — and no recourse.
+            The problem? That information is often buried in complex government databases and spreadsheets that are
+            hard to find and even harder to navigate.
           </p>
-          <p>
-            This isn&apos;t rare. It happens <em>thousands of times a year</em>.
-          </p>
-          <p>
-            The Canadian government publishes data that could expose these frauds — a list of every employer who
-            received a real, approved LMIA, and a list of employers found in violation of the rules. But that data
-            lives buried in government spreadsheets, inaccessible to the people who need it most — often because
-            they don&apos;t speak English fluently, don&apos;t know where to look, or don&apos;t have time to dig.
-          </p>
-          <p>
-            <strong className="text-gray-900">LMIA Check is our attempt to fix that.</strong> We take that public
-            government data and make it searchable in under 10 seconds. No account. No fee. No barriers.
-          </p>
-          <p>
-            Will it stop every fraud? No. But if it saves even one person from losing their life savings to a fake
-            job offer — it&apos;s worth building.
-          </p>
+
+          <div className="pt-2">
+            <h2 className="text-lg font-bold text-gray-900 mb-3">Bridging the Information Gap</h2>
+            <p className="mb-4">
+              LMIA Check was built to bring that data into the light. We believe that transparency shouldn&apos;t be a
+              luxury. Our goal is to help you understand exactly where a potential employer stands in the eyes of the
+              government before you commit to a job offer.
+            </p>
+            <ul className="space-y-2">
+              <li className="flex gap-2">
+                <span className="text-red-500 font-bold shrink-0">·</span>
+                <span><strong className="text-gray-900">Public Data, Simplified:</strong> We take official records
+                from Employment and Social Development Canada (ESDC) and make them searchable in seconds.</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-red-500 font-bold shrink-0">·</span>
+                <span><strong className="text-gray-900">Know the Status:</strong> Quickly see if an employer has a
+                history of compliance or if they&apos;ve been restricted from the program.</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-red-500 font-bold shrink-0">·</span>
+                <span><strong className="text-gray-900">Free for Everyone:</strong> No accounts, no fees, and no
+                barriers to the information you need.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="pt-2">
+            <h2 className="text-lg font-bold text-gray-900 mb-3">Why Transparency Matters</h2>
+            <p className="mb-4">
+              When an employer applies for an LMIA, they are making a commitment to the Canadian government and to
+              you. By checking their public standing, you can move forward with the confidence that you are joining a
+              workplace that respects the standards set by the government.
+            </p>
+            <p>
+              Our tool is here to ensure that the &ldquo;promise of a better life&rdquo; is built on a foundation of
+              clear, accessible facts. It&apos;s about giving you the power to do your due diligence, simply and quickly.
+            </p>
+          </div>
 
           {/* Callout box */}
           <div className="bg-red-50 border-l-4 border-l-red-500 rounded-r-xl px-5 py-4 mt-2">
