@@ -9,6 +9,16 @@ export const metadata: Metadata = {
 
 const updates = [
   {
+    date: 'Mar 10, 2026',
+    items: [
+      'Fixed search returning "not found" for valid employers — partial name matching now works',
+      'Added smart autocomplete: typing a trade name (e.g. "Tim Hortons") now suggests the registered legal name',
+      'Added fraud warning banner on every page',
+      'Added employer trust checklist with 6 checks and a trust score meter on results page',
+      'Added numbered company guide on "not found" results',
+    ],
+  },
+  {
     date: 'Mar 9, 2026',
     items: [
       'Added "How it works" section on home page — based on user feedback',
