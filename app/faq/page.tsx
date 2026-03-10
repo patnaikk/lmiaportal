@@ -149,7 +149,7 @@ const sections = [
           <>
             You can use the federal{' '}
             <a
-              href="https://www.canada.ca/en/employment-social-development/corporate/contact/fraud.html"
+              href="https://www.canada.ca/en/employment-social-development/services/foreign-workers/report-abuse/tool.html"
               target="_blank"
               rel="noopener noreferrer"
               className="text-red-600 hover:text-red-800 font-medium underline"
@@ -245,7 +245,7 @@ export default function FAQPage() {
             <strong className="text-gray-700">Note:</strong> This tool is for informational purposes only and does not
             constitute legal or immigration advice. If you are in a complex or dangerous situation, please speak with a{' '}
             <a
-              href="https://iccrc-crcic.ca/find-an-iccrc-member/"
+              href="https://college-ic.ca/protecting-the-public/find-an-immigration-consultant"
               target="_blank"
               rel="noopener noreferrer"
               className="text-red-600 hover:text-red-800 font-medium underline"
