@@ -3,13 +3,13 @@ import './globals.css'
 import FraudWarningBanner from '@/components/FraudWarningBanner'
 
 export const metadata: Metadata = {
-  title: 'LMIA Check — Verify a Canadian employer before you pay',
+  title: 'LMIA Check — Verify a Canadian employer',
   description:
-    'Free tool to verify whether a Canadian employer has a legitimate Labour Market Impact Assessment (LMIA). Check government records before paying recruitment fees.',
+    'Free tool to verify whether a Canadian employer has a legitimate Labour Market Impact Assessment (LMIA). Check government records instantly.',
   keywords: 'LMIA, Canada, employer verification, temporary foreign worker, ESDC, job offer fraud',
   openGraph: {
-    title: 'LMIA Check — Verify a Canadian employer before you pay',
-    description: 'Free tool to verify whether a Canadian employer has a legitimate LMIA. Check before paying any fees.',
+    title: 'LMIA Check — Verify a Canadian employer',
+    description: 'Free tool to verify whether a Canadian employer has a legitimate LMIA. Instantly check government records.',
     type: 'website',
   },
 }

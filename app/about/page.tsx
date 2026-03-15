@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About — LMIA Check',
-  description: 'Why we built LMIA Check, and how it helps foreign workers verify Canadian employers before paying recruitment fees.',
+  description: 'Why we built LMIA Check, and how it helps foreign workers verify Canadian employers against government records.',
 }
 
 export default function AboutPage() {
