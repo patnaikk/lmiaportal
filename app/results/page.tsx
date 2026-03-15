@@ -9,6 +9,7 @@ import EmailCapture from '@/components/EmailCapture'
 import ShareComponent from '@/components/ShareComponent'
 import FeedbackForm from '@/components/FeedbackForm'
 import RedFlagChecklist from '@/components/RedFlagChecklist'
+import MappingContribution from '@/components/MappingContribution'
 import Footer from '@/components/Footer'
 import SearchForm from '@/components/SearchForm'
 import type { Metadata } from 'next'
@@ -111,6 +112,11 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
         {/* Next steps */}
         <NextSteps result={result} />
+
+        {/* Crowdsource: ask user if they know another name */}
+        {result.risk === 'GREY' && (
+          <MappingContribution queriedName={employer} province={province} />
+        )}
 
         {/* Numbered company hint — shown when no results found */}
         {result.risk === 'GREY' && (
