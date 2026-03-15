@@ -11,6 +11,7 @@ export default function HomePage() {
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <span className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</span>
           <div className="flex items-center gap-4">
+            <Link href="/check" className="text-sm text-white bg-red-600 hover:bg-red-700 font-semibold px-3 py-1.5 rounded-lg transition-colors">Verify offer</Link>
             <Link href="/faq" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">FAQ</Link>
             <Link href="/about" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">About</Link>
             <Link href="/updates" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">What's new</Link>

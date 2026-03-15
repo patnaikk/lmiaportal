@@ -9,6 +9,12 @@ export const metadata: Metadata = {
 
 const updates = [
   {
+    date: 'Mar 15, 2026',
+    items: [
+      'New: "Is my LMIA real?" checker at /check — runs 7 checks on your job offer including employer records, fee detection, delivery source, and duration mismatch, with a plain-language traffic light result and shareable URL',
+    ],
+  },
+  {
     date: 'Mar 14, 2026',
     items: [
       'Non-compliant employers list now syncs automatically every Monday — data stays current without manual intervention',
