@@ -265,10 +265,12 @@ def ingest_violators(file_path: str):
         if ban_match:
             ban_duration = ban_match.group(1)
 
+        legal_name = str(row[legal_name_col] if legal_name_col else '').strip()
         records.append({
             'business_operating_name': op_name,
-            'business_legal_name':     str(row[legal_name_col] if legal_name_col else '').strip(),
+            'business_legal_name':     legal_name,
             'employer_normalized':     normalize_name(op_name),
+            'legal_name_normalized':   normalize_name(legal_name),
             'address':                 str(row[address_col] if address_col else '').strip(),
             'province':                '',  # extracted from address if needed
             'reasons':                 str(row[reasons_col] if reasons_col else '').strip(),

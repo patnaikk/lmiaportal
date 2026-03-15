@@ -43,6 +43,10 @@ export default function ViolationDetail({ violators }: Props) {
     }
   }
 
+  const hasDistinctLegalName =
+    v.business_legal_name &&
+    v.business_legal_name.toLowerCase().trim() !== v.business_operating_name?.toLowerCase().trim()
+
   return (
     <div className="mt-4 border border-gray-200 rounded-xl overflow-hidden">
       <div className="px-5 py-3 bg-gray-50 border-b border-gray-200">
@@ -51,6 +55,23 @@ export default function ViolationDetail({ violators }: Props) {
         </h2>
       </div>
       <div className="p-5 space-y-4">
+        {/* Employer name — always shown first so user can confirm which record was matched */}
+        <div>
+          <span className="text-xs text-gray-500 uppercase tracking-wide block mb-1">Matched Employer</span>
+          <p className="text-base font-bold text-gray-900 leading-snug">
+            {v.business_operating_name}
+          </p>
+          {hasDistinctLegalName && (
+            <p className="text-sm text-gray-500 mt-0.5">
+              Legal: <span className="font-medium text-gray-700">{v.business_legal_name}</span>
+              {v.province && <span className="text-gray-400"> · {v.province}</span>}
+            </p>
+          )}
+          {!hasDistinctLegalName && v.province && (
+            <p className="text-sm text-gray-400 mt-0.5">{v.province}</p>
+          )}
+        </div>
+
         {/* Status */}
         <div>
           <span className="text-xs text-gray-500 uppercase tracking-wide block mb-1">Compliance Status</span>

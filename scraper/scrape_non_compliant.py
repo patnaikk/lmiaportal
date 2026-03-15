@@ -160,7 +160,7 @@ def scrape():
         page = context.new_page()
 
         print(f"📄  Loading page 1...")
-        page.goto(URL, wait_until="networkidle", timeout=60_000)
+        page.goto(URL, wait_until="domcontentloaded", timeout=60_000)
         wait_for_table(page)
 
         # ── Grab headers from first page ──────────────────

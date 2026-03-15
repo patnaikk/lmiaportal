@@ -32,12 +32,13 @@ export async function verifyEmployer(
   } catch {
     // RPC not available — skip to ILIKE below
   }
-  // Always run ILIKE contains search as a supplement (catches partial matches like "amazon")
+  // Always run ILIKE contains search as a supplement.
+  // Searches BOTH operating name and legal name so "2771482 Ontario Inc" finds the record.
   if (violatorMatches.length === 0) {
     const { data } = await supabase
       .from('violators')
       .select('*')
-      .ilike('employer_normalized', `%${normalized}%`)
+      .or(`employer_normalized.ilike.%${normalized}%,legal_name_normalized.ilike.%${normalized}%`)
       .limit(5)
     violatorMatches = (data as ViolatorRecord[]) || []
   }

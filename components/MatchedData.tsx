@@ -27,8 +27,8 @@ function MatchCard({ match }: { match: PositiveLmia }) {
       {/* Employer name */}
       <div className="mb-4">
         <h3 className="text-lg font-bold text-gray-900">{match.employer_name}</h3>
-        {match.employer_name?.toLowerCase() !== match.employer_name?.toLowerCase() && (
-          <p className="text-sm text-gray-500 mt-0.5">Legal name: {match.employer_name}</p>
+        {match.province && (
+          <p className="text-sm text-gray-500 mt-0.5">{match.province}</p>
         )}
       </div>
 

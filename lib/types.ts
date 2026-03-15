@@ -26,6 +26,7 @@ export interface ViolatorRecord {
   business_operating_name: string
   business_legal_name: string
   employer_normalized: string
+  legal_name_normalized: string
   address: string
   province: string
   reasons: string

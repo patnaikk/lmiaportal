@@ -9,6 +9,14 @@ export const metadata: Metadata = {
 
 const updates = [
   {
+    date: 'Mar 14, 2026',
+    items: [
+      'Non-compliant employers list now syncs automatically every Monday — data stays current without manual intervention',
+      'Search now checks both trade name and legal name simultaneously — typing "2771482 Ontario Inc" finds the employer even if you only know the numbered company name',
+      'Violation records now show the matched employer name and legal name together on every result card',
+    ],
+  },
+  {
     date: 'Mar 10, 2026',
     items: [
       'Fixed search returning "not found" for valid employers — partial name matching now works',
