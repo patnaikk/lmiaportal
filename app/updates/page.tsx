@@ -14,6 +14,7 @@ const updates = [
       'Non-compliant employers list now syncs automatically every Monday — data stays current without manual intervention',
       'Search now checks both trade name and legal name simultaneously — typing "2771482 Ontario Inc" finds the employer even if you only know the numbered company name',
       'Violation records now show the matched employer name and legal name together on every result card',
+      'Added "Where do I find the name?" collapsible help tip on the search form — explains where to find the right employer name (offer letter, T4, pay stub) and how numbered companies work',
     ],
   },
   {
