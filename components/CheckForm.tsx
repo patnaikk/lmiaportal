@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import EmployerInput from '@/components/EmployerInput'
 
 const PROVINCES = [
   { code: 'AB', name: 'Alberta' },
@@ -23,7 +24,8 @@ export default function CheckForm() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
-  const [employer, setEmployer] = useState('')
+  const [employerDisplay, setEmployerDisplay] = useState('')
+  const [employerSearchAs, setEmployerSearchAs] = useState('')
   const [province, setProvince] = useState('')
   const [jobTitle, setJobTitle] = useState('')
   const [wage, setWage] = useState('')
@@ -33,7 +35,7 @@ export default function CheckForm() {
   const [fee, setFee] = useState('')
   const [delivery, setDelivery] = useState('')
 
-  const canSubmit = employer.trim().length >= 3 && fee !== '' && delivery !== '' && !loading
+  const canSubmit = employerDisplay.trim().length >= 3 && fee !== '' && delivery !== '' && !loading
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -41,7 +43,7 @@ export default function CheckForm() {
     setLoading(true)
 
     const params = new URLSearchParams()
-    params.set('employer', employer.trim())
+    params.set('employer', employerSearchAs.trim() || employerDisplay.trim())
     if (province) params.set('province', province)
     if (jobTitle.trim()) params.set('job_title', jobTitle.trim())
     if (wage.trim()) {
@@ -71,25 +73,12 @@ export default function CheckForm() {
           <p className="text-xs text-gray-400 mt-0.5">Cross-referenced against 11K+ LMIA records and the non-compliant employer list</p>
         </div>
 
-        <div>
-          <label htmlFor="employer" className="block text-sm font-medium text-gray-700 mb-1">
-            Employer name <span className="text-red-600" aria-label="required">*</span>
-          </label>
-          <input
-            id="employer"
-            type="text"
-            required
-            minLength={3}
-            value={employer}
-            onChange={(e) => setEmployer(e.target.value)}
-            placeholder="e.g. Sunrise Senior Care or 1234567 BC Ltd."
-            className={inputClass}
-            autoComplete="off"
-          />
-          <p className="mt-1 text-xs text-gray-400">
-            Use the name on your job offer letter or employment contract
-          </p>
-        </div>
+        <EmployerInput
+          onValueChange={(display, searchAs) => {
+            setEmployerDisplay(display)
+            setEmployerSearchAs(searchAs)
+          }}
+        />
 
         <div>
           <label htmlFor="province" className="block text-sm font-medium text-gray-700 mb-1">
@@ -267,7 +256,7 @@ export default function CheckForm() {
         </div>
       </div>
 
-      {!canSubmit && (fee === '' || delivery === '') && employer.trim().length >= 3 && (
+      {!canSubmit && (fee === '' || delivery === '') && employerDisplay.trim().length >= 3 && (
         <p className="text-xs text-red-500">Please answer the two questions above to continue.</p>
       )}
 
