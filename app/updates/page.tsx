@@ -9,6 +9,12 @@ export const metadata: Metadata = {
 
 const updates = [
   {
+    date: 'Mar 17, 2026',
+    items: [
+      'New: LMIA Guide at /guide — comprehensive educational resource explaining what LMIA is, who needs it, the 4-step work permit process (3–6 months), legitimate costs in CAD, and red flags to watch for. Helps foreign workers understand the journey from job offer to arrival in Canada.',
+    ],
+  },
+  {
     date: 'Mar 15, 2026',
     items: [
       'New: "Is my LMIA real?" checker at /check — runs 7 checks on your job offer including employer records, fee detection, delivery source, and duration mismatch, with a plain-language traffic light result and shareable URL',
@@ -60,6 +66,8 @@ export default function UpdatesPage() {
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</Link>
           <div className="flex items-center gap-4">
+            <Link href="/check" className="text-sm text-white bg-red-600 hover:bg-red-700 font-semibold px-3 py-1.5 rounded-lg transition-colors">Verify offer</Link>
+            <Link href="/guide" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">Guide</Link>
             <Link href="/faq" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">FAQ</Link>
             <Link href="/about" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">About</Link>
             <Link href="/updates" className="text-sm font-semibold text-gray-900 transition-colors">What's new</Link>
