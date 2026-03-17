@@ -369,7 +369,7 @@ def upsert_records(supabase, records: list[dict]) -> tuple[int, int]:
 
     Returns (inserted_count, updated_count).
     """
-    BATCH = 500
+    BATCH = 100
 
     # Snapshot current row count before upsert
     count_before = 0

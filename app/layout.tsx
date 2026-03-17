@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import './globals.css'
 import FraudWarningBanner from '@/components/FraudWarningBanner'
 
@@ -26,6 +27,18 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </head>
       <body className="min-h-screen flex flex-col">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-GQ04SJHDPG"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-GQ04SJHDPG');
+          `}
+        </Script>
         <FraudWarningBanner />
         {children}
       </body>
