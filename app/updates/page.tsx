@@ -9,6 +9,37 @@ export const metadata: Metadata = {
 
 const updates = [
   {
+    date: 'Mar 27, 2026',
+    items: [
+      'Data refresh: non-compliant employers list re-synced live from Canada.ca — 1,294 records (5 newly added), including 1 newly banned employer: Rocky View Tires Ltd. (Calgary, AB — banned until Mar 2027)',
+      'Search fix: province filtering now works correctly — the DB stores full province names and the search was comparing against 2-letter codes, causing all province-filtered searches to incorrectly return a location mismatch warning',
+      'Search fix: compliant employer (positive LMIA) fallback search now checks both operating name and legal name — numbered companies like "1234567 Ontario Inc" are now found in both violators and positive LMIA lookups',
+      'Search fix: when multiple violation records match an employer, the most serious compliance status now takes precedence — previously only the first match was evaluated',
+      'Search fix: violation record shown on results page now always displays the most serious match first',
+      'Fix: address mismatch warning now clearly explains that a scammer may be impersonating a real employer rather than implying the employer simply doesn\'t exist in a given province',
+      'Fix: navigating to a search result now always scrolls to the top of the page — previously the browser would restore the previous scroll position, hiding the risk result',
+    ],
+  },
+  {
+    date: 'Mar 24, 2026',
+    items: [
+      'Data refresh: non-compliant employers list re-scraped from Canada.ca — 1,289 records confirmed current (no new additions since Mar 21)',
+    ],
+  },
+  {
+    date: 'Mar 21, 2026',
+    items: [
+      'Data refresh: non-compliant employers list re-scraped from Canada.ca — 1,289 records confirmed current (no new additions since Mar 18)',
+    ],
+  },
+  {
+    date: 'Mar 18, 2026',
+    items: [
+      'Data refresh: non-compliant employers list updated — 1,289 total records (27 new since Mar 7), including 3 newly banned employers: Clearport International Inc. (Calgary, AB), Sameet Kaur Gill Professional Corporation (Calgary, AB — 5-year ban until Mar 2031), and NPP Pleasant Software Producer Inc (North Vancouver, BC — banned until Mar 2027)',
+      'Removed employer trust checklist from results page',
+    ],
+  },
+  {
     date: 'Mar 17, 2026',
     items: [
       'New: LMIA Guide at /guide — comprehensive educational resource explaining what LMIA is, who needs it, the 4-step work permit process (3–6 months), legitimate costs in CAD, and red flags to watch for. Helps foreign workers understand the journey from job offer to arrival in Canada.',

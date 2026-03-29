@@ -25,6 +25,7 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <script dangerouslySetInnerHTML={{ __html: `history.scrollRestoration='manual'` }} />
       </head>
       <body className="min-h-screen flex flex-col">
         <Script

@@ -2,6 +2,23 @@ import { supabase, supabaseAdmin } from './supabase'
 import { normalizeEmployerName } from './normalize'
 import type { VerifyResult, PositiveLmia, ViolatorRecord } from './types'
 
+// DB stores full province names; the UI sends 2-letter codes.
+const PROVINCE_CODE_TO_NAME: Record<string, string> = {
+  AB: 'Alberta',
+  BC: 'British Columbia',
+  MB: 'Manitoba',
+  NB: 'New Brunswick',
+  NL: 'Newfoundland and Labrador',
+  NS: 'Nova Scotia',
+  NT: 'Northwest Territories',
+  NU: 'Nunavut',
+  ON: 'Ontario',
+  PE: 'Prince Edward Island',
+  QC: 'Quebec',
+  SK: 'Saskatchewan',
+  YT: 'Yukon',
+}
+
 export async function verifyEmployer(
   employerName: string,
   city?: string,
@@ -34,17 +51,29 @@ export async function verifyEmployer(
   }
   // Always run ILIKE contains search as a supplement.
   // Searches BOTH operating name and legal name so "2771482 Ontario Inc" finds the record.
+  // Order by exact prefix match first, then by name length (shorter = closer match).
   if (violatorMatches.length === 0) {
     const { data } = await supabase
       .from('violators')
       .select('*')
       .or(`employer_normalized.ilike.%${normalized}%,legal_name_normalized.ilike.%${normalized}%`)
+      .order('employer_normalized', { ascending: true })
       .limit(5)
     violatorMatches = (data as ViolatorRecord[]) || []
   }
 
   if (violatorMatches.length > 0) {
-    const v = violatorMatches[0]
+    // Evaluate worst compliance status across all matches (not just first).
+    // Priority: INELIGIBLE/INELIGIBLE_UNPAID > INELIGIBLE_UNTIL > ELIGIBLE
+    const worstIneligible = violatorMatches.find(
+      (v) => v.compliance_status === 'INELIGIBLE' || v.compliance_status === 'INELIGIBLE_UNPAID'
+    )
+    const tempBanned = violatorMatches.find((v) => v.compliance_status === 'INELIGIBLE_UNTIL')
+    const v = worstIneligible ?? tempBanned ?? violatorMatches[0]
+    // Ensure the worst match is first so the UI displays it prominently.
+    if (v !== violatorMatches[0]) {
+      violatorMatches = [v, ...violatorMatches.filter((m) => m !== v)]
+    }
 
     if (v.compliance_status === 'ELIGIBLE') {
       // Served penalty — now allowed to hire. Flag YELLOW with history shown.
@@ -95,11 +124,12 @@ export async function verifyEmployer(
     // RPC not available — skip to ILIKE below
   }
   // Always run ILIKE contains search as a supplement (catches partial matches like "amazon")
+  // Searches both employer_normalized and legal_name_normalized to match numbered companies.
   if (positiveMatches.length === 0) {
     const { data } = await supabase
       .from('positive_lmia')
       .select('*')
-      .ilike('employer_normalized', `%${normalized}%`)
+      .or(`employer_normalized.ilike.%${normalized}%,legal_name_normalized.ilike.%${normalized}%`)
       .limit(20)
     positiveMatches = (data as PositiveLmia[]) || []
   }
@@ -117,10 +147,14 @@ export async function verifyEmployer(
 
   // Step 3: Cross-check city/province if provided
   if (city || province) {
+    // Resolve province code to full name as stored in DB (e.g. "BC" → "British Columbia")
+    const provinceFull = province
+      ? (PROVINCE_CODE_TO_NAME[province.toUpperCase()] ?? province)
+      : undefined
     const detailMatch = positiveMatches.filter(
       (m) =>
         (!city || m.city?.toLowerCase().includes(city.toLowerCase())) &&
-        (!province || m.province === province)
+        (!provinceFull || m.province === provinceFull)
     )
 
     if (detailMatch.length === 0) {

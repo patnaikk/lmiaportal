@@ -8,10 +8,10 @@ import NextSteps from '@/components/NextSteps'
 import EmailCapture from '@/components/EmailCapture'
 import ShareComponent from '@/components/ShareComponent'
 import FeedbackForm from '@/components/FeedbackForm'
-import RedFlagChecklist from '@/components/RedFlagChecklist'
 import MappingContribution from '@/components/MappingContribution'
 import Footer from '@/components/Footer'
 import SearchForm from '@/components/SearchForm'
+import ScrollToTop from '@/components/ScrollToTop'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -78,6 +78,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
         </div>
       </header>
 
+      <ScrollToTop query={employer} />
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
         {/* Search summary */}
         <div className="mb-4 flex items-center gap-2 flex-wrap">
@@ -144,18 +145,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
           </div>
         )}
 
-        {/* Red Flag Employer Checklist */}
-        <RedFlagChecklist
-          employerAddress={
-            result.positiveMatches[0]
-              ? [result.positiveMatches[0].address, result.positiveMatches[0].city, result.positiveMatches[0].province]
-                  .filter(Boolean)
-                  .join(', ')
-              : undefined
-          }
-        />
-
-        {/* Email notification capture */}
+{/* Email notification capture */}
         <EmailCapture
           employerQuery={employer}
           employerNormalized={employerNormalized}

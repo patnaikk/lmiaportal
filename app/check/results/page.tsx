@@ -122,7 +122,7 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
     flags.push({
       severity: 'yellow',
       title: 'Employer province does not match LMIA records',
-      detail: `This employer exists in government records but not in ${province || 'the province you specified'}. Scammers sometimes copy real employer names — verify you have the right company.`,
+      detail: `This employer exists in government records, but the LMIA on file is for a different province than ${province || 'the one you specified'}. Scammers sometimes copy real employer names — verify you have the right company.`,
       action: 'Confirm the employer address directly with the company before proceeding.',
     })
   }
