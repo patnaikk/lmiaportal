@@ -1,10 +1,10 @@
 'use client'
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 
 export default function ScrollToTop({ query }: { query: string }) {
-  useEffect(() => {
-    history.scrollRestoration = 'manual'
-    window.scrollTo({ top: 0, behavior: 'instant' })
+  useLayoutEffect(() => {
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
   }, [query])
   return null
 }
