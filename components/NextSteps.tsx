@@ -54,7 +54,6 @@ export default function NextSteps({ result }: Props) {
         icon: '✕',
         text: `This employer is BANNED from hiring temporary workers until ${banDate} — any offer is illegitimate`,
       },
-      { icon: '✕', text: 'Do not pay any fees to this employer or recruiter under any circumstances' },
       {
         icon: '✕',
         text: (
@@ -71,7 +70,6 @@ export default function NextSteps({ result }: Props) {
   } else if (risk === 'RED') {
     steps = [
       { icon: '✕', text: 'This employer has an outstanding government penalty and cannot legally hire temporary workers' },
-      { icon: '✕', text: 'Do not pay any fees to this employer or recruiter under any circumstances' },
       {
         icon: '✕',
         text: (
