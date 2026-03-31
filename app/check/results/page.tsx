@@ -107,6 +107,16 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
     })
   }
 
+  // Check 2b — Employer only has Permanent Resident stream LMIAs (not for TFWs)
+  if (employerResult.risk === 'YELLOW' && employerResult.reason === 'pr_only_stream') {
+    flags.push({
+      severity: 'yellow',
+      title: "Employer's LMIAs are for Permanent Residents only — not TFWs",
+      detail: 'This employer was found in government records, but all their approved LMIAs are under the Permanent Resident Only stream. This type of LMIA cannot be used by temporary foreign workers. An offer claiming to be an LMIA for a TFW from this employer may be fraudulent.',
+      action: 'Ask the employer to provide the LMIA number and confirm it is under the Temporary Foreign Worker Program stream, not the Permanent Resident stream.',
+    })
+  }
+
   // Check 3 — Employer not found in positive LMIA list
   if (employerResult.risk === 'GREY') {
     flags.push({

@@ -30,6 +30,7 @@ import re
 import smtplib
 import sys
 import time
+import unicodedata
 from datetime import datetime, timezone
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -113,6 +114,11 @@ def normalize_name(name: str) -> str:
     if not isinstance(name, str):
         return ""
     name = name.lower()
+    # Strip possessive 's before punctuation removal (mirrors JS normalizer).
+    name = re.sub(r"[\u2019\u0027]s\b", "", name)
+    # Strip diacritics (é→e, à→a, etc.) to match JS normalizer behaviour.
+    name = unicodedata.normalize("NFD", name)
+    name = "".join(c for c in name if unicodedata.category(c) != "Mn")
     name = re.sub(r"[^\w\s]", " ", name)
     name = re.sub(r"\s+", " ", name).strip()
     words = [w for w in name.split() if w not in LEGAL_SUFFIXES]

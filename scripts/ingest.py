@@ -20,6 +20,7 @@ import argparse
 import os
 import re
 import sys
+import unicodedata
 from datetime import datetime
 
 import pandas as pd
@@ -53,6 +54,11 @@ def normalize_name(name: str) -> str:
     if not isinstance(name, str):
         return ''
     name = name.lower()
+    # Strip possessive 's before punctuation removal (mirrors JS normalizer).
+    name = re.sub(r'[\u2019\u0027]s\b', '', name)
+    # Strip diacritics (é→e, à→a, etc.) to match JS normalizer behaviour.
+    name = unicodedata.normalize('NFD', name)
+    name = ''.join(c for c in name if unicodedata.category(c) != 'Mn')
     name = re.sub(r'[^\w\s]', ' ', name)   # remove punctuation
     name = re.sub(r'\s+', ' ', name).strip()
     words = [w for w in name.split() if w not in LEGAL_SUFFIXES]
@@ -287,7 +293,7 @@ def ingest_violators(file_path: str):
 
     for i in range(0, len(records), 500):
         batch = records[i:i + 500]
-        supabase_client.table('violators').upsert(batch).execute()
+        supabase_client.table('violators').upsert(batch, on_conflict='business_operating_name,decision_date').execute()
         print(f'  {min(i + 500, len(records))}/{len(records)} records ingested...')
 
     print(f'Done. {len(records)} violator records loaded.')

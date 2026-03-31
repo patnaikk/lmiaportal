@@ -61,6 +61,32 @@ export async function verifyEmployer(
       .limit(5)
     violatorMatches = (data as ViolatorRecord[]) || []
   }
+  // Truncation fallback for violators: drop trailing descriptor words one at a time.
+  // e.g. "Afghan Chopan Kebab Restaurant" → retry as "Afghan Chopan Kebab".
+  if (violatorMatches.length === 0) {
+    const words = normalized.split(' ')
+    for (let drop = 1; drop <= words.length - 2; drop++) {
+      const shorter = words.slice(0, words.length - drop).join(' ')
+      const { data: rpcData, error: rpcErr } = await supabase.rpc('search_violators', {
+        query_normalized: shorter,
+        sim_threshold: 0.65,
+      })
+      if (!rpcErr && rpcData?.length) {
+        violatorMatches = rpcData as ViolatorRecord[]
+        break
+      }
+      const { data: ilikeData } = await supabase
+        .from('violators')
+        .select('*')
+        .or(`employer_normalized.ilike.%${shorter}%,legal_name_normalized.ilike.%${shorter}%`)
+        .order('employer_normalized', { ascending: true })
+        .limit(5)
+      if (ilikeData?.length) {
+        violatorMatches = ilikeData as ViolatorRecord[]
+        break
+      }
+    }
+  }
 
   if (violatorMatches.length > 0) {
     // Evaluate worst compliance status across all matches (not just first).
@@ -77,6 +103,7 @@ export async function verifyEmployer(
 
     if (v.compliance_status === 'ELIGIBLE') {
       // Served penalty — now allowed to hire. Flag YELLOW with history shown.
+      await logSearch(employerName, city, province, 'YELLOW')
       return {
         risk: 'YELLOW',
         reason: 'prior_violation_now_eligible',
@@ -88,6 +115,7 @@ export async function verifyEmployer(
     }
 
     if (v.compliance_status === 'INELIGIBLE_UNTIL') {
+      await logSearch(employerName, city, province, 'RED')
       return {
         risk: 'RED',
         subtype: 'BANNED_TEMPORARY',
@@ -100,6 +128,7 @@ export async function verifyEmployer(
     }
 
     // INELIGIBLE_UNPAID or INELIGIBLE (plain) — treat as RED, no end date
+    await logSearch(employerName, city, province, 'RED')
     return {
       risk: 'RED',
       subtype: 'BANNED_UNPAID_PENALTY',
@@ -123,15 +152,42 @@ export async function verifyEmployer(
   } catch {
     // RPC not available — skip to ILIKE below
   }
-  // Always run ILIKE contains search as a supplement (catches partial matches like "amazon")
-  // Searches both employer_normalized and legal_name_normalized to match numbered companies.
+  // ILIKE fallback: catches partial/short matches the trigram RPC misses (e.g. "amazon").
+  // NOTE: positive_lmia has no legal_name_normalized column — search employer_normalized only.
   if (positiveMatches.length === 0) {
     const { data } = await supabase
       .from('positive_lmia')
       .select('*')
-      .or(`employer_normalized.ilike.%${normalized}%,legal_name_normalized.ilike.%${normalized}%`)
+      .ilike('employer_normalized', `%${normalized}%`)
       .limit(20)
     positiveMatches = (data as PositiveLmia[]) || []
+  }
+
+  // Truncation fallback: if the user added descriptor words (e.g. "Tim Hortons Restaurant"),
+  // the normalized query is longer than the stored value, so ILIKE %query% fails.
+  // Retry by dropping one word at a time until we get a hit or reach 2 words.
+  if (positiveMatches.length === 0) {
+    const words = normalized.split(' ')
+    for (let drop = 1; drop <= words.length - 2; drop++) {
+      const shorter = words.slice(0, words.length - drop).join(' ')
+      const { data: rpcData, error: rpcErr } = await supabase.rpc('search_positive_lmia', {
+        query_normalized: shorter,
+        sim_threshold: 0.55,
+      })
+      if (!rpcErr && rpcData?.length) {
+        positiveMatches = rpcData as PositiveLmia[]
+        break
+      }
+      const { data: ilikeData } = await supabase
+        .from('positive_lmia')
+        .select('*')
+        .ilike('employer_normalized', `%${shorter}%`)
+        .limit(20)
+      if (ilikeData?.length) {
+        positiveMatches = ilikeData as PositiveLmia[]
+        break
+      }
+    }
   }
 
   if (positiveMatches.length === 0) {
@@ -151,9 +207,20 @@ export async function verifyEmployer(
     const provinceFull = province
       ? (PROVINCE_CODE_TO_NAME[province.toUpperCase()] ?? province)
       : undefined
+    // Normalise city for comparison: strip punctuation + diacritics so
+    // "St Johns" matches "St. John's" and "Montreal" matches "Montréal".
+    const normCity = (s: string) =>
+      s
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^\w\s]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+    const cityNorm = city ? normCity(city) : undefined
     const detailMatch = positiveMatches.filter(
       (m) =>
-        (!city || m.city?.toLowerCase().includes(city.toLowerCase())) &&
+        (!cityNorm || normCity(m.city ?? '').includes(cityNorm)) &&
         (!provinceFull || m.province === provinceFull)
     )
 
@@ -170,10 +237,31 @@ export async function verifyEmployer(
       }
     }
 
+    // PR-only check on the location-filtered results (mirrors Step 4 logic).
+    // Without this, an employer with only PR-only LMIAs in the matching province
+    // would return GREEN instead of YELLOW/pr_only_stream.
+    const prOnlyDetail = detailMatch.filter((m) =>
+      m.program_stream?.toLowerCase().includes('permanent resident only')
+    )
+    const nonPrDetail = detailMatch.filter(
+      (m) => !m.program_stream?.toLowerCase().includes('permanent resident only')
+    )
+    if (prOnlyDetail.length > 0 && nonPrDetail.length === 0) {
+      await logSearch(employerName, city, province, 'YELLOW')
+      return {
+        risk: 'YELLOW',
+        reason: 'pr_only_stream',
+        positiveMatches: prOnlyDetail,
+        violatorMatches: [],
+        source: 'positive_lmia',
+        employerQuery: employerName,
+      }
+    }
+
     await logSearch(employerName, city, province, 'GREEN')
     return {
       risk: 'GREEN',
-      positiveMatches: detailMatch,
+      positiveMatches: nonPrDetail.length > 0 ? nonPrDetail : detailMatch,
       violatorMatches: [],
       source: 'positive_lmia',
       employerQuery: employerName,

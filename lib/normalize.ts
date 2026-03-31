@@ -24,6 +24,13 @@ const LEGAL_SUFFIXES = new Set([
 export function normalizeEmployerName(name: string): string {
   if (!name) return ''
   let n = name.toLowerCase()
+  // Strip possessive 's (Tim Horton's → Tim Horton, McDonald's → McDonald).
+  // Must run before punctuation removal, otherwise the apostrophe becomes a space
+  // and 's becomes a phantom standalone word that breaks trigram matching.
+  n = n.replace(/[\u2019']s\b/g, '')
+  // Strip diacritics (é→e, à→a, â→a, etc.) so French names match regardless of accent input.
+  // Must run before punctuation removal so accented chars don't become spaces.
+  n = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   // Remove punctuation (keep alphanumeric and spaces)
   n = n.replace(/[^\w\s]/g, ' ')
   // Collapse whitespace
