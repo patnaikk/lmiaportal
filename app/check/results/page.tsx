@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { verifyEmployer } from '@/lib/verify'
 import Footer from '@/components/Footer'
+import ScrollToTop from '@/components/ScrollToTop'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -232,6 +233,7 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <ScrollToTop query={employer} />
       {/* Header */}
       <header className="bg-white border-b-[3px] border-red-600 sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
