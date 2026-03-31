@@ -55,7 +55,6 @@ export default function CheckForm() {
     params.set('fee', fee)
     params.set('delivery', delivery)
 
-    window.scrollTo(0, 0)
     router.push(`/check/results?${params.toString()}`)
   }
 
