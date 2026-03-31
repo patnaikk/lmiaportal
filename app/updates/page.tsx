@@ -9,6 +9,18 @@ export const metadata: Metadata = {
 
 const updates = [
   {
+    date: 'Mar 30, 2026',
+    items: [
+      'Search fix: employer names with possessives (e.g. "Tim Horton\'s", "McDonald\'s") now match correctly — the possessive \'s is stripped before matching so it no longer breaks trigram search',
+      'Search fix: accented characters in employer names (é, à, â, etc.) are now normalized — "Montréal" matches "Montreal" and French employer names resolve correctly regardless of how the accent is typed',
+      'Search fix: truncation fallback now applies to violator lookups as well as positive LMIA — typing "Afghan Chopan Kebab Restaurant" correctly finds "Afghan Chopan Kebab" on the non-compliant list',
+      'Search fix: city comparison is now accent- and punctuation-aware — "St. John\'s" matches "St Johns" and "Montréal" matches "Montreal" in location-filtered results',
+      'Search fix: employers with Permanent Resident Only stream LMIAs now correctly return a YELLOW warning (not GREEN) when province filtering is applied — previously they could bypass the PR-only stream check',
+      'Fix: search activity logging was missing for violator matches — RED and YELLOW results from the non-compliant list are now recorded correctly',
+      'Fix: data ingestion and sync scripts now normalize employer names identically to the search engine — possessives and diacritics are stripped at index time, ensuring stored values match what searches produce',
+    ],
+  },
+  {
     date: 'Mar 27, 2026',
     items: [
       'Data refresh: non-compliant employers list re-synced live from Canada.ca — 1,294 records (5 newly added), including 1 newly banned employer: Rocky View Tires Ltd. (Calgary, AB — banned until Mar 2027)',
