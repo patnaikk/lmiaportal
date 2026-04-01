@@ -9,6 +9,12 @@ export const metadata: Metadata = {
 
 const updates = [
   {
+    date: 'Apr 1, 2026',
+    items: [
+      'Data refresh: non-compliant employers list re-scraped from Canada.ca — 1,294 total records (32 more than original load of 1,262), including 5 new additions since Mar 24: Aumeir Printing and Design Ltd. (Kelowna, BC), Lumberjacks Diner (Roddickton, NL), Marché La Gazelle (Verdun, QC), ROCKY VIEW TIRES LTD (Calgary, AB — newly banned until Mar 2027), and Singapore Trucking Inc. (Calgary, AB — banned until Aug 2035)',
+    ],
+  },
+  {
     date: 'Mar 30, 2026',
     items: [
       'Search fix: employer names with possessives (e.g. "Tim Horton\'s", "McDonald\'s") now match correctly — the possessive \'s is stripped before matching so it no longer breaks trigram search',
