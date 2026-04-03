@@ -7,6 +7,7 @@ import MatchedData from '@/components/MatchedData'
 import NextSteps from '@/components/NextSteps'
 import EmailCapture from '@/components/EmailCapture'
 import ShareComponent from '@/components/ShareComponent'
+import ResultQRCode from '@/components/ResultQRCode'
 import FeedbackForm from '@/components/FeedbackForm'
 import MappingContribution from '@/components/MappingContribution'
 import Footer from '@/components/Footer'
@@ -151,6 +152,9 @@ export default async function ResultsPage({ searchParams }: PageProps) {
           employerNormalized={employerNormalized}
           lastResult={result.risk}
         />
+
+        {/* QR Code */}
+        <ResultQRCode employer={employer} city={city} province={province} />
 
         {/* Share */}
         <ShareComponent riskResult={result.risk} />

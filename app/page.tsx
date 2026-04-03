@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import SearchForm from '@/components/SearchForm'
 import Footer from '@/components/Footer'
+import RecentlyBanned from '@/components/RecentlyBanned'
 
 export default function HomePage() {
   return (
@@ -92,6 +93,8 @@ export default function HomePage() {
           No signup. No tracking. No ads. Uses publicly available Government of Canada data.
         </p>
       </div>
+
+      <RecentlyBanned />
 
       <Footer />
     </div>

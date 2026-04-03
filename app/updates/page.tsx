@@ -9,6 +9,14 @@ export const metadata: Metadata = {
 
 const updates = [
   {
+    date: 'Apr 3, 2026',
+    items: [
+      'New: Result cards now show the employer name and check date — screenshot and share directly to WhatsApp so a friend or family member can see exactly what you found',
+      'New: QR code on every result page — scan or screenshot it, send via WhatsApp, and the recipient lands directly on the same result without typing anything',
+      'New: "Recently Banned" feed on the homepage — shows the 5 most recently banned employers pulled live from the database, each linking directly to their result',
+    ],
+  },
+  {
     date: 'Apr 1, 2026',
     items: [
       'Data refresh: non-compliant employers list re-scraped from Canada.ca — 1,294 total records (32 more than original load of 1,262), including 5 new additions since Mar 24: Aumeir Printing and Design Ltd. (Kelowna, BC), Lumberjacks Diner (Roddickton, NL), Marché La Gazelle (Verdun, QC), ROCKY VIEW TIRES LTD (Calgary, AB — newly banned until Mar 2027), and Singapore Trucking Inc. (Calgary, AB — banned until Aug 2035)',

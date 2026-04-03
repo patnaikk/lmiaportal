@@ -17,8 +17,31 @@ function EsdcContact() {
   )
 }
 
+function CardHeader({ employer }: { employer: string }) {
+  return (
+    <div className="mb-3 pb-3 border-b border-gray-100">
+      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Employer checked</p>
+      <p className="text-sm font-bold text-gray-900 leading-snug break-words">{employer}</p>
+    </div>
+  )
+}
+
+function CardFooter() {
+  const date = new Date().toLocaleDateString('en-CA', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+  return (
+    <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+      <span className="text-[10px] text-gray-400">lmiacheck.ca · Free · Official Gov Data</span>
+      <span className="text-[10px] text-gray-400">{date}</span>
+    </div>
+  )
+}
+
 export default function RiskIndicator({ result }: Props) {
-  const { risk, subtype, reason, ban_end_date } = result
+  const { risk, subtype, reason, ban_end_date, employerQuery } = result
 
   if (risk === 'GREEN') {
     return (
@@ -27,6 +50,7 @@ export default function RiskIndicator({ result }: Props) {
         role="status"
         aria-label="Verification result: Verified"
       >
+        <CardHeader employer={employerQuery} />
         <div className="flex items-center gap-2.5 mb-3">
           <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
@@ -42,6 +66,7 @@ export default function RiskIndicator({ result }: Props) {
         <p className="text-sm text-gray-600 leading-relaxed">
           This employer appears in official Canadian government LMIA records and has not been flagged for violations.
         </p>
+        <CardFooter />
       </div>
     )
   }
@@ -53,7 +78,7 @@ export default function RiskIndicator({ result }: Props) {
     if (reason === 'address_mismatch') {
       title = 'Location details don\'t match'
       message =
-        'This employer was found in government records but some details do not match your offer. Ask your employer to clarify before paying any fees.'
+        'This employer was found in government records but some details do not match your offer. Ask your employer to clarify before proceeding.'
     } else if (reason === 'pr_only_stream') {
       title = 'Not a TFW position'
       message =
@@ -70,6 +95,7 @@ export default function RiskIndicator({ result }: Props) {
         role="status"
         aria-label="Verification result: Verify Further"
       >
+        <CardHeader employer={employerQuery} />
         <div className="flex items-center gap-2.5 mb-3">
           <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-amber-600">
@@ -85,6 +111,7 @@ export default function RiskIndicator({ result }: Props) {
         </div>
         <h3 className="text-base font-bold text-gray-900 mb-1.5">{title}</h3>
         <p className="text-sm text-gray-600 leading-relaxed">{message}</p>
+        <CardFooter />
       </div>
     )
   }
@@ -100,13 +127,13 @@ export default function RiskIndicator({ result }: Props) {
         month: 'long',
         day: 'numeric',
       })
-      message = `This employer has been found non-compliant by the Canadian government and is BANNED from hiring temporary foreign workers until ${formatted}. Do not pay any fees — this ban is active.`
+      message = `This employer has been found non-compliant by the Canadian government and is BANNED from hiring temporary foreign workers until ${formatted}. This ban is active.`
     } else if (isBannedTemporary) {
       message =
-        'This employer has been found non-compliant by the Canadian government and is BANNED from hiring temporary foreign workers. Do not pay any fees. This ban is active.'
+        'This employer has been found non-compliant by the Canadian government and is BANNED from hiring temporary foreign workers. This ban is active.'
     } else {
       message =
-        'This employer has an outstanding unpaid monetary penalty issued by the Canadian government and cannot hire temporary foreign workers until it is paid. Do not pay any fees.'
+        'This employer has an outstanding unpaid monetary penalty issued by the Canadian government and cannot hire temporary foreign workers until it is paid.'
     }
 
     return (
@@ -115,6 +142,7 @@ export default function RiskIndicator({ result }: Props) {
         role="alert"
         aria-label={`Verification result: ${title}`}
       >
+        <CardHeader employer={employerQuery} />
         <div className="flex items-center gap-2.5 mb-3">
           <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-red-600">
@@ -131,6 +159,7 @@ export default function RiskIndicator({ result }: Props) {
         <h3 className="text-base font-bold text-gray-900 mb-1.5">{title}</h3>
         <p className="text-sm text-gray-600 leading-relaxed">{message}</p>
         <EsdcContact />
+        <CardFooter />
       </div>
     )
   }
@@ -142,6 +171,7 @@ export default function RiskIndicator({ result }: Props) {
       role="status"
       aria-label="Verification result: Not Found"
     >
+      <CardHeader employer={employerQuery} />
       <div className="flex items-center gap-2.5 mb-3">
         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500">
@@ -157,9 +187,10 @@ export default function RiskIndicator({ result }: Props) {
       </div>
       <h3 className="text-base font-bold text-gray-900 mb-1.5">No government records found</h3>
       <p className="text-sm text-gray-600 leading-relaxed">
-        This employer does not appear in any government LMIA records. This may mean the job offer is fraudulent. Exercise maximum caution and verify independently before paying any fees.
+        This employer does not appear in any government LMIA records. This may mean the job offer is fraudulent. Exercise maximum caution and verify independently.
       </p>
       <EsdcContact />
+      <CardFooter />
     </div>
   )
 }
