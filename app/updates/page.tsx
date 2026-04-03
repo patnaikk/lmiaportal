@@ -15,6 +15,8 @@ const updates = [
       'New: Result cards now show the employer name and check date — screenshot and share directly to WhatsApp so a friend or family member can see exactly what you found',
       'New: QR code on every result page — scan or screenshot it, send via WhatsApp, and the recipient lands directly on the same result without typing anything',
       'New: "Recently Banned" feed on the homepage — shows the 5 most recently banned employers pulled live from the database, each linking directly to their result',
+      'New: Latest ban callout banner between the hero and search form — shows the most recently banned employer at a glance so first-time visitors see real data immediately',
+      'New: April 2026 TFWP rule changes added to the Guide — advertising period doubled to 8 weeks, mandatory youth recruitment, rural low-wage cap raised temporarily to 15%',
     ],
   },
   {
