@@ -156,6 +156,27 @@ export default async function ResultsPage({ searchParams }: PageProps) {
         {/* QR Code */}
         <ResultQRCode employer={employer} city={city} province={province} />
 
+        {/* Download PDF */}
+        <div className="mt-6 p-4 border border-gray-200 rounded-xl">
+          <p className="text-sm font-medium text-gray-700 mb-1">Download & Print</p>
+          <p className="text-xs text-gray-500 mb-3">
+            Save this result as a PDF to share with family or for your records.
+          </p>
+          <a
+            href={`/api/download-result?employer=${encodeURIComponent(employer)}${city ? `&city=${encodeURIComponent(city)}` : ''}${province ? `&province=${encodeURIComponent(province)}` : ''}`}
+            download
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-1 transition-colors"
+            aria-label="Download result as PDF"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download PDF
+          </a>
+        </div>
+
         {/* Share */}
         <ShareComponent riskResult={result.risk} />
 
