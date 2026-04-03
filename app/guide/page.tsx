@@ -274,6 +274,62 @@ export default function GuidePage() {
           </div>
         </section>
 
+        {/* April 2026 rule changes */}
+        <section className="bg-amber-50 border-l-4 border-amber-500 rounded-lg p-6">
+          <div className="flex items-center gap-2 mb-1">
+            <h2 className="text-2xl font-extrabold text-gray-900 flex items-center gap-2">
+              <span>📋</span> April 2026 Rule Changes
+            </h2>
+            <span className="text-[10px] font-semibold text-amber-700 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full">New</span>
+          </div>
+          <p className="text-sm text-gray-500 mb-5">Effective April 1, 2026 — applies to low-wage LMIA positions</p>
+
+          {/* Table */}
+          <div className="overflow-x-auto mb-5">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="bg-amber-100">
+                  <th className="text-left font-semibold text-gray-700 px-3 py-2 rounded-tl-lg">Change</th>
+                  <th className="text-left font-semibold text-gray-700 px-3 py-2">Before Apr 1</th>
+                  <th className="text-left font-semibold text-gray-700 px-3 py-2 rounded-tr-lg">After Apr 1, 2026</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-amber-100">
+                <tr className="bg-white">
+                  <td className="px-3 py-2.5 text-gray-700 font-medium">Advertising duration</td>
+                  <td className="px-3 py-2.5 text-gray-500">4 consecutive weeks</td>
+                  <td className="px-3 py-2.5 font-semibold text-amber-800">8 consecutive weeks</td>
+                </tr>
+                <tr className="bg-amber-50/40">
+                  <td className="px-3 py-2.5 text-gray-700 font-medium">Youth recruitment</td>
+                  <td className="px-3 py-2.5 text-gray-500">No specific requirement</td>
+                  <td className="px-3 py-2.5 font-semibold text-amber-800">Mandatory (ages 15–30)</td>
+                </tr>
+                <tr className="bg-white">
+                  <td className="px-3 py-2.5 text-gray-700 font-medium">Rural low-wage TFW cap</td>
+                  <td className="px-3 py-2.5 text-gray-500">10% of workforce</td>
+                  <td className="px-3 py-2.5 font-semibold text-amber-800">Up to 15% (temp, until Mar 2027)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="space-y-4 text-sm text-gray-700">
+            <div>
+              <p className="font-semibold text-gray-900 mb-1">1. Advertising period doubled: 4 weeks → 8 weeks</p>
+              <p className="leading-relaxed">Employers must advertise low-wage positions for 8 consecutive weeks before submitting an LMIA — the full 8 weeks must be completed first. If someone promises you a "fast LMIA" for a low-wage position in less time, that is a red flag.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-900 mb-1">2. Youth recruitment is now mandatory</p>
+              <p className="leading-relaxed">Employers must prove they specifically targeted workers aged 15–30 — via the Job Bank youth section, youth job boards, colleges, or youth employment programs. This is in addition to existing requirements for Indigenous peoples, newcomers, persons with disabilities, and asylum seekers.</p>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-900 mb-1">3. Rural low-wage cap raised temporarily: 10% → 15%</p>
+              <p className="leading-relaxed">Rural employers (outside census metropolitan areas) in participating provinces can employ up to 15% low-wage TFWs — up from 10% — until March 31, 2027. This requires a formal request from the province or territory and is not a blanket increase.</p>
+            </div>
+          </div>
+        </section>
+
         {/* Disclaimer */}
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
           <p className="text-xs text-gray-600 leading-relaxed">

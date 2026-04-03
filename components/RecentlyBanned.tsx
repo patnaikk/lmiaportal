@@ -37,7 +37,7 @@ export default async function RecentlyBanned() {
   if (rows.length === 0) return null
 
   return (
-    <div className="max-w-2xl mx-auto w-full px-4 pb-6">
+    <div id="recently-banned" className="max-w-2xl mx-auto w-full px-4 pb-6">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Recently banned employers</h2>
         <span className="text-[10px] font-medium text-red-500 bg-red-50 border border-red-100 px-2 py-0.5 rounded-full">

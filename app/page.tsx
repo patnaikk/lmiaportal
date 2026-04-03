@@ -2,6 +2,7 @@ import Link from 'next/link'
 import SearchForm from '@/components/SearchForm'
 import Footer from '@/components/Footer'
 import RecentlyBanned from '@/components/RecentlyBanned'
+import LatestBanBanner from '@/components/LatestBanBanner'
 
 export default function HomePage() {
   return (
@@ -50,6 +51,9 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* Latest ban callout */}
+      <LatestBanBanner />
 
       {/* Search card */}
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-5">
