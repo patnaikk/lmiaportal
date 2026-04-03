@@ -169,10 +169,9 @@ export async function GET(request: NextRequest): Promise<Response> {
       doc.text(statusLabelLines, col, y)
       y += statusLabelLines.length * 5 + 3
 
-      // Decision date + penalty side by side
+      // Decision date + penalty side by side (with proper spacing)
       if (v.decision_date || v.penalty_amount) {
-        const halfW = (contentWidth - 6) / 2
-        const col2 = col + halfW + 6
+        const col2 = col + 115 // Fixed column 2 position (enough space for first column)
 
         if (v.decision_date) {
           label(doc, 'Date of Government Decision', col, y)
@@ -200,7 +199,7 @@ export async function GET(request: NextRequest): Promise<Response> {
             doc.setFontSize(8)
             doc.setFont('helvetica', 'normal')
             doc.setTextColor(107, 114, 128)
-            doc.text(`+ ${v.ban_duration}`, col2 + doc.getTextWidth(v.penalty_amount) + 2, y)
+            doc.text(`${v.ban_duration}`, col2 + 40, y)
           }
         }
         y += 8
@@ -233,15 +232,14 @@ export async function GET(request: NextRequest): Promise<Response> {
       sectionHeading(doc, 'LMIA Record', col, y, pageWidth, margin)
       y += 6
 
-      // Stream + occupation side by side
-      const halfW = (contentWidth - 6) / 2
-      const col2 = col + halfW + 6
+      // Stream + occupation side by side (fixed columns)
+      const col2 = col + 115
 
       label(doc, 'Program Stream', col, y)
       label(doc, 'Occupation', col2, y)
       y += 4
-      const streamLines = value(doc, p.program_stream ?? '—', col, y, halfW)
-      const occLines = value(doc, p.occupation_title ?? '—', col2, y, halfW)
+      const streamLines = value(doc, p.program_stream ?? '—', col, y, 105)
+      const occLines = value(doc, p.occupation_title ?? '—', col2, y, contentWidth - 115)
       y += Math.max(streamLines, occLines) * 5 + 3
 
       // Approved LMIAs + positions + quarter
