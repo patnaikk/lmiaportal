@@ -83,14 +83,15 @@ export async function GET(request: NextRequest): Promise<Response> {
     const label = riskLabels[result.risk] || 'UNKNOWN'
     const [r, g, b] = hexToRgb(colorHex)
 
-    // Draw badge background (light fill)
+    // Draw badge background (light fill using lighter shade)
+    const lightR = Math.min(255, r + 191) // Add white to lighten
+    const lightG = Math.min(255, g + 191)
+    const lightB = Math.min(255, b + 191)
     doc.setDrawColor(r, g, b)
-    doc.setFillColor(r, g, b)
-    doc.setFillOpacity(0.1)
+    doc.setFillColor(lightR, lightG, lightB)
     doc.rect(margin, yPosition, contentWidth, 18, 'FD')
 
     // Draw badge text
-    doc.setFillOpacity(1)
     doc.setFontSize(14)
     doc.setFont('helvetica', 'bold')
     doc.setTextColor(r, g, b)
