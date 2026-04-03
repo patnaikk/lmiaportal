@@ -1,13 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { jsPDF } from 'jspdf'
 import { verifyEmployer } from '@/lib/verify'
+import { expandViolationReasons, VIOLATION_CODES } from '@/lib/violation-codes'
 
-// Hex to RGB conversion
-function hexToRgb(hex: string): [number, number, number] {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-  if (!result) return [0, 0, 0]
-  return [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)]
+// ─── helpers ────────────────────────────────────────────────────────────────
+
+function label(doc: jsPDF, text: string, x: number, y: number) {
+  doc.setFontSize(7.5)
+  doc.setFont('helvetica', 'normal')
+  doc.setTextColor(107, 114, 128)
+  doc.text(text.toUpperCase(), x, y)
 }
+
+function value(doc: jsPDF, text: string, x: number, y: number, contentWidth: number): number {
+  doc.setFontSize(10)
+  doc.setFont('helvetica', 'normal')
+  doc.setTextColor(17, 24, 39)
+  const lines = doc.splitTextToSize(text, contentWidth)
+  doc.text(lines, x, y)
+  return lines.length
+}
+
+function sectionHeading(doc: jsPDF, text: string, x: number, y: number, pageWidth: number, margin: number) {
+  doc.setFontSize(8)
+  doc.setFont('helvetica', 'bold')
+  doc.setTextColor(107, 114, 128)
+  doc.text(text.toUpperCase(), x, y)
+  doc.setDrawColor(229, 231, 235)
+  doc.setLineWidth(0.3)
+  const textWidth = doc.getTextWidth(text.toUpperCase()) + 3
+  doc.line(x + textWidth, y - 1, pageWidth - margin, y - 1)
+}
+
+// ─── route ──────────────────────────────────────────────────────────────────
 
 export async function GET(request: NextRequest): Promise<Response> {
   try {
@@ -20,186 +45,294 @@ export async function GET(request: NextRequest): Promise<Response> {
       return NextResponse.json({ error: 'Employer name required' }, { status: 400 })
     }
 
-    // Get verification result
     const result = await verifyEmployer(employer, city, province)
 
-    // Create PDF document
-    const doc = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4',
-    })
-
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
     const pageWidth = doc.internal.pageSize.getWidth()
-    const margin = 15
+    const pageHeight = doc.internal.pageSize.getHeight()
+    const margin = 16
+    const col = margin
     const contentWidth = pageWidth - 2 * margin
-    let yPosition = margin
+    let y = margin + 2
 
-    // Title (without emoji - jsPDF doesn't render emojis well)
-    doc.setFontSize(18)
+    // ── Brand header ──────────────────────────────────────────────────────
+    doc.setFontSize(22)
     doc.setFont('helvetica', 'bold')
-    doc.text('LMIA Check Result', pageWidth / 2, yPosition, { align: 'center' })
-    yPosition += 12
+    doc.setTextColor(17, 24, 39)
+    doc.text('LMIA Check', col, y)
+    y += 6
 
-    // Divider line
-    doc.setDrawColor(239, 68, 68)
-    doc.setLineWidth(1)
-    doc.line(margin, yPosition, pageWidth - margin, yPosition)
-    yPosition += 8
-
-    // Employer Checked label
     doc.setFontSize(9)
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(107, 114, 128)
-    doc.text('EMPLOYER CHECKED', margin, yPosition)
-    yPosition += 5
+    doc.text('Employment Verification Report  ·  lmiacheck.ca', col, y)
+    y += 10
 
-    // Employer name
-    doc.setFontSize(16)
+    // ── Employer block ────────────────────────────────────────────────────
+    label(doc, 'Employer Verified', col, y)
+    y += 4
+
+    doc.setFontSize(18)
     doc.setFont('helvetica', 'bold')
-    doc.setTextColor(0, 0, 0)
-    const employerLines = doc.splitTextToSize(employer, contentWidth)
-    doc.text(employerLines, margin, yPosition)
-    yPosition += employerLines.length * 6 + 4
+    doc.setTextColor(17, 24, 39)
+    const empLines = doc.splitTextToSize(employer, contentWidth)
+    doc.text(empLines, col, y)
+    y += empLines.length * 6.5
 
-    // Location
     if (city || province) {
-      doc.setFontSize(10)
+      doc.setFontSize(9)
       doc.setFont('helvetica', 'normal')
       doc.setTextColor(107, 114, 128)
-      const location = `${city || ''}${city && province ? ', ' : ''}${province || ''}`
-      const locationLines = doc.splitTextToSize(location, contentWidth)
-      doc.text(locationLines, margin, yPosition)
-      yPosition += locationLines.length * 4 + 4
+      doc.text(`${city || ''}${city && province ? ', ' : ''}${province || ''}`, col, y)
+      y += 5
     }
+    y += 5
 
-    yPosition += 3
-
-    // Result badge with solid color background
-    const riskColors: Record<string, string> = {
-      GREEN: '#10b981',
-      YELLOW: '#f59e0b',
-      RED: '#ef4444',
-      GREY: '#9ca3af',
+    // ── Risk badge ────────────────────────────────────────────────────────
+    const COLORS: Record<string, [number, number, number]> = {
+      GREEN:  [16, 185, 129],
+      YELLOW: [245, 158, 11],
+      RED:    [220, 38, 38],
+      GREY:   [107, 114, 128],
     }
-
-    const riskLabelsNoEmoji: Record<string, string> = {
-      GREEN: 'VERIFIED',
+    const BADGE_LABELS: Record<string, string> = {
+      GREEN:  'VERIFIED',
       YELLOW: 'VERIFY FURTHER',
-      RED: 'HIGH RISK',
-      GREY: 'NOT FOUND',
+      RED:    'HIGH RISK — BANNED',
+      GREY:   'NOT FOUND IN RECORDS',
+    }
+    const STATUS_TEXT: Record<string, string> = {
+      GREEN:  'This employer appears in official Canadian government LMIA records.',
+      YELLOW: 'This employer requires further verification before you proceed.',
+      RED:    'This employer is banned from hiring temporary foreign workers.',
+      GREY:   'This employer does not appear in any official government records.',
     }
 
-    const colorHex = riskColors[result.risk] || '#9ca3af'
-    const label = riskLabelsNoEmoji[result.risk] || 'UNKNOWN'
-    const [r, g, b] = hexToRgb(colorHex)
+    const badgeRgb = COLORS[result.risk] ?? COLORS['GREY']
+    const badgeLabel = BADGE_LABELS[result.risk] ?? 'UNKNOWN'
 
-    // Draw badge background with solid color
-    doc.setDrawColor(r, g, b)
-    doc.setFillColor(r, g, b)
-    doc.rect(margin, yPosition, contentWidth, 22, 'FD')
-
-    // Draw badge text (white text on colored background)
-    doc.setFontSize(16)
+    doc.setFillColor(...badgeRgb)
+    doc.rect(col, y, contentWidth, 14, 'F')
+    doc.setFontSize(13)
     doc.setFont('helvetica', 'bold')
     doc.setTextColor(255, 255, 255)
-    doc.text(label, margin + 5, yPosition + 14)
-    yPosition += 28
+    doc.text(badgeLabel, col + 5, y + 9.5)
+    y += 18
 
-    // Reset text color
-    doc.setTextColor(0, 0, 0)
-
-    // Result Details section
-    doc.setFontSize(10)
-    doc.setFont('helvetica', 'bold')
-    doc.setTextColor(0, 0, 0)
-    doc.text('WHAT THIS MEANS', margin, yPosition)
-    yPosition += 6
-
-    // Result details content
+    // Status one-liner
     doc.setFontSize(10)
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(55, 65, 81)
+    const statusLines = doc.splitTextToSize(STATUS_TEXT[result.risk] ?? '', contentWidth)
+    doc.text(statusLines, col, y)
+    y += statusLines.length * 5 + 7
 
-    let statusText = ''
-    let detailText = ''
+    // ── Violator detail block ─────────────────────────────────────────────
+    if (result.violatorMatches.length > 0) {
+      const v = result.violatorMatches[0]
 
-    if (result.risk === 'GREEN') {
-      statusText = 'This employer is verified in official Canadian government records.'
-      detailText = 'You can proceed with confidence. Request a copy of their LMIA approval letter.'
-    } else if (result.risk === 'YELLOW') {
-      statusText = 'This employer needs further verification before you proceed.'
-      if (result.reason === 'address_mismatch') {
-        detailText = 'Location details do not match records. Contact the employer directly to clarify.'
-      } else if (result.reason === 'pr_only_stream') {
-        detailText = 'Their approved positions are for Permanent Residents only, not temporary workers.'
-      } else {
-        detailText = 'They were previously penalized but are currently eligible. Proceed with caution.'
+      sectionHeading(doc, 'Government Violation Record', col, y, pageWidth, margin)
+      y += 6
+
+      // Operating name + legal name
+      const hasDistinctLegal =
+        v.business_legal_name &&
+        v.business_legal_name.toLowerCase().trim() !== v.business_operating_name?.toLowerCase().trim()
+
+      label(doc, 'Matched Employer', col, y); y += 4
+      const opLines = value(doc, v.business_operating_name, col, y, contentWidth)
+      y += opLines * 5
+
+      if (hasDistinctLegal) {
+        doc.setFontSize(9)
+        doc.setFont('helvetica', 'normal')
+        doc.setTextColor(107, 114, 128)
+        const legalLines = doc.splitTextToSize(`Legal name: ${v.business_legal_name}`, contentWidth)
+        doc.text(legalLines, col, y)
+        y += legalLines.length * 4.5
       }
-    } else if (result.risk === 'RED') {
-      statusText = 'This employer is banned from hiring foreign workers.'
-      if (result.subtype === 'BANNED_TEMPORARY' && result.ban_end_date) {
-        detailText = `Ban until: ${new Date(result.ban_end_date).toLocaleDateString('en-CA')}. Do not accept an offer from this employer.`
-      } else if (result.subtype === 'BANNED_TEMPORARY') {
-        detailText = 'They cannot hire temporary foreign workers. Do not accept an offer from this employer.'
-      } else {
-        detailText = 'They have unpaid penalties. Do not accept an offer from this employer.'
+      y += 3
+
+      // Compliance status
+      label(doc, 'Compliance Status', col, y); y += 4
+      const statusLabel =
+        v.compliance_status === 'INELIGIBLE_UNTIL'
+          ? `INELIGIBLE UNTIL ${v.ineligible_until_date ? new Date(v.ineligible_until_date).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }) : 'date not specified'}`
+          : v.compliance_status === 'ELIGIBLE'
+          ? 'ELIGIBLE (previously penalised, now allowed to hire)'
+          : 'INELIGIBLE — UNPAID PENALTY'
+
+      doc.setFontSize(10)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(...badgeRgb)
+      const statusLabelLines = doc.splitTextToSize(statusLabel, contentWidth)
+      doc.text(statusLabelLines, col, y)
+      y += statusLabelLines.length * 5 + 3
+
+      // Decision date + penalty side by side
+      if (v.decision_date || v.penalty_amount) {
+        const halfW = (contentWidth - 6) / 2
+        const col2 = col + halfW + 6
+
+        if (v.decision_date) {
+          label(doc, 'Date of Government Decision', col, y)
+        }
+        if (v.penalty_amount) {
+          label(doc, 'Monetary Penalty', col2, y)
+        }
+        y += 4
+
+        if (v.decision_date) {
+          doc.setFontSize(10)
+          doc.setFont('helvetica', 'normal')
+          doc.setTextColor(17, 24, 39)
+          doc.text(
+            new Date(v.decision_date).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' }),
+            col, y
+          )
+        }
+        if (v.penalty_amount) {
+          doc.setFontSize(13)
+          doc.setFont('helvetica', 'bold')
+          doc.setTextColor(17, 24, 39)
+          doc.text(v.penalty_amount, col2, y)
+          if (v.ban_duration) {
+            doc.setFontSize(8)
+            doc.setFont('helvetica', 'normal')
+            doc.setTextColor(107, 114, 128)
+            doc.text(`+ ${v.ban_duration}`, col2 + doc.getTextWidth(v.penalty_amount) + 2, y)
+          }
+        }
+        y += 8
       }
-    } else {
-      statusText = 'This employer does not appear in official government records.'
-      detailText = 'Verify they exist independently before proceeding. Check their website, business registration, and call their main line.'
+
+      // Violations list
+      const codes = expandViolationReasons(v.reasons)
+      if (codes.length > 0) {
+        label(doc, `Violations Found (${codes.length})`, col, y); y += 5
+        for (const code of codes) {
+          const desc = VIOLATION_CODES[code] ?? `Violation code ${code}`
+          doc.setFontSize(9)
+          doc.setFont('helvetica', 'bold')
+          doc.setTextColor(17, 24, 39)
+          doc.text(`${code}.`, col, y)
+          doc.setFont('helvetica', 'normal')
+          doc.setTextColor(55, 65, 81)
+          const descLines = doc.splitTextToSize(desc, contentWidth - 8)
+          doc.text(descLines, col + 7, y)
+          y += descLines.length * 4.5 + 1.5
+        }
+        y += 2
+      }
     }
 
-    const statusLines = doc.splitTextToSize(statusText, contentWidth)
-    doc.text(statusLines, margin, yPosition)
-    yPosition += statusLines.length * 5 + 3
+    // ── Positive LMIA detail block ────────────────────────────────────────
+    if (result.positiveMatches.length > 0) {
+      const p = result.positiveMatches[0]
 
-    const detailLines = doc.splitTextToSize(detailText, contentWidth)
-    doc.setTextColor(107, 114, 128)
-    doc.text(detailLines, margin, yPosition)
-    yPosition += detailLines.length * 5 + 6
+      sectionHeading(doc, 'LMIA Record', col, y, pageWidth, margin)
+      y += 6
 
-    // Check date & source
-    const checkDate = new Date().toLocaleDateString('en-CA', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-    doc.setFontSize(8)
-    doc.setTextColor(156, 163, 175)
-    doc.setFont('helvetica', 'normal')
-    doc.text(`Checked on: ${checkDate}`, margin, yPosition)
-    yPosition += 4
-    doc.text('Source: Employment and Social Development Canada (ESDC)', margin, yPosition)
-    yPosition += 6
+      // Stream + occupation side by side
+      const halfW = (contentWidth - 6) / 2
+      const col2 = col + halfW + 6
 
-    // Footer divider
+      label(doc, 'Program Stream', col, y)
+      label(doc, 'Occupation', col2, y)
+      y += 4
+      const streamLines = value(doc, p.program_stream ?? '—', col, y, halfW)
+      const occLines = value(doc, p.occupation_title ?? '—', col2, y, halfW)
+      y += Math.max(streamLines, occLines) * 5 + 3
+
+      // Approved LMIAs + positions + quarter
+      label(doc, 'Approved LMIAs', col, y)
+      label(doc, 'Approved Positions', col2, y)
+      y += 4
+      doc.setFontSize(13)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(17, 24, 39)
+      doc.text(String(p.approved_lmias ?? '—'), col, y)
+      doc.text(String(p.approved_positions ?? '—'), col2, y)
+      y += 7
+
+      if (p.quarter) {
+        label(doc, 'Data Quarter', col, y); y += 4
+        value(doc, p.quarter, col, y, contentWidth)
+        y += 6
+      }
+      y += 2
+    }
+
+    // ── What To Do Next ───────────────────────────────────────────────────
+    sectionHeading(doc, 'What To Do Next', col, y, pageWidth, margin)
+    y += 6
+
+    const NEXT_STEPS: Record<string, string[]> = {
+      GREEN: [
+        'Request a copy of the LMIA approval letter from your employer.',
+        'Use a licensed RCIC or immigration lawyer to process your work permit.',
+        'Never pay recruitment fees — employers bear all costs under LMIA rules.',
+      ],
+      YELLOW: [
+        result.reason === 'address_mismatch'
+          ? 'Contact the employer using independently verified contact info and ask them to clarify the address in your offer.'
+          : result.reason === 'pr_only_stream'
+          ? 'Ask the employer to provide their LMIA approval letter confirming the correct stream for your position.'
+          : 'Verify this employer independently before proceeding.',
+        'Consult a licensed RCIC before signing any offer letter.',
+      ],
+      RED: [
+        'Do not accept any job offer from this employer.',
+        'If you have already paid fees, contact ESDC at 1-800-367-5693.',
+        'Report this employer to ESDC: 1-800-367-5693.',
+        'Contact a licensed RCIC or legal aid for free advice.',
+      ],
+      GREY: [
+        'Independently verify this employer exists before proceeding.',
+        'Check their website, business registration, and call their main line.',
+        'If you paid fees, contact ESDC at 1-800-367-5693 immediately.',
+      ],
+    }
+
+    const steps = NEXT_STEPS[result.risk] ?? []
+    for (const step of steps) {
+      doc.setFontSize(9)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(...badgeRgb)
+      doc.text('—', col, y)
+      doc.setFont('helvetica', 'normal')
+      doc.setTextColor(55, 65, 81)
+      const stepLines = doc.splitTextToSize(step, contentWidth - 6)
+      doc.text(stepLines, col + 5, y)
+      y += stepLines.length * 4.5 + 2
+    }
+
+    // ── Footer ────────────────────────────────────────────────────────────
+    const checkDate = new Date().toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })
+
     doc.setDrawColor(229, 231, 235)
-    doc.setLineWidth(0.5)
-    doc.line(margin, yPosition, pageWidth - margin, yPosition)
-    yPosition += 5
+    doc.setLineWidth(0.3)
+    doc.line(col, pageHeight - 20, pageWidth - margin, pageHeight - 20)
 
-    // Footer text
-    doc.setFontSize(7)
-    doc.setTextColor(107, 114, 128)
-    const footerText =
-      'This is an informational verification record from LMIA Check (lmiacheck.ca) based on publicly available Government of Canada data. It does not constitute legal or immigration advice. For help with visa applications, consult a licensed immigration consultant or lawyer.'
-    const footerLines = doc.splitTextToSize(footerText, contentWidth - 2)
-    doc.text(footerLines, margin + 1, yPosition)
+    doc.setFontSize(7.5)
+    doc.setFont('helvetica', 'normal')
+    doc.setTextColor(156, 163, 175)
+    doc.text(`Checked: ${checkDate}  ·  Source: Employment and Social Development Canada (ESDC)  ·  lmiacheck.ca`, col, pageHeight - 15)
 
-    // Generate PDF and convert to Buffer
+    const disclaimer = 'Based on publicly available Government of Canada data. Not legal or immigration advice. Consult a licensed immigration consultant or lawyer before making any employment decisions.'
+    const disclaimerLines = doc.splitTextToSize(disclaimer, contentWidth)
+    doc.text(disclaimerLines, col, pageHeight - 11)
+
     const pdfBytes = doc.output('arraybuffer')
     const pdfBuffer = Buffer.from(pdfBytes)
 
-    const response = new NextResponse(pdfBuffer, {
+    return new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="LMIA_${employer.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf"`,
       },
     })
-
-    return response
   } catch (error) {
     console.error('PDF generation error:', error)
     return NextResponse.json({ error: 'Failed to generate PDF' }, { status: 500 })
