@@ -25,7 +25,7 @@ export default async function RecentlyBanned() {
       .from('violators')
       .select('business_operating_name, province, decision_date, compliance_status')
       .in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID'])
-      .order('decision_date', { ascending: false })
+      .order('decision_date', { ascending: false, nullsFirst: false })
       .limit(5)
 
     rows = (data as BannedRow[]) || []
