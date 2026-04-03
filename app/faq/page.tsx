@@ -3,8 +3,8 @@ import Footer from '@/components/Footer'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'FAQ — LMIA Check',
-  description: 'Answers to common questions about LMIA fraud, your rights as a foreign worker in Canada, and how to use this tool.',
+  title: 'LMIA FAQ 2026 — Common Questions About Verification & Fraud',
+  description: 'FAQ on LMIA scams, how to spot fake job offers, employer verification, banned employers, and your rights as a foreign worker in Canada.',
 }
 
 const sections = [

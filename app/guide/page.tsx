@@ -2,8 +2,8 @@ import Link from 'next/link'
 import Footer from '@/components/Footer'
 
 export const metadata = {
-  title: 'LMIA Guide | LMIA Check',
-  description: 'Understand what LMIA is, who needs it, and how the Canadian work permit process works.',
+  title: 'LMIA Guide 2026 — How to Verify a Canadian Job Offer | LMIA Check',
+  description: 'Complete guide to understanding LMIA, spotting fraud, and verifying Canadian employers. Learn the 4-step work permit process, costs, red flags, and 2026 rule changes.',
 }
 
 export default function GuidePage() {
@@ -271,6 +271,74 @@ export default function GuidePage() {
                 📞 1-800-367-5693
               </a>
             </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="bg-white border border-gray-200 rounded-lg p-6">
+          <h2 className="text-2xl font-extrabold text-gray-900 mb-5 flex items-center gap-2">
+            <span>❓</span> Common Questions
+          </h2>
+          <div className="space-y-3">
+            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
+                Is LMIA free or do I have to pay?
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <p className="mt-3 text-sm text-gray-700 leading-relaxed">
+                The LMIA itself is free. Your employer applies for it at no cost. You only pay for your work permit application ($255 CAD) and supporting documents (medical exam, police clearance, translations). If anyone asks you to pay for the LMIA directly, that is a scam.
+              </p>
+            </details>
+
+            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
+                How long does the LMIA process take?
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <p className="mt-3 text-sm text-gray-700 leading-relaxed">
+                The LMIA itself takes 4–8 weeks for your employer to get approved (as of April 2026, they must advertise for 8 weeks). Your work permit takes another 2–4 weeks to process. Total: 3–6 months from job offer to work permit approval.
+              </p>
+            </details>
+
+            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
+                What if my employer says the LMIA is already approved?
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <p className="mt-3 text-sm text-gray-700 leading-relaxed">
+                Ask to see proof. A legitimate LMIA approval is a government document (job letter from ESDC). If they refuse or only send you screenshots, be suspicious. Always verify the employer using LMIA Check before proceeding.
+              </p>
+            </details>
+
+            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
+                Can I work in Canada while my work permit is being processed?
+                <span className="text-gray-400 group-open:text-blue-700">▼</span>
+              </summary>
+              <p className="mt-3 text-sm text-gray-700 leading-relaxed">
+                Only if you have an open work permit or if you're applying from within Canada. If you're outside Canada waiting for a decision, you cannot work legally until your work permit is approved. Do not start work early.
+              </p>
+            </details>
+
+            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
+                What's the difference between a work permit and an LMIA?
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <p className="mt-3 text-sm text-gray-700 leading-relaxed">
+                <strong>LMIA</strong> = your employer's document proving Canada needs a foreign worker (applies to most people on work visas). <strong>Work Permit</strong> = your personal document allowing you to work in Canada. You need both. The LMIA comes first.
+              </p>
+            </details>
+
+            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+              <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
+                What should I do if I already paid someone for an LMIA?
+                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <p className="mt-3 text-sm text-gray-700 leading-relaxed">
+                You have been scammed. Stop all communication with that person immediately. Report to ESDC: <strong>1-800-367-5693</strong>. Contact a licensed immigration consultant (RCIC) or your embassy for next steps. Do not send more money.
+              </p>
+            </details>
           </div>
         </section>
 
