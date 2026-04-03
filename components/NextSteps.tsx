@@ -19,13 +19,13 @@ export default function NextSteps({ result }: Props) {
     steps = [
       { icon: '✓', text: 'Request a copy of the LMIA approval letter from your employer' },
       { icon: '✓', text: 'Use a licensed RCIC (Regulated Canadian Immigration Consultant) to process your application' },
-      { icon: '✓', text: 'Never pay fees directly to a recruiter — fees should only go to licensed consultants' },
+      { icon: '✓', text: 'Use a licensed RCIC (Regulated Canadian Immigration Consultant) or immigration lawyer for your application' },
     ]
   } else if (risk === 'YELLOW' && reason === 'address_mismatch') {
     steps = [
       { icon: '⚠', text: 'Contact the employer directly using contact information you find independently (not from the offer letter)' },
       { icon: '⚠', text: 'Ask them to confirm their LMIA number and address match what is on your offer' },
-      { icon: '⚠', text: 'Do not pay any fees until details are confirmed' },
+      { icon: '⚠', text: 'Confirm all offer details before proceeding with your application' },
     ]
   } else if (risk === 'YELLOW' && reason === 'prior_violation_now_eligible') {
     steps = [
@@ -39,7 +39,7 @@ export default function NextSteps({ result }: Props) {
       { icon: '⚠', text: 'The government records for this employer only cover Permanent Resident positions — not temporary foreign workers' },
       { icon: '⚠', text: 'Contact the employer directly using independently verified contact information' },
       { icon: '⚠', text: 'Ask them to show you their LMIA approval letter for your specific position' },
-      { icon: '⚠', text: 'Do not pay any fees until the correct LMIA stream is confirmed' },
+      { icon: '⚠', text: 'Ask them to show you their LMIA approval letter confirming the correct stream for your position' },
     ]
   } else if (risk === 'RED' && subtype === 'BANNED_TEMPORARY') {
     const banDate = ban_end_date
@@ -86,7 +86,7 @@ export default function NextSteps({ result }: Props) {
   } else {
     // GREY
     steps = [
-      { icon: '?', text: 'Do not pay any fees until you have independently verified this employer exists' },
+      { icon: '?', text: 'Independently verify this employer exists before proceeding with your application' },
       {
         icon: '?',
         text: (

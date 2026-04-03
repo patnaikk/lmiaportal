@@ -3,7 +3,7 @@
   "configurations": [
     {
       "name": "lmia-portal",
-      "runtimeExecutable": "/opt/homebrew/opt/node@25/bin/node",
+      "runtimeExecutable": "/opt/homebrew/bin/node",
       "runtimeArgs": ["/Users/sandeep/Downloads/lmia-portal/node_modules/.bin/next", "dev"],
       "port": 3000,
       "autoPort": true
