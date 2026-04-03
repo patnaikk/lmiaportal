@@ -35,36 +35,47 @@ export async function GET(request: NextRequest): Promise<Response> {
     const contentWidth = pageWidth - 2 * margin
     let yPosition = margin
 
-    // Title
-    doc.setFontSize(20)
+    // Title (without emoji - jsPDF doesn't render emojis well)
+    doc.setFontSize(18)
     doc.setFont('helvetica', 'bold')
-    doc.text('🍁 LMIA Check Result', pageWidth / 2, yPosition, { align: 'center' })
+    doc.text('LMIA Check Result', pageWidth / 2, yPosition, { align: 'center' })
     yPosition += 12
 
+    // Divider line
+    doc.setDrawColor(239, 68, 68)
+    doc.setLineWidth(1)
+    doc.line(margin, yPosition, pageWidth - margin, yPosition)
+    yPosition += 8
+
     // Employer Checked label
-    doc.setFontSize(11)
+    doc.setFontSize(9)
     doc.setFont('helvetica', 'normal')
-    doc.text('Employer Checked:', margin, yPosition)
-    yPosition += 6
+    doc.setTextColor(107, 114, 128)
+    doc.text('EMPLOYER CHECKED', margin, yPosition)
+    yPosition += 5
 
     // Employer name
-    doc.setFontSize(14)
+    doc.setFontSize(16)
     doc.setFont('helvetica', 'bold')
-    doc.text(employer, margin, yPosition)
-    yPosition += 10
+    doc.setTextColor(0, 0, 0)
+    const employerLines = doc.splitTextToSize(employer, contentWidth)
+    doc.text(employerLines, margin, yPosition)
+    yPosition += employerLines.length * 6 + 4
 
     // Location
     if (city || province) {
       doc.setFontSize(10)
       doc.setFont('helvetica', 'normal')
-      doc.setTextColor(102, 102, 102)
-      const location = `Location: ${city || '—'}${city && province ? ', ' : ''}${province || ''}`
-      doc.text(location, margin, yPosition)
-      yPosition += 8
-      doc.setTextColor(0, 0, 0)
+      doc.setTextColor(107, 114, 128)
+      const location = `${city || ''}${city && province ? ', ' : ''}${province || ''}`
+      const locationLines = doc.splitTextToSize(location, contentWidth)
+      doc.text(locationLines, margin, yPosition)
+      yPosition += locationLines.length * 4 + 4
     }
 
-    // Result badge
+    yPosition += 3
+
+    // Result badge with solid color background
     const riskColors: Record<string, string> = {
       GREEN: '#10b981',
       YELLOW: '#f59e0b',
@@ -72,102 +83,81 @@ export async function GET(request: NextRequest): Promise<Response> {
       GREY: '#9ca3af',
     }
 
-    const riskLabels: Record<string, string> = {
-      GREEN: '✅ VERIFIED',
-      YELLOW: '⚠️ VERIFY FURTHER',
-      RED: '🚫 HIGH RISK',
-      GREY: '❓ NOT FOUND',
+    const riskLabelsNoEmoji: Record<string, string> = {
+      GREEN: 'VERIFIED',
+      YELLOW: 'VERIFY FURTHER',
+      RED: 'HIGH RISK',
+      GREY: 'NOT FOUND',
     }
 
     const colorHex = riskColors[result.risk] || '#9ca3af'
-    const label = riskLabels[result.risk] || 'UNKNOWN'
+    const label = riskLabelsNoEmoji[result.risk] || 'UNKNOWN'
     const [r, g, b] = hexToRgb(colorHex)
 
-    // Draw badge background (light fill using lighter shade)
-    const lightR = Math.min(255, r + 191) // Add white to lighten
-    const lightG = Math.min(255, g + 191)
-    const lightB = Math.min(255, b + 191)
+    // Draw badge background with solid color
     doc.setDrawColor(r, g, b)
-    doc.setFillColor(lightR, lightG, lightB)
-    doc.rect(margin, yPosition, contentWidth, 18, 'FD')
+    doc.setFillColor(r, g, b)
+    doc.rect(margin, yPosition, contentWidth, 22, 'FD')
 
-    // Draw badge text
-    doc.setFontSize(14)
+    // Draw badge text (white text on colored background)
+    doc.setFontSize(16)
     doc.setFont('helvetica', 'bold')
-    doc.setTextColor(r, g, b)
-    doc.text(label, margin + 3, yPosition + 12)
-    yPosition += 25
+    doc.setTextColor(255, 255, 255)
+    doc.text(label, margin + 5, yPosition + 14)
+    yPosition += 28
 
     // Reset text color
     doc.setTextColor(0, 0, 0)
 
-    // Result Details heading
-    doc.setFontSize(11)
+    // Result Details section
+    doc.setFontSize(10)
     doc.setFont('helvetica', 'bold')
-    doc.text('Result Details:', margin, yPosition)
-    yPosition += 7
+    doc.setTextColor(0, 0, 0)
+    doc.text('WHAT THIS MEANS', margin, yPosition)
+    yPosition += 6
 
     // Result details content
     doc.setFontSize(10)
     doc.setFont('helvetica', 'normal')
+    doc.setTextColor(55, 65, 81)
+
+    let statusText = ''
+    let detailText = ''
 
     if (result.risk === 'GREEN') {
-      doc.text('Status: Legitimate employer', margin, yPosition)
-      yPosition += 6
-      doc.setTextColor(102, 102, 102)
-      const detailText = doc.splitTextToSize(
-        'This employer appears in official Canadian government LMIA records.',
-        contentWidth
-      )
-      doc.text(detailText, margin, yPosition)
-      yPosition += detailText.length * 5
-      doc.setTextColor(0, 0, 0)
+      statusText = 'This employer is verified in official Canadian government records.'
+      detailText = 'You can proceed with confidence. Request a copy of their LMIA approval letter.'
     } else if (result.risk === 'YELLOW') {
-      doc.text('Status: Verify further', margin, yPosition)
-      yPosition += 6
-      doc.setTextColor(102, 102, 102)
-      let detailContent = ''
+      statusText = 'This employer needs further verification before you proceed.'
       if (result.reason === 'address_mismatch') {
-        detailContent = 'Location details do not match your job offer. Ask your employer to clarify.'
+        detailText = 'Location details do not match records. Contact the employer directly to clarify.'
       } else if (result.reason === 'pr_only_stream') {
-        detailContent = 'All approved positions are Permanent Resident Only, not for temporary workers.'
+        detailText = 'Their approved positions are for Permanent Residents only, not temporary workers.'
       } else {
-        detailContent = 'Previously penalised but currently eligible to hire. Proceed with caution.'
+        detailText = 'They were previously penalized but are currently eligible. Proceed with caution.'
       }
-      const detailText = doc.splitTextToSize(detailContent, contentWidth)
-      doc.text(detailText, margin, yPosition)
-      yPosition += detailText.length * 5
-      doc.setTextColor(0, 0, 0)
     } else if (result.risk === 'RED') {
-      doc.text('Status: High risk / Banned', margin, yPosition)
-      yPosition += 6
-      doc.setTextColor(102, 102, 102)
-      let detailContent = ''
+      statusText = 'This employer is banned from hiring foreign workers.'
       if (result.subtype === 'BANNED_TEMPORARY' && result.ban_end_date) {
-        detailContent = `Banned from hiring until: ${new Date(result.ban_end_date).toLocaleDateString('en-CA')}`
+        detailText = `Ban until: ${new Date(result.ban_end_date).toLocaleDateString('en-CA')}. Do not accept an offer from this employer.`
       } else if (result.subtype === 'BANNED_TEMPORARY') {
-        detailContent = 'Currently banned from hiring temporary foreign workers.'
+        detailText = 'They cannot hire temporary foreign workers. Do not accept an offer from this employer.'
       } else {
-        detailContent = 'Has outstanding unpaid penalties. Cannot hire temporary foreign workers.'
+        detailText = 'They have unpaid penalties. Do not accept an offer from this employer.'
       }
-      const detailText = doc.splitTextToSize(detailContent, contentWidth)
-      doc.text(detailText, margin, yPosition)
-      yPosition += detailText.length * 5
-      doc.setTextColor(0, 0, 0)
     } else {
-      doc.text('Status: Not found in government records', margin, yPosition)
-      yPosition += 6
-      doc.setTextColor(102, 102, 102)
-      const detailText = doc.splitTextToSize(
-        'This employer does not appear in any official LMIA records.',
-        contentWidth
-      )
-      doc.text(detailText, margin, yPosition)
-      yPosition += detailText.length * 5
-      doc.setTextColor(0, 0, 0)
+      statusText = 'This employer does not appear in official government records.'
+      detailText = 'Verify they exist independently before proceeding. Check their website, business registration, and call their main line.'
     }
 
-    yPosition += 8
+    const statusLines = doc.splitTextToSize(statusText, contentWidth)
+    doc.text(statusLines, margin, yPosition)
+    yPosition += statusLines.length * 5 + 3
+
+    const detailLines = doc.splitTextToSize(detailText, contentWidth)
+    doc.setTextColor(107, 114, 128)
+    doc.text(detailLines, margin, yPosition)
+    yPosition += detailLines.length * 5 + 6
 
     // Check date & source
     const checkDate = new Date().toLocaleDateString('en-CA', {
@@ -175,26 +165,27 @@ export async function GET(request: NextRequest): Promise<Response> {
       month: 'long',
       day: 'numeric',
     })
-    doc.setFontSize(9)
+    doc.setFontSize(8)
     doc.setTextColor(156, 163, 175)
+    doc.setFont('helvetica', 'normal')
     doc.text(`Checked on: ${checkDate}`, margin, yPosition)
-    yPosition += 5
-    doc.text('Source: ESDC (Employment and Social Development Canada)', margin, yPosition)
-    yPosition += 8
+    yPosition += 4
+    doc.text('Source: Employment and Social Development Canada (ESDC)', margin, yPosition)
+    yPosition += 6
 
-    // Footer line
+    // Footer divider
     doc.setDrawColor(229, 231, 235)
     doc.setLineWidth(0.5)
     doc.line(margin, yPosition, pageWidth - margin, yPosition)
     yPosition += 5
 
     // Footer text
-    doc.setFontSize(8)
-    doc.setTextColor(102, 102, 102)
+    doc.setFontSize(7)
+    doc.setTextColor(107, 114, 128)
     const footerText =
-      'This document is a verification record from LMIA Check (lmiacheck.ca). It is based on publicly available Government of Canada data and is provided for informational purposes only. It does not constitute legal or immigration advice.'
-    const footerLines = doc.splitTextToSize(footerText, contentWidth)
-    doc.text(footerLines, margin, yPosition)
+      'This is an informational verification record from LMIA Check (lmiacheck.ca) based on publicly available Government of Canada data. It does not constitute legal or immigration advice. For help with visa applications, consult a licensed immigration consultant or lawyer.'
+    const footerLines = doc.splitTextToSize(footerText, contentWidth - 2)
+    doc.text(footerLines, margin + 1, yPosition)
 
     // Generate PDF and convert to Buffer
     const pdfBytes = doc.output('arraybuffer')
