@@ -41,7 +41,7 @@ export default function HomePage() {
             <div className="text-[11px] text-gray-400 font-medium mt-0.5">Employers</div>
           </div>
           <div className="py-3 text-center">
-            <div className="text-xl font-extrabold text-red-600 leading-tight">1,262</div>
+            <div className="text-xl font-extrabold text-red-600 leading-tight">1,296</div>
             <div className="text-[11px] text-gray-400 font-medium mt-0.5">Violators tracked</div>
           </div>
           <div className="py-3 text-center">

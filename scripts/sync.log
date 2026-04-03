@@ -1,0 +1,544 @@
+2026-03-14 20:12:18 INFO     ============================================================
+2026-03-14 20:12:18 INFO       Non-Compliant Employers Sync  —  2026-03-15 00:12 UTC
+2026-03-14 20:12:18 INFO     ============================================================
+2026-03-14 20:12:22 INFO     Fetching page 1 for count check...
+2026-03-14 20:12:45 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs?select=last_known_count&source=eq.ircc_non_compliant&status=in.%28success%2Cskipped%29&order=synced_at.desc&limit=1 "HTTP/2 404 Not Found"
+2026-03-14 20:12:45 WARNING  Could not read last known count from DB: {'message': "Could not find the table 'public.sync_logs' in the schema cache", 'code': 'PGRST205', 'hint': "Perhaps you meant the table 'public.search_logs'", 'details': None}
+2026-03-14 20:12:45 INFO     Live count: None   Last synced count: None
+2026-03-14 20:12:45 INFO     Count changed or unknown — starting full scrape...
+2026-03-14 20:13:06 INFO     Columns: ['Business operating name', 'Business legal name', 'Address', 'Reason(s)', 'Date of final decision', 'Penalty', 'Status']
+2026-03-14 20:13:06 INFO     Page  1  →   25 rows  (running total: 25)
+2026-03-14 20:13:08 INFO     Page  2  →   25 rows  (running total: 50)
+2026-03-14 20:13:10 INFO     Page  3  →   25 rows  (running total: 75)
+2026-03-14 20:13:12 INFO     Page  4  →   25 rows  (running total: 100)
+2026-03-14 20:13:14 INFO     Page  5  →   25 rows  (running total: 125)
+2026-03-14 20:13:16 INFO     Page  6  →   25 rows  (running total: 150)
+2026-03-14 20:13:18 INFO     Page  7  →   25 rows  (running total: 175)
+2026-03-14 20:13:20 INFO     Page  8  →   25 rows  (running total: 200)
+2026-03-14 20:13:22 INFO     Page  9  →   25 rows  (running total: 225)
+2026-03-14 20:13:25 INFO     Page 10  →   25 rows  (running total: 250)
+2026-03-14 20:13:27 INFO     Page 11  →   25 rows  (running total: 275)
+2026-03-14 20:13:29 INFO     Page 12  →   25 rows  (running total: 300)
+2026-03-14 20:13:31 INFO     Page 13  →   25 rows  (running total: 325)
+2026-03-14 20:13:33 INFO     Page 14  →   25 rows  (running total: 350)
+2026-03-14 20:13:35 INFO     Page 15  →   25 rows  (running total: 375)
+2026-03-14 20:13:37 INFO     Page 16  →   25 rows  (running total: 400)
+2026-03-14 20:13:39 INFO     Page 17  →   25 rows  (running total: 425)
+2026-03-14 20:13:41 INFO     Page 18  →   25 rows  (running total: 450)
+2026-03-14 20:13:43 INFO     Page 19  →   25 rows  (running total: 475)
+2026-03-14 20:13:45 INFO     Page 20  →   25 rows  (running total: 500)
+2026-03-14 20:13:47 INFO     Page 21  →   25 rows  (running total: 525)
+2026-03-14 20:13:50 INFO     Page 22  →   25 rows  (running total: 550)
+2026-03-14 20:13:52 INFO     Page 23  →   25 rows  (running total: 575)
+2026-03-14 20:13:54 INFO     Page 24  →   25 rows  (running total: 600)
+2026-03-14 20:13:56 INFO     Page 25  →   25 rows  (running total: 625)
+2026-03-14 20:13:58 INFO     Page 26  →   25 rows  (running total: 650)
+2026-03-14 20:14:00 INFO     Page 27  →   25 rows  (running total: 675)
+2026-03-14 20:14:02 INFO     Page 28  →   25 rows  (running total: 700)
+2026-03-14 20:14:04 INFO     Page 29  →   25 rows  (running total: 725)
+2026-03-14 20:14:06 INFO     Page 30  →   25 rows  (running total: 750)
+2026-03-14 20:14:08 INFO     Page 31  →   25 rows  (running total: 775)
+2026-03-14 20:14:10 INFO     Page 32  →   25 rows  (running total: 800)
+2026-03-14 20:14:12 INFO     Page 33  →   25 rows  (running total: 825)
+2026-03-14 20:14:14 INFO     Page 34  →   25 rows  (running total: 850)
+2026-03-14 20:14:17 INFO     Page 35  →   25 rows  (running total: 875)
+2026-03-14 20:14:19 INFO     Page 36  →   25 rows  (running total: 900)
+2026-03-14 20:14:21 INFO     Page 37  →   25 rows  (running total: 925)
+2026-03-14 20:14:23 INFO     Page 38  →   25 rows  (running total: 950)
+2026-03-14 20:14:25 INFO     Page 39  →   25 rows  (running total: 975)
+2026-03-14 20:14:27 INFO     Page 40  →   25 rows  (running total: 1000)
+2026-03-14 20:14:29 INFO     Page 41  →   25 rows  (running total: 1025)
+2026-03-14 20:14:31 INFO     Page 42  →   25 rows  (running total: 1050)
+2026-03-14 20:14:33 INFO     Page 43  →   25 rows  (running total: 1075)
+2026-03-14 20:14:35 INFO     Page 44  →   25 rows  (running total: 1100)
+2026-03-14 20:14:37 INFO     Page 45  →   25 rows  (running total: 1125)
+2026-03-14 20:14:40 INFO     Page 46  →   25 rows  (running total: 1150)
+2026-03-14 20:14:42 INFO     Page 47  →   25 rows  (running total: 1175)
+2026-03-14 20:14:44 INFO     Page 48  →   25 rows  (running total: 1200)
+2026-03-14 20:14:46 INFO     Page 49  →   25 rows  (running total: 1225)
+2026-03-14 20:14:48 INFO     Page 50  →   25 rows  (running total: 1250)
+2026-03-14 20:14:50 INFO     Page 51  →   22 rows  (running total: 1272)
+2026-03-14 20:14:50 INFO     Last page reached.
+2026-03-14 20:14:50 INFO     Scraped 1272 records across 51 pages.
+2026-03-14 20:14:50 INFO     Upserting 1272 parsed records...
+2026-03-14 20:14:51 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-14 20:14:52 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22business_legal_name%22%2C%22ban_duration%22%2C%22ineligible_until_date%22%2C%22reasons%22%2C%22compliance_status%22%2C%22province%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_raw%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22business_operating_name%22 "HTTP/2 400 Bad Request"
+2026-03-14 20:14:52 ERROR    DB upsert failed: {'message': 'there is no unique or exclusion constraint matching the ON CONFLICT specification', 'code': '42P10', 'hint': None, 'details': None}
+Traceback (most recent call last):
+  File "/Users/sandeep/Downloads/lmia-portal/scripts/sync_violators.py", line 571, in run_sync
+    inserted, updated = upsert_records(supabase, records)
+                        ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/sandeep/Downloads/lmia-portal/scripts/sync_violators.py", line 378, in upsert_records
+    ).execute()
+      ~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': 'there is no unique or exclusion constraint matching the ON CONFLICT specification', 'code': '42P10', 'hint': None, 'details': None}
+2026-03-14 20:14:53 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs "HTTP/2 404 Not Found"
+2026-03-14 20:14:53 WARNING  Could not write sync_log: {'message': "Could not find the table 'public.sync_logs' in the schema cache", 'code': 'PGRST205', 'hint': "Perhaps you meant the table 'public.search_logs'", 'details': None}
+2026-03-14 20:14:53 INFO     Email skipped (SYNC_EMAIL_TO / SMTP_USER / SMTP_PASS not configured).
+2026-03-14 20:19:59 INFO     ============================================================
+2026-03-14 20:19:59 INFO       Non-Compliant Employers Sync  —  2026-03-15 00:19 UTC
+2026-03-14 20:19:59 INFO     ============================================================
+2026-03-14 20:20:00 INFO     Fetching page 1 for count check...
+2026-03-14 20:20:24 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs?select=last_known_count&source=eq.ircc_non_compliant&status=in.%28success%2Cskipped%29&order=synced_at.desc&limit=1 "HTTP/2 404 Not Found"
+2026-03-14 20:20:24 WARNING  Could not read last known count from DB: {'message': "Could not find the table 'public.sync_logs' in the schema cache", 'code': 'PGRST205', 'hint': "Perhaps you meant the table 'public.search_logs'", 'details': None}
+2026-03-14 20:20:24 INFO     Live count: None   Last synced count: None
+2026-03-14 20:20:24 INFO     Count changed or unknown — starting full scrape...
+2026-03-14 20:21:24 ERROR    Scrape failed: Page.goto: Timeout 60000ms exceeded.
+Call log:
+  - navigating to "https://www.canada.ca/en/immigration-refugees-citizenship/services/work-canada/employers-non-compliant.html", waiting until "networkidle"
+Traceback (most recent call last):
+  File "/Users/sandeep/Downloads/lmia-portal/scripts/sync_violators.py", line 543, in run_sync
+    page.goto(IRCC_URL, wait_until="networkidle", timeout=60_000)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/playwright/sync_api/_generated.py", line 9054, in goto
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.goto(
+        ^^^^^^^^^^^^^^^^^^^^
+            url=url, timeout=timeout, waitUntil=wait_until, referer=referer
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        )
+        ^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/playwright/_impl/_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/playwright/_impl/_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/playwright/_impl/_frame.py", line 153, in goto
+    await self._channel.send(
+        "goto", self._navigation_timeout, locals_to_params(locals())
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/playwright/_impl/_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 60000ms exceeded.
+Call log:
+  - navigating to "https://www.canada.ca/en/immigration-refugees-citizenship/services/work-canada/employers-non-compliant.html", waiting until "networkidle"
+
+2026-03-14 20:21:25 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs "HTTP/2 404 Not Found"
+2026-03-14 20:21:25 WARNING  Could not write sync_log: {'message': "Could not find the table 'public.sync_logs' in the schema cache", 'code': 'PGRST205', 'hint': "Perhaps you meant the table 'public.search_logs'", 'details': None}
+2026-03-14 20:21:25 INFO     Email skipped (SYNC_EMAIL_TO / SMTP_USER / SMTP_PASS not configured).
+2026-03-14 20:23:34 INFO     ============================================================
+2026-03-14 20:23:34 INFO       Non-Compliant Employers Sync  —  2026-03-15 00:23 UTC
+2026-03-14 20:23:34 INFO     ============================================================
+2026-03-14 20:23:35 INFO     Fetching page 1 for count check...
+2026-03-14 20:23:55 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs?select=last_known_count&source=eq.ircc_non_compliant&status=in.%28success%2Cskipped%29&order=synced_at.desc&limit=1 "HTTP/2 404 Not Found"
+2026-03-14 20:23:55 WARNING  Could not read last known count from DB: {'message': "Could not find the table 'public.sync_logs' in the schema cache", 'code': 'PGRST205', 'hint': "Perhaps you meant the table 'public.search_logs'", 'details': None}
+2026-03-14 20:23:55 INFO     Live count: None   Last synced count: None
+2026-03-14 20:23:55 INFO     Count changed or unknown — starting full scrape...
+2026-03-14 20:24:10 INFO     Columns: ['Business operating name', 'Business legal name', 'Address', 'Reason(s)', 'Date of final decision', 'Penalty', 'Status']
+2026-03-14 20:24:10 INFO     Page  1  →  1272 rows  (running total: 1272)
+2026-03-14 20:24:10 INFO     No Next button — assuming last page.
+2026-03-14 20:24:10 INFO     Scraped 1272 records across 1 pages.
+2026-03-14 20:24:10 INFO     Upserting 1272 parsed records...
+2026-03-14 20:24:11 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-14 20:24:12 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22compliance_status%22%2C%22employer_normalized%22%2C%22penalty_amount%22%2C%22address%22%2C%22business_legal_name%22%2C%22reasons%22%2C%22province%22%2C%22penalty_raw%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22status_raw%22%2C%22ban_duration%22%2C%22legal_name_normalized%22%2C%22business_operating_name%22 "HTTP/2 400 Bad Request"
+2026-03-14 20:24:12 ERROR    DB upsert failed: {'message': "Could not find the 'legal_name_normalized' column of 'violators' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+Traceback (most recent call last):
+  File "/Users/sandeep/Downloads/lmia-portal/scripts/sync_violators.py", line 617, in run_sync
+    inserted, updated = upsert_records(supabase, records)
+                        ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/sandeep/Downloads/lmia-portal/scripts/sync_violators.py", line 389, in upsert_records
+    ).execute()
+      ~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/postgrest/_sync/request_builder.py", line 53, in execute
+    raise APIError(dict(json_obj))
+postgrest.exceptions.APIError: {'message': "Could not find the 'legal_name_normalized' column of 'violators' in the schema cache", 'code': 'PGRST204', 'hint': None, 'details': None}
+2026-03-14 20:24:12 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs "HTTP/2 404 Not Found"
+2026-03-14 20:24:12 WARNING  Could not write sync_log: {'message': "Could not find the table 'public.sync_logs' in the schema cache", 'code': 'PGRST205', 'hint': "Perhaps you meant the table 'public.search_logs'", 'details': None}
+2026-03-14 20:24:12 INFO     Email skipped (SYNC_EMAIL_TO / SMTP_USER / SMTP_PASS not configured).
+2026-03-14 20:28:45 INFO     ============================================================
+2026-03-14 20:28:45 INFO       Non-Compliant Employers Sync  —  2026-03-15 00:28 UTC
+2026-03-14 20:28:45 INFO     ============================================================
+2026-03-14 20:28:46 INFO     Fetching page 1 for count check...
+2026-03-14 20:29:02 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs?select=last_known_count&source=eq.ircc_non_compliant&status=in.%28success%2Cskipped%29&order=synced_at.desc&limit=1 "HTTP/2 200 OK"
+2026-03-14 20:29:02 INFO     Live count: None   Last synced count: None
+2026-03-14 20:29:02 INFO     Count changed or unknown — starting full scrape...
+2026-03-14 20:29:20 INFO     Columns: ['Business operating name', 'Business legal name', 'Address', 'Reason(s)', 'Date of final decision', 'Penalty', 'Status']
+2026-03-14 20:29:20 INFO     Page  1  →  1272 rows  (running total: 1272)
+2026-03-14 20:29:20 INFO     No Next button — assuming last page.
+2026-03-14 20:29:20 INFO     Scraped 1272 records across 1 pages.
+2026-03-14 20:29:20 INFO     Upserting 1272 parsed records...
+2026-03-14 20:29:21 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-14 20:29:22 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22compliance_status%22%2C%22legal_name_normalized%22%2C%22decision_date%22%2C%22address%22%2C%22business_legal_name%22%2C%22penalty_amount%22%2C%22province%22%2C%22employer_normalized%22%2C%22status_raw%22%2C%22reasons%22%2C%22ineligible_until_date%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-14 20:29:22 INFO       upserted 500/1272 records
+2026-03-14 20:29:22 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22compliance_status%22%2C%22legal_name_normalized%22%2C%22decision_date%22%2C%22address%22%2C%22business_legal_name%22%2C%22penalty_amount%22%2C%22province%22%2C%22employer_normalized%22%2C%22status_raw%22%2C%22reasons%22%2C%22ineligible_until_date%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22business_operating_name%22 "HTTP/2 201 Created"
+2026-03-14 20:29:22 INFO       upserted 1000/1272 records
+2026-03-14 20:29:23 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22compliance_status%22%2C%22legal_name_normalized%22%2C%22decision_date%22%2C%22address%22%2C%22business_legal_name%22%2C%22penalty_amount%22%2C%22province%22%2C%22employer_normalized%22%2C%22status_raw%22%2C%22reasons%22%2C%22ineligible_until_date%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22business_operating_name%22 "HTTP/2 201 Created"
+2026-03-14 20:29:23 INFO       upserted 1272/1272 records
+2026-03-14 20:29:23 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-14 20:29:23 INFO     Done: 10 new, 1262 updated.
+2026-03-14 20:29:23 INFO     Sync complete at 2026-03-15 00:28 UTC
+  Scraped:  1272 records
+  New:      10
+  Updated:  1262
+  Duration: 37.7s
+2026-03-14 20:29:23 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs "HTTP/2 201 Created"
+2026-03-14 20:29:23 INFO     Email skipped (SYNC_EMAIL_TO / SMTP_USER / SMTP_PASS not configured).
+2026-03-14 20:29:23 INFO     ============================================================
+2026-03-16 19:32:58 INFO     ============================================================
+2026-03-16 19:32:58 INFO       Non-Compliant Employers Sync  —  2026-03-16 23:32 UTC
+2026-03-16 19:32:58 INFO     ============================================================
+2026-03-16 19:33:00 INFO     Fetching page 1 for count check...
+2026-03-16 19:33:16 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs?select=last_known_count&source=eq.ircc_non_compliant&status=in.%28success%2Cskipped%29&order=synced_at.desc&limit=1 "HTTP/2 200 OK"
+2026-03-16 19:33:16 INFO     Live count: None   Last synced count: 1272
+2026-03-16 19:33:16 INFO     Count changed or unknown — starting full scrape...
+2026-03-16 19:33:33 INFO     Columns: ['Business operating name', 'Business legal name', 'Address', 'Reason(s)', 'Date of final decision', 'Penalty', 'Status']
+2026-03-16 19:33:33 INFO     Page  1  →  1272 rows  (running total: 1272)
+2026-03-16 19:33:33 INFO     No Next button — assuming last page.
+2026-03-16 19:33:33 INFO     Scraped 1272 records across 1 pages.
+2026-03-16 19:33:33 INFO     Upserting 1272 parsed records...
+2026-03-16 19:33:34 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-16 19:33:34 ERROR    DB upsert failed: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpx/_transports/default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpx/_transports/default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_sync/connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_sync/connection.py", line 103, in handle_request
+    return self._connection.handle_request(request)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_sync/http2.py", line 187, in handle_request
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_sync/http2.py", line 146, in handle_request
+    self._send_request_body(request=request, stream_id=stream_id)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_sync/http2.py", line 262, in _send_request_body
+    self._send_stream_data(request, stream_id, data)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_sync/http2.py", line 276, in _send_stream_data
+    self._write_outgoing_data(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_sync/http2.py", line 484, in _write_outgoing_data
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_sync/http2.py", line 472, in _write_outgoing_data
+    self._network_stream.write(data_to_send, timeout)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_backends/sync.py", line 135, in write
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpcore/_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.WriteError: [Errno 32] Broken pipe
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/sandeep/Downloads/lmia-portal/scripts/sync_violators.py", line 645, in run_sync
+    inserted, updated = upsert_records(supabase, records)
+                        ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/sandeep/Downloads/lmia-portal/scripts/sync_violators.py", line 443, in upsert_records
+    _run_batches(use_conflict=True)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/sandeep/Downloads/lmia-portal/scripts/sync_violators.py", line 425, in _run_batches
+    _do_upsert(batch, use_conflict)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/sandeep/Downloads/lmia-portal/scripts/sync_violators.py", line 396, in _do_upsert
+    ).execute()
+      ~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/postgrest/_sync/request_builder.py", line 47, in execute
+    r = self.request.send()
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/postgrest/base_request_builder.py", line 82, in send
+    return self.session.request(
+           ~~~~~~~~~~~~~~~~~~~~^
+        self.http_method,
+        ^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        auth=self.auth,
+        ^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpx/_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpx/_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpx/_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpx/_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpx/_transports/default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages/httpx/_transports/default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.WriteError: [Errno 32] Broken pipe
+2026-03-16 19:33:35 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs "HTTP/2 201 Created"
+2026-03-16 19:33:35 INFO     Email skipped (SYNC_EMAIL_TO / SMTP_USER / SMTP_PASS not configured).
+2026-03-16 19:34:22 INFO     ============================================================
+2026-03-16 19:34:22 INFO       Non-Compliant Employers Sync  —  2026-03-16 23:34 UTC
+2026-03-16 19:34:22 INFO     ============================================================
+2026-03-16 19:34:23 INFO     Fetching page 1 for count check...
+2026-03-16 19:34:41 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs?select=last_known_count&source=eq.ircc_non_compliant&status=in.%28success%2Cskipped%29&order=synced_at.desc&limit=1 "HTTP/2 200 OK"
+2026-03-16 19:34:41 INFO     Live count: None   Last synced count: 1272
+2026-03-16 19:34:41 INFO     Count changed or unknown — starting full scrape...
+2026-03-16 19:34:53 INFO     Columns: ['Business operating name', 'Business legal name', 'Address', 'Reason(s)', 'Date of final decision', 'Penalty', 'Status']
+2026-03-16 19:34:53 INFO     Page  1  →  1272 rows  (running total: 1272)
+2026-03-16 19:34:53 INFO     No Next button — assuming last page.
+2026-03-16 19:34:53 INFO     Scraped 1272 records across 1 pages.
+2026-03-16 19:34:54 INFO     Upserting 1272 parsed records...
+2026-03-16 19:34:54 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-16 19:34:54 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:54 INFO       upserted 100/1272 records
+2026-03-16 19:34:54 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:54 INFO       upserted 200/1272 records
+2026-03-16 19:34:55 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:55 INFO       upserted 300/1272 records
+2026-03-16 19:34:55 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:55 INFO       upserted 400/1272 records
+2026-03-16 19:34:55 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:55 INFO       upserted 500/1272 records
+2026-03-16 19:34:55 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:55 INFO       upserted 600/1272 records
+2026-03-16 19:34:56 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:56 INFO       upserted 700/1272 records
+2026-03-16 19:34:56 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:56 INFO       upserted 800/1272 records
+2026-03-16 19:34:56 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:56 INFO       upserted 900/1272 records
+2026-03-16 19:34:56 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:56 INFO       upserted 1000/1272 records
+2026-03-16 19:34:56 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:56 INFO       upserted 1100/1272 records
+2026-03-16 19:34:57 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:57 INFO       upserted 1200/1272 records
+2026-03-16 19:34:57 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22legal_name_normalized%22%2C%22address%22%2C%22decision_date%22%2C%22ineligible_until_date%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22penalty_amount%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22status_raw%22%2C%22business_legal_name%22 "HTTP/2 200 OK"
+2026-03-16 19:34:57 INFO       upserted 1272/1272 records
+2026-03-16 19:34:57 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-16 19:34:57 INFO     Done: 0 new, 1272 updated.
+2026-03-16 19:34:57 INFO     Sync complete at 2026-03-16 23:34 UTC
+  Scraped:  1272 records
+  New:      0
+  Updated:  1272
+  Duration: 34.7s
+2026-03-16 19:34:57 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs "HTTP/2 201 Created"
+2026-03-16 19:34:57 INFO     Email skipped (SYNC_EMAIL_TO / SMTP_USER / SMTP_PASS not configured).
+2026-03-16 19:34:57 INFO     ============================================================
+2026-03-27 20:49:06 INFO     ============================================================
+2026-03-27 20:49:06 INFO       Non-Compliant Employers Sync  —  2026-03-28 00:49 UTC
+2026-03-27 20:49:06 INFO     ============================================================
+2026-03-27 20:49:10 INFO     Fetching page 1 for count check...
+2026-03-27 20:49:26 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs?select=last_known_count&source=eq.ircc_non_compliant&status=in.%28success%2Cskipped%29&order=synced_at.desc&limit=1 "HTTP/2 200 OK"
+2026-03-27 20:49:26 INFO     Live count: None   Last synced count: 1272
+2026-03-27 20:49:26 INFO     Count changed or unknown — starting full scrape...
+2026-03-27 20:49:40 INFO     Columns: ['Business operating name', 'Business legal name', 'Address', 'Reason(s)', 'Date of final decision', 'Penalty', 'Status']
+2026-03-27 20:49:40 INFO     Page  1  →  1294 rows  (running total: 1294)
+2026-03-27 20:49:40 INFO     No Next button — assuming last page.
+2026-03-27 20:49:40 INFO     Scraped 1294 records across 1 pages.
+2026-03-27 20:49:40 INFO     Upserting 1294 parsed records...
+2026-03-27 20:49:41 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-27 20:49:42 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-27 20:49:42 INFO       upserted 100/1294 records
+2026-03-27 20:49:42 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 201 Created"
+2026-03-27 20:49:42 INFO       upserted 200/1294 records
+2026-03-27 20:49:42 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-27 20:49:42 INFO       upserted 300/1294 records
+2026-03-27 20:49:42 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-27 20:49:42 INFO       upserted 400/1294 records
+2026-03-27 20:49:42 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-27 20:49:42 INFO       upserted 500/1294 records
+2026-03-27 20:49:43 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-27 20:49:43 INFO       upserted 600/1294 records
+2026-03-27 20:49:43 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-27 20:49:43 INFO       upserted 700/1294 records
+2026-03-27 20:49:43 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 201 Created"
+2026-03-27 20:49:43 INFO       upserted 800/1294 records
+2026-03-27 20:49:43 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-27 20:49:43 INFO       upserted 900/1294 records
+2026-03-27 20:49:43 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 201 Created"
+2026-03-27 20:49:43 INFO       upserted 1000/1294 records
+2026-03-27 20:49:44 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-27 20:49:44 INFO       upserted 1100/1294 records
+2026-03-27 20:49:44 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 201 Created"
+2026-03-27 20:49:44 INFO       upserted 1200/1294 records
+2026-03-27 20:49:44 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22status_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22employer_normalized%22%2C%22decision_date%22%2C%22penalty_amount%22%2C%22reasons%22%2C%22penalty_raw%22%2C%22legal_name_normalized%22%2C%22business_legal_name%22%2C%22address%22%2C%22ineligible_until_date%22%2C%22province%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-27 20:49:44 INFO       upserted 1294/1294 records
+2026-03-27 20:49:44 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-27 20:49:44 INFO     Done: 5 new, 1289 updated.
+2026-03-27 20:49:44 INFO     Sync complete at 2026-03-28 00:49 UTC
+  Scraped:  1294 records
+  New:      5
+  Updated:  1289
+  Duration: 37.8s
+2026-03-27 20:49:44 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs "HTTP/2 201 Created"
+2026-03-27 20:49:44 INFO     Email skipped (SYNC_EMAIL_TO / SMTP_USER / SMTP_PASS not configured).
+2026-03-27 20:49:44 INFO     ============================================================
+2026-03-30 17:56:23 INFO     ============================================================
+2026-03-30 17:56:23 INFO       Non-Compliant Employers Sync  —  2026-03-30 21:56 UTC
+2026-03-30 17:56:23 INFO     ============================================================
+2026-03-30 17:56:25 INFO     Fetching page 1 for count check...
+2026-03-30 17:56:41 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs?select=last_known_count&source=eq.ircc_non_compliant&status=in.%28success%2Cskipped%29&order=synced_at.desc&limit=1 "HTTP/2 200 OK"
+2026-03-30 17:56:41 INFO     Live count: None   Last synced count: 1294
+2026-03-30 17:56:41 INFO     Count changed or unknown — starting full scrape...
+2026-03-30 17:56:56 INFO     Columns: ['Business operating name', 'Business legal name', 'Address', 'Reason(s)', 'Date of final decision', 'Penalty', 'Status']
+2026-03-30 17:56:56 INFO     Page  1  →  1294 rows  (running total: 1294)
+2026-03-30 17:56:56 INFO     No Next button — assuming last page.
+2026-03-30 17:56:56 INFO     Scraped 1294 records across 1 pages.
+2026-03-30 17:56:56 INFO     Upserting 1294 parsed records...
+2026-03-30 17:56:56 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-30 17:56:57 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:57 INFO       upserted 100/1294 records
+2026-03-30 17:56:57 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:57 INFO       upserted 200/1294 records
+2026-03-30 17:56:57 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:57 INFO       upserted 300/1294 records
+2026-03-30 17:56:58 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:58 INFO       upserted 400/1294 records
+2026-03-30 17:56:58 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:58 INFO       upserted 500/1294 records
+2026-03-30 17:56:58 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:58 INFO       upserted 600/1294 records
+2026-03-30 17:56:58 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:58 INFO       upserted 700/1294 records
+2026-03-30 17:56:59 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:59 INFO       upserted 800/1294 records
+2026-03-30 17:56:59 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:59 INFO       upserted 900/1294 records
+2026-03-30 17:56:59 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:59 INFO       upserted 1000/1294 records
+2026-03-30 17:56:59 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:59 INFO       upserted 1100/1294 records
+2026-03-30 17:56:59 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:56:59 INFO       upserted 1200/1294 records
+2026-03-30 17:57:00 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22decision_date%22%2C%22ineligible_until_date%22%2C%22legal_name_normalized%22%2C%22penalty_raw%22%2C%22province%22%2C%22compliance_status%22%2C%22business_legal_name%22%2C%22address%22%2C%22ban_duration%22%2C%22penalty_amount%22%2C%22status_raw%22%2C%22reasons%22%2C%22employer_normalized%22%2C%22business_operating_name%22 "HTTP/2 200 OK"
+2026-03-30 17:57:00 INFO       upserted 1294/1294 records
+2026-03-30 17:57:00 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-30 17:57:00 INFO     Done: 0 new, 1294 updated.
+2026-03-30 17:57:00 INFO     Sync complete at 2026-03-30 21:56 UTC
+  Scraped:  1294 records
+  New:      0
+  Updated:  1294
+  Duration: 36.9s
+2026-03-30 17:57:00 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs "HTTP/2 201 Created"
+2026-03-30 17:57:00 INFO     Email skipped (SYNC_EMAIL_TO / SMTP_USER / SMTP_PASS not configured).
+2026-03-30 17:57:00 INFO     ============================================================
+2026-03-30 19:09:00 INFO     ============================================================
+2026-03-30 19:09:00 INFO       Non-Compliant Employers Sync  —  2026-03-30 23:09 UTC
+2026-03-30 19:09:00 INFO     ============================================================
+2026-03-30 19:09:02 INFO     Fetching page 1 for count check...
+2026-03-30 19:09:17 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs?select=last_known_count&source=eq.ircc_non_compliant&status=in.%28success%2Cskipped%29&order=synced_at.desc&limit=1 "HTTP/2 200 OK"
+2026-03-30 19:09:17 INFO     Live count: None   Last synced count: 1294
+2026-03-30 19:09:17 INFO     Count changed or unknown — starting full scrape...
+2026-03-30 19:09:30 INFO     Columns: ['Business operating name', 'Business legal name', 'Address', 'Reason(s)', 'Date of final decision', 'Penalty', 'Status']
+2026-03-30 19:09:30 INFO     Page  1  →  1294 rows  (running total: 1294)
+2026-03-30 19:09:31 INFO     No Next button — assuming last page.
+2026-03-30 19:09:31 INFO     Scraped 1294 records across 1 pages.
+2026-03-30 19:09:31 INFO     Upserting 1294 parsed records...
+2026-03-30 19:09:31 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-30 19:09:31 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:31 INFO       upserted 100/1294 records
+2026-03-30 19:09:32 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:32 INFO       upserted 200/1294 records
+2026-03-30 19:09:32 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:32 INFO       upserted 300/1294 records
+2026-03-30 19:09:32 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:32 INFO       upserted 400/1294 records
+2026-03-30 19:09:32 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:32 INFO       upserted 500/1294 records
+2026-03-30 19:09:33 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:33 INFO       upserted 600/1294 records
+2026-03-30 19:09:33 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:33 INFO       upserted 700/1294 records
+2026-03-30 19:09:33 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:33 INFO       upserted 800/1294 records
+2026-03-30 19:09:33 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:33 INFO       upserted 900/1294 records
+2026-03-30 19:09:33 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:33 INFO       upserted 1000/1294 records
+2026-03-30 19:09:34 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:34 INFO       upserted 1100/1294 records
+2026-03-30 19:09:34 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:34 INFO       upserted 1200/1294 records
+2026-03-30 19:09:34 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22address%22%2C%22legal_name_normalized%22%2C%22employer_normalized%22%2C%22reasons%22%2C%22decision_date%22%2C%22compliance_status%22%2C%22ineligible_until_date%22%2C%22business_legal_name%22%2C%22business_operating_name%22%2C%22province%22%2C%22penalty_amount%22%2C%22ban_duration%22%2C%22penalty_raw%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-03-30 19:09:34 INFO       upserted 1294/1294 records
+2026-03-30 19:09:35 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-03-30 19:09:35 INFO     Done: 0 new, 1294 updated.
+2026-03-30 19:09:35 INFO     Sync complete at 2026-03-30 23:09 UTC
+  Scraped:  1294 records
+  New:      0
+  Updated:  1294
+  Duration: 35.0s
+2026-03-30 19:09:35 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs "HTTP/2 201 Created"
+2026-03-30 19:09:35 INFO     Email skipped (SYNC_EMAIL_TO / SMTP_USER / SMTP_PASS not configured).
+2026-03-30 19:09:35 INFO     ============================================================
+2026-04-03 12:49:35 INFO     ============================================================
+2026-04-03 12:49:35 INFO       Non-Compliant Employers Sync  —  2026-04-03 16:49 UTC
+2026-04-03 12:49:35 INFO     ============================================================
+2026-04-03 12:49:38 INFO     Fetching page 1 for count check...
+2026-04-03 12:49:50 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs?select=last_known_count&source=eq.ircc_non_compliant&status=in.%28success%2Cskipped%29&order=synced_at.desc&limit=1 "HTTP/2 200 OK"
+2026-04-03 12:49:50 INFO     Live count: None   Last synced count: 1294
+2026-04-03 12:49:50 INFO     Count changed or unknown — starting full scrape...
+2026-04-03 12:50:08 INFO     Columns: ['Business operating name', 'Business legal name', 'Address', 'Reason(s)', 'Date of final decision', 'Penalty', 'Status']
+2026-04-03 12:50:08 INFO     Page  1  →  1296 rows  (running total: 1296)
+2026-04-03 12:50:08 INFO     No Next button — assuming last page.
+2026-04-03 12:50:08 INFO     Scraped 1296 records across 1 pages.
+2026-04-03 12:50:08 INFO     Upserting 1296 parsed records...
+2026-04-03 12:50:08 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-04-03 12:50:09 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:09 INFO       upserted 100/1296 records
+2026-04-03 12:50:09 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:09 INFO       upserted 200/1296 records
+2026-04-03 12:50:09 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:09 INFO       upserted 300/1296 records
+2026-04-03 12:50:09 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:09 INFO       upserted 400/1296 records
+2026-04-03 12:50:09 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:09 INFO       upserted 500/1296 records
+2026-04-03 12:50:10 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:10 INFO       upserted 600/1296 records
+2026-04-03 12:50:10 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:10 INFO       upserted 700/1296 records
+2026-04-03 12:50:10 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:10 INFO       upserted 800/1296 records
+2026-04-03 12:50:10 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:10 INFO       upserted 900/1296 records
+2026-04-03 12:50:10 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:10 INFO       upserted 1000/1296 records
+2026-04-03 12:50:10 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:10 INFO       upserted 1100/1296 records
+2026-04-03 12:50:11 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 200 OK"
+2026-04-03 12:50:11 INFO       upserted 1200/1296 records
+2026-04-03 12:50:11 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?on_conflict=business_operating_name%2Cdecision_date&columns=%22penalty_raw%22%2C%22ban_duration%22%2C%22compliance_status%22%2C%22reasons%22%2C%22decision_date%22%2C%22business_operating_name%22%2C%22business_legal_name%22%2C%22province%22%2C%22address%22%2C%22penalty_amount%22%2C%22legal_name_normalized%22%2C%22ineligible_until_date%22%2C%22employer_normalized%22%2C%22status_raw%22 "HTTP/2 201 Created"
+2026-04-03 12:50:11 INFO       upserted 1296/1296 records
+2026-04-03 12:50:11 INFO     HTTP Request: GET https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/violators?select=id "HTTP/2 206 Partial Content"
+2026-04-03 12:50:11 INFO     Done: 2 new, 1294 updated.
+2026-04-03 12:50:11 INFO     Sync complete at 2026-04-03 16:49 UTC
+  Scraped:  1296 records
+  New:      2
+  Updated:  1294
+  Duration: 35.7s
+2026-04-03 12:50:11 INFO     HTTP Request: POST https://kkazqaiigdhhqielyvas.supabase.co/rest/v1/sync_logs "HTTP/2 201 Created"
+2026-04-03 12:50:11 INFO     Email skipped (SYNC_EMAIL_TO / SMTP_USER / SMTP_PASS not configured).
+2026-04-03 12:50:11 INFO     ============================================================

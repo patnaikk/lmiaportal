@@ -11,6 +11,7 @@ const updates = [
   {
     date: 'Apr 3, 2026',
     items: [
+      'Data refresh: non-compliant employers list re-scraped from Canada.ca — 1,296 total records (2 new additions since Apr 1)',
       'New: Result cards now show the employer name and check date — screenshot and share directly to WhatsApp so a friend or family member can see exactly what you found',
       'New: QR code on every result page — scan or screenshot it, send via WhatsApp, and the recipient lands directly on the same result without typing anything',
       'New: "Recently Banned" feed on the homepage — shows the 5 most recently banned employers pulled live from the database, each linking directly to their result',
