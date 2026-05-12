@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import Footer from '@/components/Footer'
+import Navigation from '@/components/Navigation'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -8,6 +8,18 @@ export const metadata: Metadata = {
 }
 
 const updates = [
+  {
+    date: 'May 11, 2026',
+    items: [
+      'Data refresh: non-compliant employers list re-synced from Canada.ca — 1,329 total records (5 new additions since May 5): Royal Paan (Surrey, BC), Cheema Agro Farms & Lands Development (Delta, BC), Les Entreprises Agricoles André Desroches Inc. (Abercorn, QC — banned until May 2027), Wildflower Greenhouse Ltd. (Surrey, BC), and AAI Canada (Trois-Rivières, QC)',
+    ],
+  },
+  {
+    date: 'May 5, 2026',
+    items: [
+      'Data refresh: non-compliant employers list re-synced from Canada.ca — 1,327 total records (1 new addition since May 4)',
+    ],
+  },
   {
     date: 'Apr 3, 2026',
     items: [
@@ -122,18 +134,7 @@ const updates = [
 export default function UpdatesPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      <header className="bg-white border-b-[3px] border-red-600 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</Link>
-          <div className="flex items-center gap-4">
-            <Link href="/check" className="text-sm text-white bg-red-600 hover:bg-red-700 font-semibold px-3 py-1.5 rounded-lg transition-colors">Verify offer</Link>
-            <Link href="/guide" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">Guide</Link>
-            <Link href="/faq" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">FAQ</Link>
-            <Link href="/about" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">About</Link>
-            <Link href="/updates" className="text-sm font-semibold text-gray-900 transition-colors">What's new</Link>
-          </div>
-        </div>
-      </header>
+      <Navigation currentPage="updates" />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8">
         <h1 className="text-2xl font-extrabold text-gray-900 mb-1">What's new</h1>
