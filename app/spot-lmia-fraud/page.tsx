@@ -156,9 +156,9 @@ export default function SpotLmiaFraudPage() {
 
         {/* Call to action */}
         <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h2 className="text-lg font-bold text-blue-900 mb-3">Verify Before You Pay</h2>
+          <h2 className="text-lg font-bold text-blue-900 mb-3">Verify Before You Accept</h2>
           <p className="text-blue-800 mb-4">
-            Use LMIA Check to instantly verify if an employer is legitimate. It only takes seconds and could save you thousands of dollars.
+            Use LMIA Check to instantly verify if an employer is legitimate. It only takes seconds and could protect you from fraud and exploitation.
           </p>
           <Link href="/check" className="inline-block px-6 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">
             Check Employer Now
