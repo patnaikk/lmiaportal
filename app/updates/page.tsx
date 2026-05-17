@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Footer from '@/components/Footer'
 import Navigation from '@/components/Navigation'
 import type { Metadata } from 'next'
@@ -7,7 +8,41 @@ export const metadata: Metadata = {
   description: 'What\'s new on LMIA Check — feature updates and data refreshes.',
 }
 
-const updates = [
+const updates: { date: string; items: React.ReactNode[] }[] = [
+  {
+    date: 'May 17, 2026',
+    items: [
+      <>
+        New: Financial tools for newcomers — LMIA Check now links to{' '}
+        <a href="https://buildcreditcanada.ca" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline font-medium">
+          buildcreditcanada.ca
+        </a>
+        {' '}at 7 key touchpoints across the site. Foreign workers who verify a legitimate employer
+        can immediately access free, bilingual tools to set up banking, plan their first paycheque,
+        build Canadian credit, and find the cheapest way to send money home.
+      </>,
+      <>
+        New: GREEN verified results now show a &ldquo;Planning your move to Canada?&rdquo; card with chip links to{' '}
+        <a href="https://buildcreditcanada.ca/compare.html" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">Banking Comparator</a>,{' '}
+        <a href="https://buildcreditcanada.ca/send-money.html" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">Money Transfer Calculator</a>,
+        {' '}and{' '}
+        <a href="https://buildcreditcanada.ca/spending-plan.html" target="_blank" rel="noopener noreferrer" className="text-blue-700 hover:underline">Spending Plan</a>
+        {' '}— shown on both the simple results page and as step 3 of the &ldquo;What to do next&rdquo; list.
+      </>,
+      <>
+        New: Guide page now ends with an &ldquo;After You Arrive: Financial Setup&rdquo; section —{' '}
+        <Link href="/guide" className="text-blue-700 hover:underline">4 steps covering banking, budgeting, credit building, and remittances</Link>
+        {' '}for newly arrived workers.
+      </>,
+      <>
+        New: FAQ has a new &ldquo;🏦 Life After LMIA: Financial Setup&rdquo; section —{' '}
+        <Link href="/faq" className="text-blue-700 hover:underline">3 questions</Link>
+        {' '}covering financial preparation, cheapest remittance options, and why your foreign
+        credit score doesn&apos;t transfer to Canada.
+      </>,
+      'Fix: Spot LMIA Fraud page subtitle changed from "9 red flags before you pay" to "9 red flags in any job offer" — employees never pay for an LMIA, the employer does. CTA updated from "Verify Before You Pay" to "Verify Before You Accept".',
+    ],
+  },
   {
     date: 'May 16, 2026',
     items: [
