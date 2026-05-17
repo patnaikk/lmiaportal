@@ -9,6 +9,12 @@ export const metadata: Metadata = {
 
 const updates = [
   {
+    date: 'May 16, 2026',
+    items: [
+      'Improved: "Employer not found" results now show 5 specific, ordered next steps instead of vague generic advice — includes how to find the legal/numbered company name, how to ask for the LMIA number, how to call Service Canada to verify directly, how to check the federal business registry, and a clear reminder that paying any fee is illegal',
+    ],
+  },
+  {
     date: 'May 11, 2026',
     items: [
       'Data refresh: non-compliant employers list re-synced from Canada.ca — 1,329 total records (5 new additions since May 5): Royal Paan (Surrey, BC), Cheema Agro Farms & Lands Development (Delta, BC), Les Entreprises Agricoles André Desroches Inc. (Abercorn, QC — banned until May 2027), Wildflower Greenhouse Ltd. (Surrey, BC), and AAI Canada (Trois-Rivières, QC)',

@@ -85,21 +85,63 @@ export default function NextSteps({ result }: Props) {
     ]
   } else {
     // GREY
+    title = 'Employer not found — here\'s what to do'
     steps = [
-      { icon: '?', text: 'Independently verify this employer exists before proceeding with your application' },
       {
-        icon: '?',
+        icon: '1',
         text: (
           <>
-            Call ESDC at{' '}
-            <a href="tel:18003675693" className="font-bold underline">
-              1-800-367-5693
-            </a>{' '}
-            to ask them to verify the employer
+            <strong>Search by legal name.</strong> Your offer letter may use a trade name, but the LMIA is filed under the legal name. Check your T4, pay stub, or the signature line of your contract for a numbered company name (e.g.{' '}
+            <span className="font-mono text-xs bg-gray-100 px-1 rounded">1234567 BC Ltd.</span>) and search again.
           </>
         ),
       },
-      { icon: '?', text: 'Search the employer name on the Canada Revenue Agency Business Registry' },
+      {
+        icon: '2',
+        text: (
+          <>
+            <strong>Ask the employer for their LMIA number.</strong> A legitimate employer will provide this immediately — it looks like{' '}
+            <span className="font-mono text-xs bg-gray-100 px-1 rounded">123456-A</span>. If they hesitate or refuse, that is a serious red flag.
+          </>
+        ),
+      },
+      {
+        icon: '3',
+        text: (
+          <>
+            <strong>Call Service Canada to verify directly.</strong>{' '}
+            <a href="tel:18003675693" className="font-bold underline text-blue-700">
+              1-800-367-5693
+            </a>{' '}
+            — ask them to confirm whether an LMIA was approved for this employer and your specific job. This is free and takes a few minutes.
+          </>
+        ),
+      },
+      {
+        icon: '4',
+        text: (
+          <>
+            <strong>Check if the business is registered.</strong>{' '}
+            <a
+              href="https://www.ic.gc.ca/app/scr/cc/CorporationsCanada/fdrlCrpSrch.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold underline text-blue-700"
+            >
+              Search the federal business registry →
+            </a>{' '}
+            A real Canadian employer will appear here or in their province&apos;s registry.
+          </>
+        ),
+      },
+      {
+        icon: '5',
+        text: (
+          <><strong>Do not pay anything until you have verified the LMIA.</strong> Charging workers for an LMIA or job offer is illegal in Canada. If anyone asks you to pay — even calling it a &ldquo;deposit&rdquo; or &ldquo;processing fee&rdquo; — stop all contact and report it to the{' '}
+            <a href="tel:18884958501" className="font-bold underline text-blue-700">Canadian Anti-Fraud Centre (1-888-495-8501)</a>.
+          </>
+        ),
+      },
     ]
   }
 
