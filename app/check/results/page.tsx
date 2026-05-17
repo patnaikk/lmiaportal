@@ -152,7 +152,7 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
       severity: 'yellow',
       title: 'Unclear whether a fee was requested',
       detail: 'Any payment for an LMIA or job placement — whether called a "processing fee", "deposit", or "administrative cost" — is illegal.',
-      action: 'If any payment was requested or implied, treat this as a serious red flag and do not pay.',
+      action: 'If any payment was requested or implied, treat this as a serious red flag. Contact the Canadian Anti-Fraud Centre at 1-888-495-8501.',
     })
   }
 

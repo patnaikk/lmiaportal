@@ -96,7 +96,7 @@ export default function VerifyLmiaPage() {
             <p className="text-sm text-red-800 leading-relaxed">
               Real LMIA numbers are exactly 7 digits (e.g. <span className="font-mono text-xs bg-red-100 px-1 rounded">9783145</span>). <strong>"{input.trim()}"</strong> does not match this format — this is a red flag that the document may be forged.
             </p>
-            <p className="text-sm text-red-800 leading-relaxed">Do not pay anything or submit any application until you have called Service Canada to verify.</p>
+            <p className="text-sm text-red-800 leading-relaxed">Call Service Canada to verify before submitting any application or documents.</p>
           </div>
         )}
 
@@ -163,7 +163,7 @@ export default function VerifyLmiaPage() {
               <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-bold flex items-center justify-center mt-0.5">4</span>
               <div>
                 <p className="text-sm font-medium text-blue-900">If they cannot find it</p>
-                <p className="text-sm text-blue-800 leading-relaxed">If Service Canada has no record of the LMIA number — stop all contact with the employer and do not pay anything. Report the fraud to the <a href="tel:18884958501" className="font-bold underline">Canadian Anti-Fraud Centre (1-888-495-8501)</a>.</p>
+                <p className="text-sm text-blue-800 leading-relaxed">If Service Canada has no record of the LMIA number — stop all contact with the employer and report it to the <a href="tel:18884958501" className="font-bold underline">Canadian Anti-Fraud Centre (1-888-495-8501)</a>.</p>
               </div>
             </div>
           </div>

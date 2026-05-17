@@ -137,7 +137,8 @@ export default function NextSteps({ result }: Props) {
       {
         icon: '5',
         text: (
-          <><strong>Do not pay anything until you have verified the LMIA.</strong> Charging workers for an LMIA or job offer is illegal in Canada. If anyone asks you to pay — even calling it a &ldquo;deposit&rdquo; or &ldquo;processing fee&rdquo; — stop all contact and report it to the{' '}
+          <>
+            <strong>If Service Canada cannot confirm the LMIA exists</strong> for this employer and job, stop all contact and report it to the{' '}
             <a href="tel:18884958501" className="font-bold underline text-blue-700">Canadian Anti-Fraud Centre (1-888-495-8501)</a>.
           </>
         ),

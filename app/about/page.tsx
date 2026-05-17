@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import Footer from '@/components/Footer'
+import Navigation from '@/components/Navigation'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -10,17 +10,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* Nav */}
-      <header className="bg-white border-b-[3px] border-red-600 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</Link>
-          <div className="flex items-center gap-4">
-            <Link href="/faq" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">FAQ</Link>
-            <Link href="/about" className="text-sm font-semibold text-gray-900 transition-colors">About</Link>
-            <Link href="/updates" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">What's new</Link>
-          </div>
-        </div>
-      </header>
+      <Navigation currentPage="about" />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10 space-y-10">
 
@@ -131,7 +121,7 @@ export default function AboutPage() {
               <p className="text-sm font-bold text-gray-900 mb-0.5">🟢 Verified</p>
               <p className="text-sm text-gray-600 leading-relaxed">
                 The employer is in government LMIA records with no flagged violations. A good sign — but always
-                request a copy of the actual LMIA approval letter before paying any fees.
+                request a copy of the actual LMIA approval letter and verify the employer directly with Service Canada.
               </p>
             </div>
             <div className="bg-white border border-gray-200 border-l-4 border-l-amber-400 rounded-xl px-4 py-3">
@@ -146,7 +136,7 @@ export default function AboutPage() {
               <p className="text-sm font-bold text-gray-900 mb-0.5">🔴 High Risk</p>
               <p className="text-sm text-gray-600 leading-relaxed">
                 This employer is currently banned from hiring temporary foreign workers, or has an outstanding
-                unpaid penalty. Any job offer is illegitimate. Do not pay fees.
+                unpaid penalty. Any job offer from this employer is illegitimate.
               </p>
             </div>
             <div className="bg-white border border-gray-200 border-l-4 border-l-gray-400 rounded-xl px-4 py-3">
