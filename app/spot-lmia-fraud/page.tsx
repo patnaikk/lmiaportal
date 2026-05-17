@@ -38,10 +38,10 @@ export default function SpotLmiaFraudPage() {
         <div className="text-4xl mb-3">🚩</div>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight mb-3">
           How to Spot LMIA Fraud<br />
-          <em className="not-italic text-red-600">9 red flags before you pay</em>
+          <em className="not-italic text-red-600">9 red flags in any job offer</em>
         </h1>
         <p className="text-gray-500 text-[15px] leading-relaxed max-w-sm mx-auto">
-          Scammers target foreign workers with fake Canadian job offers. Learn to identify the warning signs.
+          Scammers target foreign workers with fake Canadian job offers. Employees never pay for an LMIA — the employer does. Learn to spot the warning signs.
         </p>
       </div>
 
