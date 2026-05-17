@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { verifyEmployer } from '@/lib/verify'
+import { findBenchmark, toHourly } from '@/lib/wage-benchmarks'
 import Footer from '@/components/Footer'
 import ScrollToTop from '@/components/ScrollToTop'
+import Navigation from '@/components/Navigation'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -64,11 +66,7 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
   if (!employer) {
     return (
       <div className="flex flex-col min-h-screen">
-        <header className="bg-white border-b-[3px] border-red-600">
-          <div className="max-w-2xl mx-auto px-4 h-14 flex items-center">
-            <Link href="/" className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</Link>
-          </div>
-        </header>
+        <Navigation />
         <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8">
           <p className="text-gray-600">Please fill in the form to run a check.</p>
           <Link href="/check" className="mt-4 inline-block text-red-600 underline font-medium">← Back to checker</Link>
@@ -188,6 +186,33 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
     })
   }
 
+  // Check 8 — Wage too low for the occupation
+  if (wage && jobTitle) {
+    const benchmark = findBenchmark(jobTitle)
+    if (benchmark) {
+      const offeredHourly = toHourly(parseFloat(wage), wagePeriod)
+      if (!isNaN(offeredHourly) && offeredHourly > 0) {
+        if (offeredHourly < benchmark.minHourly * 0.75) {
+          flags.push({
+            severity: 'red',
+            title: `Wage is far below typical for ${benchmark.label}`,
+            detail: `The offered wage of $${offeredHourly.toFixed(2)}/hr is significantly below the typical range of $${benchmark.minHourly}–$${benchmark.typicalHourly}/hr for this role in Canada. This level of underpayment is a strong indicator of fraud or labour exploitation.`,
+            action: 'Do not accept this offer. Compare against the Job Bank wage report for your occupation and province before proceeding.',
+            actionUrl: 'https://www.jobbank.gc.ca/wagereport/occupation',
+          })
+        } else if (offeredHourly < benchmark.minHourly) {
+          flags.push({
+            severity: 'yellow',
+            title: `Wage is below typical for ${benchmark.label}`,
+            detail: `The offered wage of $${offeredHourly.toFixed(2)}/hr is below the typical starting rate of $${benchmark.minHourly}/hr for this role in Canada (median: $${benchmark.typicalHourly}/hr). This may indicate an exploitative offer or a mismatch in the job title.`,
+            action: 'Ask the employer to justify the wage in writing. Compare against the Government of Canada Job Bank wage report for your occupation.',
+            actionUrl: 'https://www.jobbank.gc.ca/wagereport/occupation',
+          })
+        }
+      }
+    }
+  }
+
   // ── Overall result ────────────────────────────────────────────────────────
   const overall = computeResult(flags)
 
@@ -234,17 +259,7 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
   return (
     <div className="flex flex-col min-h-screen">
       <ScrollToTop query={employer} />
-      {/* Header */}
-      <header className="bg-white border-b-[3px] border-red-600 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</Link>
-          <div className="flex items-center gap-4">
-            <Link href="/faq" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">FAQ</Link>
-            <Link href="/about" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">About</Link>
-            <Link href="/updates" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">What&apos;s new</Link>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
 
