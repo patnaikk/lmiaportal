@@ -95,6 +95,13 @@ export default async function HomePage() {
           <SearchForm />
           <p className="text-center text-xs text-gray-400 mt-4">🔒 No data stored · No login required</p>
         </div>
+        <a
+          href="/verify-lmia"
+          className="mt-3 flex items-center justify-center gap-1.5 text-xs text-gray-400 hover:text-red-600 transition-colors"
+        >
+          <span>🔢</span>
+          Have an LMIA number on your document? Check if it's real →
+        </a>
       </main>
 
       {/* How it works */}
