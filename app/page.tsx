@@ -3,8 +3,39 @@ import Footer from '@/components/Footer'
 import RecentlyBanned from '@/components/RecentlyBanned'
 import LatestBanBanner from '@/components/LatestBanBanner'
 import Navigation from '@/components/Navigation'
+import { supabase } from '@/lib/supabase'
 
-export default function HomePage() {
+export const revalidate = 3600 // refresh stats every hour
+
+async function fetchStats() {
+  try {
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+
+    const [{ count: employerCount }, { count: violatorCount }, { count: searchCount }] =
+      await Promise.all([
+        supabase.from('positive_lmia').select('*', { count: 'exact', head: true }),
+        supabase.from('violators').select('*', { count: 'exact', head: true }),
+        supabase.from('search_logs').select('*', { count: 'exact', head: true }).gte('searched_at', oneWeekAgo),
+      ])
+
+    return {
+      employers: employerCount ?? 0,
+      violators: violatorCount ?? 0,
+      searches: searchCount ?? 0,
+    }
+  } catch {
+    return { employers: 0, violators: 0, searches: 0 }
+  }
+}
+
+function formatCount(n: number): string {
+  if (n >= 1000) return `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}K+`
+  return n.toString()
+}
+
+export default async function HomePage() {
+  const stats = await fetchStats()
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Navigation currentPage="home" />
@@ -25,16 +56,16 @@ export default function HomePage() {
       <div className="max-w-2xl mx-auto w-full px-4">
         <div className="grid grid-cols-3 divide-x divide-gray-200 border border-gray-200 rounded-xl bg-white overflow-hidden shadow-sm">
           <div className="py-3 text-center">
-            <div className="text-xl font-extrabold text-red-600 leading-tight">11K+</div>
+            <div className="text-xl font-extrabold text-red-600 leading-tight">{stats.employers > 0 ? formatCount(stats.employers) : '11K+'}</div>
             <div className="text-[11px] text-gray-400 font-medium mt-0.5">Employers</div>
           </div>
           <div className="py-3 text-center">
-            <div className="text-xl font-extrabold text-red-600 leading-tight">1,329</div>
+            <div className="text-xl font-extrabold text-red-600 leading-tight">{stats.violators > 0 ? stats.violators.toLocaleString() : '1,329'}</div>
             <div className="text-[11px] text-gray-400 font-medium mt-0.5">Violators tracked</div>
           </div>
           <div className="py-3 text-center">
-            <div className="text-xl font-extrabold text-red-600 leading-tight">Free</div>
-            <div className="text-[11px] text-gray-400 font-medium mt-0.5">Always</div>
+            <div className="text-xl font-extrabold text-red-600 leading-tight">{stats.searches > 0 ? formatCount(stats.searches) : '—'}</div>
+            <div className="text-[11px] text-gray-400 font-medium mt-0.5">Checks this week</div>
           </div>
         </div>
       </div>
