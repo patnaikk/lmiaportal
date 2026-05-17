@@ -39,6 +39,22 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Full offer check CTA */}
+      <div className="max-w-2xl mx-auto w-full px-4 mt-4">
+        <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3.5 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-red-900">Have a job offer in hand?</p>
+            <p className="text-xs text-red-700 mt-0.5">Run a full check — we'll also analyze the fee, wage, delivery source, and duration for red flags.</p>
+          </div>
+          <a
+            href="/check"
+            className="flex-shrink-0 px-3.5 py-2 bg-red-600 text-white text-xs font-semibold rounded-lg hover:bg-red-700 transition-colors whitespace-nowrap"
+          >
+            Full check →
+          </a>
+        </div>
+      </div>
+
       {/* Latest ban callout */}
       <LatestBanBanner />
 

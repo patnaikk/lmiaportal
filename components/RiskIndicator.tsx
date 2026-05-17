@@ -185,11 +185,13 @@ export default function RiskIndicator({ result }: Props) {
           Not Found
         </span>
       </div>
-      <h3 className="text-base font-bold text-gray-900 mb-1.5">No government records found</h3>
+      <h3 className="text-base font-bold text-gray-900 mb-1.5">Not found in government records</h3>
       <p className="text-sm text-gray-600 leading-relaxed">
-        This employer does not appear in any government LMIA records. This may mean the job offer is fraudulent. Exercise maximum caution and verify independently.
+        This employer does not appear in the LMIA database. This is common — many legitimate employers file under a different legal or numbered company name, or are too new to appear yet. It does not automatically mean the offer is fraudulent.
       </p>
-      <EsdcContact />
+      <p className="text-sm text-gray-600 leading-relaxed mt-2">
+        Follow the steps below to verify before making any decision or payment.
+      </p>
       <CardFooter />
     </div>
   )
