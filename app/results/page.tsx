@@ -13,6 +13,7 @@ import MappingContribution from '@/components/MappingContribution'
 import Footer from '@/components/Footer'
 import SearchForm from '@/components/SearchForm'
 import ScrollToTop from '@/components/ScrollToTop'
+import Navigation from '@/components/Navigation'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -40,11 +41,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
   if (!employer) {
     return (
       <div className="flex flex-col min-h-screen">
-        <header className="bg-white border-b-[3px] border-red-600">
-          <div className="max-w-2xl mx-auto px-4 h-14 flex items-center">
-            <Link href="/" className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</Link>
-          </div>
-        </header>
+        <Navigation />
         <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8">
           <p className="text-gray-600">Please enter an employer name to search.</p>
           <Link href="/" className="mt-4 inline-block text-blue-700 underline">← Back to search</Link>
@@ -66,18 +63,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Header */}
-      <header className="bg-white border-b-[3px] border-red-600 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</Link>
-          <div className="flex items-center gap-4">
-            <Link href="/check" className="text-sm text-white bg-red-600 hover:bg-red-700 font-semibold px-3 py-1.5 rounded-lg transition-colors">Verify offer</Link>
-            <Link href="/faq" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">FAQ</Link>
-            <Link href="/about" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">About</Link>
-            <Link href="/updates" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">What's new</Link>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       <ScrollToTop query={employer} />
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
@@ -115,6 +101,20 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
         {/* Next steps */}
         <NextSteps result={result} />
+
+        {/* LMIA number verifier prompt — shown for GREY results */}
+        {result.risk === 'GREY' && (
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+            <p className="text-sm font-semibold text-blue-900 mb-1">Have an LMIA number on your document?</p>
+            <p className="text-xs text-blue-700 mb-3">Check whether the number format is valid and get the exact script to verify it with Service Canada in 5 minutes.</p>
+            <a
+              href="/verify-lmia"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Check LMIA number →
+            </a>
+          </div>
+        )}
 
         {/* Crowdsource: ask user if they know another name */}
         {result.risk === 'GREY' && (
