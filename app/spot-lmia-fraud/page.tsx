@@ -175,6 +175,24 @@ export default function SpotLmiaFraudPage() {
           <p className="text-sm text-red-700 mt-3">Also contact a licensed immigration consultant or your nearest Canadian embassy for additional support.</p>
         </div>
 
+        {/* Send money safely */}
+        <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <h2 className="text-lg font-bold text-blue-900 mb-2">Sending Money Home Safely</h2>
+          <p className="text-blue-800 text-sm leading-relaxed mb-4">
+            Whether you're already in Canada or planning your move — bank wire transfers are expensive.
+            Compare Wise, Remitly, Western Union, and others to find the lowest-cost option for
+            sending money to your family.
+          </p>
+          <a
+            href="https://buildcreditcanada.ca/send-money.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=fraud-page"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-5 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Compare money transfer services →
+          </a>
+        </div>
+
       </main>
 
       <Footer />

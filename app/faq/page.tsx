@@ -172,6 +172,69 @@ const sections = [
     ],
   },
   {
+    heading: '🏦 Life After LMIA: Financial Setup',
+    questions: [
+      {
+        q: 'My employer is verified. What should I do to prepare financially for Canada?',
+        a: (
+          <>
+            Before your first paycheque, focus on three things: open a Canadian bank account
+            (some newcomer programs waive fees for your first year), create a spending plan
+            so rent and savings don&apos;t compete, and get a secured credit card to start building
+            Canadian credit history from day one. Your foreign credit score doesn&apos;t transfer —
+            you start from scratch.{' '}
+            <a
+              href="https://buildcreditcanada.ca/tools.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=faq"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 hover:text-blue-900 font-medium underline"
+            >
+              Free newcomer financial tools at buildcreditcanada.ca →
+            </a>
+          </>
+        ),
+      },
+      {
+        q: 'What is the cheapest way to send money home from Canada?',
+        a: (
+          <>
+            Bank wire transfers typically cost 4–6% in exchange rate markup plus flat fees — that&apos;s
+            hundreds of dollars per year on regular remittances. Services like Wise, Remitly, and
+            Remitbee can cut that to under 1%. The best option depends on your destination country
+            and transfer amount.{' '}
+            <a
+              href="https://buildcreditcanada.ca/send-money.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=faq"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 hover:text-blue-900 font-medium underline"
+            >
+              Compare remittance services →
+            </a>
+          </>
+        ),
+      },
+      {
+        q: 'Does my credit score from my home country transfer to Canada?',
+        a: (
+          <>
+            No. Canadian credit bureaus (Equifax and TransUnion Canada) have no access to foreign
+            credit histories. You start from zero regardless of your home country score. The fastest
+            path to 700+ involves a secured credit card, on-time payments, and low utilization —
+            a realistic timeline is 12–18 months with consistent habits.{' '}
+            <a
+              href="https://buildcreditcanada.ca/credit-score-timeline.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=faq"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 hover:text-blue-900 font-medium underline"
+            >
+              See the credit-building timeline →
+            </a>
+          </>
+        ),
+      },
+    ],
+  },
+  {
     heading: '💡 Final Thoughts',
     questions: [
       {
