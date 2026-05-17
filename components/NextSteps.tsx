@@ -18,8 +18,25 @@ export default function NextSteps({ result }: Props) {
   if (risk === 'GREEN') {
     steps = [
       { icon: '✓', text: 'Request a copy of the LMIA approval letter from your employer' },
-      { icon: '✓', text: 'Use a licensed RCIC (Regulated Canadian Immigration Consultant) to process your application' },
       { icon: '✓', text: 'Use a licensed RCIC (Regulated Canadian Immigration Consultant) or immigration lawyer for your application' },
+      {
+        icon: '✓',
+        text: (
+          <>
+            <strong>Set up your Canadian finances before you arrive.</strong>{' '}
+            Compare bank accounts, create a spending plan for your first paycheque,
+            and find the cheapest way to send money home.{' '}
+            <a
+              href="https://buildcreditcanada.ca/tools.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=green-nextsteps"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold underline text-blue-700 hover:text-blue-900"
+            >
+              Free newcomer financial tools →
+            </a>
+          </>
+        ),
+      },
     ]
   } else if (risk === 'YELLOW' && reason === 'address_mismatch') {
     steps = [

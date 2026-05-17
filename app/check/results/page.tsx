@@ -428,6 +428,16 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
             <a href="https://college-ic.ca/protecting-the-public/find-an-immigration-consultant" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline">
               <span>🔎</span> Verify a licensed immigration consultant (CICC)
             </a>
+            {overall !== 'red' && (
+              <a
+                href="https://buildcreditcanada.ca/tools.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=check-results"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-blue-700 hover:text-blue-900 hover:underline"
+              >
+                <span>🇨🇦</span> Free financial tools for newcomers — buildcreditcanada.ca
+              </a>
+            )}
           </div>
         </div>
 
