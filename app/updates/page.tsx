@@ -11,7 +11,10 @@ const updates = [
   {
     date: 'May 16, 2026',
     items: [
-      'Improved: "Employer not found" results now show 5 specific, ordered next steps instead of vague generic advice — includes how to find the legal/numbered company name, how to ask for the LMIA number, how to call Service Canada to verify directly, how to check the federal business registry, and a clear reminder that paying any fee is illegal',
+      'New: Wage benchmarking on the full offer check — if you enter a job title and offered wage, the tool now compares it against typical Canadian rates for 17 common LMIA occupations (sourced from StatsCan Job Bank). A $12/hr "restaurant manager" offer flags RED; a wage below the typical starting rate flags YELLOW with a link to the official Job Bank wage report',
+      'Improved: "Employer not found" result card now uses calm, accurate language — not being in the database is common (legal name, numbered company, new employer) and does not automatically mean the offer is fraudulent. The card directs users to the 5-step verification checklist below',
+      'Improved: "Employer not found" next steps replaced with 5 specific, ordered actions: find the legal/numbered company name, ask for the LMIA number, call Service Canada directly (1-800-367-5693), check the federal business registry, and a clear reminder that any fee request is illegal',
+      'New: "Have a job offer in hand?" prompt on the homepage — routes users who have received an offer into the full /check flow which analyzes fee, wage, delivery source, and duration in addition to the employer database check',
     ],
   },
   {
