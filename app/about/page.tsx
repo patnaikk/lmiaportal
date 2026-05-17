@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Footer from '@/components/Footer'
 import Navigation from '@/components/Navigation'
 import type { Metadata } from 'next'
