@@ -398,6 +398,71 @@ export default function GuidePage() {
           </div>
         </section>
 
+        {/* After Arrival: Financial Setup */}
+        <section className="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-6">
+          <h2 className="text-2xl font-extrabold text-gray-900 mb-3 flex items-center gap-2">
+            <span>🏦</span> After You Arrive: Financial Setup
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-5">
+            Your first 90 days in Canada are the most financially critical. Most newcomers miss key steps that cost them months of credit-building time or hundreds in unnecessary bank fees.
+          </p>
+          <div className="space-y-4">
+            <div className="flex gap-3 items-start">
+              <span className="font-extrabold text-blue-600 text-lg leading-tight mt-0.5">1.</span>
+              <div>
+                <p className="font-semibold text-gray-800">Open the right bank account</p>
+                <p className="text-sm text-gray-600 mt-0.5">
+                  Not all newcomer accounts are equal — fees, welcome offers, and perks vary widely. Compare before you walk into a branch.{' '}
+                  <a href="https://buildcreditcanada.ca/compare.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=guide" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-700 hover:underline">
+                    Banking Comparator →
+                  </a>
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3 items-start">
+              <span className="font-extrabold text-blue-600 text-lg leading-tight mt-0.5">2.</span>
+              <div>
+                <p className="font-semibold text-gray-800">Plan your first paycheque</p>
+                <p className="text-sm text-gray-600 mt-0.5">
+                  Split take-home pay into rent, savings, and spending before it arrives — not after.{' '}
+                  <a href="https://buildcreditcanada.ca/spending-plan.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=guide" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-700 hover:underline">
+                    Spending Plan →
+                  </a>
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3 items-start">
+              <span className="font-extrabold text-blue-600 text-lg leading-tight mt-0.5">3.</span>
+              <div>
+                <p className="font-semibold text-gray-800">Start building Canadian credit</p>
+                <p className="text-sm text-gray-600 mt-0.5">
+                  Your foreign credit history doesn't follow you. See the realistic month-by-month path from zero to 700+.{' '}
+                  <a href="https://buildcreditcanada.ca/credit-score-timeline.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=guide" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-700 hover:underline">
+                    Credit Score Timeline →
+                  </a>
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3 items-start">
+              <span className="font-extrabold text-blue-600 text-lg leading-tight mt-0.5">4.</span>
+              <div>
+                <p className="font-semibold text-gray-800">Find the cheapest way to send money home</p>
+                <p className="text-sm text-gray-600 mt-0.5">
+                  Bank wire fees cost hundreds per year. Compare Wise, Remitly, Western Union, and others.{' '}
+                  <a href="https://buildcreditcanada.ca/send-money.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=guide" target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-700 hover:underline">
+                    Money Transfer Calculator →
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 mt-5">
+            All tools at{' '}
+            <a href="https://buildcreditcanada.ca?utm_source=lmiacheck&utm_medium=referral&utm_campaign=guide" target="_blank" rel="noopener noreferrer" className="underline">buildcreditcanada.ca</a>
+            {' '}are free, bilingual (English/French), and require no signup.
+          </p>
+        </section>
+
         {/* Disclaimer */}
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
           <p className="text-xs text-gray-600 leading-relaxed">

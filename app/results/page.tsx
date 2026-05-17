@@ -102,6 +102,45 @@ export default async function ResultsPage({ searchParams }: PageProps) {
         {/* Next steps */}
         <NextSteps result={result} />
 
+        {/* Financial setup prompt — shown for GREEN results only */}
+        {result.risk === 'GREEN' && (
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+            <p className="text-sm font-semibold text-blue-900 mb-1">
+              Planning your move to Canada?
+            </p>
+            <p className="text-xs text-blue-700 mb-3 leading-relaxed">
+              Once your employer is verified, start your financial setup — bank account,
+              first budget, and a plan to send money home cheaply. All free, no signup.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <a
+                href="https://buildcreditcanada.ca/compare.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=green-results"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-blue-200 rounded-lg text-xs font-semibold text-blue-800 hover:bg-blue-50 transition-colors"
+              >
+                Compare banks →
+              </a>
+              <a
+                href="https://buildcreditcanada.ca/send-money.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=green-results"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-blue-200 rounded-lg text-xs font-semibold text-blue-800 hover:bg-blue-50 transition-colors"
+              >
+                Cheapest remittance →
+              </a>
+              <a
+                href="https://buildcreditcanada.ca/spending-plan.html?utm_source=lmiacheck&utm_medium=referral&utm_campaign=green-results"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-3 py-1.5 bg-white border border-blue-200 rounded-lg text-xs font-semibold text-blue-800 hover:bg-blue-50 transition-colors"
+              >
+                Spending plan →
+              </a>
+            </div>
+          </div>
+        )}
+
         {/* LMIA number verifier prompt — shown for GREY results */}
         {result.risk === 'GREY' && (
           <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">

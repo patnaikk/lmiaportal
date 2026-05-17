@@ -52,6 +52,14 @@ export default function Footer() {
           <Link href="/updates" className="underline hover:text-gray-600">
             What's new
           </Link>
+          <a
+            href="https://buildcreditcanada.ca?utm_source=lmiacheck&utm_medium=referral&utm_campaign=footer"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-gray-600"
+          >
+            Financial tools for newcomers
+          </a>
         </div>
       </div>
     </footer>
