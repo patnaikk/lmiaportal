@@ -10,6 +10,19 @@ export const metadata: Metadata = {
 
 const updates: { date: string; items: React.ReactNode[] }[] = [
   {
+    date: 'May 23, 2026 · Pass 3',
+    items: [
+      'Polish: Cards now have a 1px hairline edge (ring-black/[0.04]) in addition to their shadow. Apple\'s actual cards have BOTH — pure-shadow cards look like blobs without definition. Combined with a refined multi-layer shadow (tight contact + soft ambient) so cards feel physical instead of computer-generated',
+      'Polish: Recently-banned employer list now uses human time-relative dates — "Banned 3 weeks ago", "Banned today", "Banned Mar 30" — instead of robot dates like "Banned Apr 30, 2026". iOS Mail / Messages style',
+      'Polish: External links across the site (canada.ca, ESDC, BuildCreditCanada, "Report fraud") now have a small ↗ arrow indicating they leave the site. Apple consistently marks external destinations',
+      'Polish: Replaced 🇨🇦 emoji with a properly-shaped designed maple-leaf SVG. Emoji renders differently on every operating system (Apple, Google, Microsoft, Samsung); a designed mark is consistent everywhere. Same treatment in nav logo and hero badge',
+      'Polish: Replaced 🔢 emoji on the "LMIA number" link with a clean SVG number-pad icon',
+      'Accessibility: Bumped tertiary body copy from gray-400 (fails WCAG AA contrast at ~2.9:1 on white) to gray-500 (passes at ~4.6:1). Affects subtitles in How-it-works, Recently-banned rows, the LMIA-number link',
+      'Polish: Refined "New ban" banner — ring-based edge, animated pulsing dot (matching the data-freshness indicator), tighter color hierarchy',
+      'Polish: Hero typography responsive scale — text-3xl on phone, text-5xl on tablet+. Previous text-4xl was too aggressive at iPhone width',
+    ],
+  },
+  {
     date: 'May 23, 2026 · Pass 2',
     items: [
       'New: Ready-to-send messages on banned-employer results — three pre-written templates (reply to a recruiter, report to Service Canada / ESDC, tell your family) auto-populate with the employer name and ban date. One-tap copy to clipboard. Users no longer have to figure out what to say to a fraudulent recruiter — professional words ready to send',
