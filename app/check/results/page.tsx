@@ -340,16 +340,23 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
             {flags.map((flag, i) => (
               <div
                 key={i}
-                className={`rounded-xl border-l-4 p-4 ${
-                  flag.severity === 'red'
-                    ? 'border-l-red-500 bg-red-50'
-                    : 'border-l-yellow-400 bg-yellow-50'
+                className={`rounded-2xl overflow-hidden shadow-sm ${
+                  flag.severity === 'red' ? 'bg-red-50' : 'bg-amber-50'
                 }`}
               >
-                <div className="flex items-start gap-2">
-                  <span className="text-base mt-0.5" aria-hidden="true">
-                    {flag.severity === 'red' ? '🔴' : '🟡'}
-                  </span>
+                <div className={`h-0.5 ${flag.severity === 'red' ? 'bg-red-400' : 'bg-amber-400'}`} />
+                <div className="flex items-start gap-2 p-4">
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${flag.severity === 'red' ? 'bg-red-100' : 'bg-amber-100'}`} aria-hidden="true">
+                    {flag.severity === 'red' ? (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-red-600">
+                        <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+                      </svg>
+                    ) : (
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-amber-600">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                      </svg>
+                    )}
+                  </div>
                   <div className="flex-1 min-w-0">
                     <p className={`text-sm font-semibold ${flag.severity === 'red' ? 'text-red-900' : 'text-yellow-900'}`}>
                       {flag.title}

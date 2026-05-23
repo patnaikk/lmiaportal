@@ -21,10 +21,8 @@ export default function FeedbackForm({ employerQuery }: Props) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!message.trim() || status === 'loading') return
-
     setStatus('loading')
     setErrorMsg('')
-
     try {
       const res = await fetch('/api/feedback', {
         method: 'POST',
@@ -36,9 +34,7 @@ export default function FeedbackForm({ employerQuery }: Props) {
           email: email.trim() || null,
         }),
       })
-
       const data = await res.json()
-
       if (data.success) {
         setStatus('success')
       } else {
@@ -53,9 +49,9 @@ export default function FeedbackForm({ employerQuery }: Props) {
 
   if (status === 'success') {
     return (
-      <div className="mt-6 p-4 border border-gray-200 rounded-xl bg-gray-50">
-        <p className="text-sm text-gray-700">
-          <span className="text-green-600 font-semibold">✓ Thanks for your feedback.</span> We review every submission to improve data quality.
+      <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+        <p className="text-sm text-gray-600">
+          <span className="font-semibold text-green-600">Thanks for your feedback.</span> We review every submission to improve data quality.
         </p>
       </div>
     )
@@ -75,12 +71,12 @@ export default function FeedbackForm({ employerQuery }: Props) {
   }
 
   return (
-    <div className="mt-6 p-4 border border-gray-200 rounded-xl bg-gray-50">
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-sm font-medium text-gray-800">Send us feedback</p>
+    <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Send feedback</p>
         <button
           onClick={() => setIsOpen(false)}
-          className="text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-gray-300 hover:text-gray-500 transition-colors"
           aria-label="Close feedback form"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -91,25 +87,23 @@ export default function FeedbackForm({ employerQuery }: Props) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        {/* Feedback type */}
         <div>
-          <label htmlFor="feedback-type" className="block text-xs font-medium text-gray-600 mb-1">
+          <label htmlFor="feedback-type" className="block text-xs font-medium text-gray-500 mb-1.5">
             Type of feedback
           </label>
           <select
             id="feedback-type"
             value={feedbackType}
             onChange={(e) => setFeedbackType(e.target.value as 'missing_employer' | 'suggestion')}
-            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white"
+            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
           >
             <option value="missing_employer">Missing employer — should be in the database</option>
             <option value="suggestion">General suggestion or feedback</option>
           </select>
         </div>
 
-        {/* Message */}
         <div>
-          <label htmlFor="feedback-message" className="block text-xs font-medium text-gray-600 mb-1">
+          <label htmlFor="feedback-message" className="block text-xs font-medium text-gray-500 mb-1.5">
             Your feedback <span className="text-gray-400">(required)</span>
           </label>
           <textarea
@@ -119,15 +113,14 @@ export default function FeedbackForm({ employerQuery }: Props) {
             placeholder={placeholder}
             required
             rows={3}
-            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white resize-none"
+            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50 resize-none"
             aria-label="Your feedback"
           />
         </div>
 
-        {/* Email (optional) */}
         <div>
-          <label htmlFor="feedback-email" className="block text-xs font-medium text-gray-600 mb-1">
-            Email <span className="text-gray-400">(optional — so we can follow up)</span>
+          <label htmlFor="feedback-email" className="block text-xs font-medium text-gray-500 mb-1.5">
+            Email <span className="text-gray-400">(optional)</span>
           </label>
           <input
             type="email"
@@ -135,7 +128,7 @@ export default function FeedbackForm({ employerQuery }: Props) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
-            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white"
+            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
             aria-label="Email address for follow-up (optional)"
           />
         </div>
@@ -143,13 +136,13 @@ export default function FeedbackForm({ employerQuery }: Props) {
         <button
           type="submit"
           disabled={status === 'loading' || message.trim().length < 10}
-          className="w-full px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-lg hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px]"
+          className="w-full px-4 py-3 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-1 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {status === 'loading' ? 'Sending…' : 'Send feedback'}
         </button>
 
         {status === 'error' && (
-          <p className="text-xs text-red-600" role="alert">{errorMsg}</p>
+          <p className="text-xs text-red-500" role="alert">{errorMsg}</p>
         )}
       </form>
     </div>

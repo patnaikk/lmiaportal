@@ -19,6 +19,10 @@
   --color-brand:        #1D4ED8;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text-primary);

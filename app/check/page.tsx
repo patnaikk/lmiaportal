@@ -1,6 +1,6 @@
-import Link from 'next/link'
 import CheckForm from '@/components/CheckForm'
 import Footer from '@/components/Footer'
+import Navigation from '@/components/Navigation'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -12,18 +12,7 @@ export const metadata: Metadata = {
 export default function CheckPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
-
-      {/* Nav */}
-      <header className="bg-white border-b-[3px] border-red-600 sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="text-lg font-extrabold text-gray-900 tracking-tight">🍁 LMIA Check</Link>
-          <div className="flex items-center gap-4">
-            <Link href="/faq" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">FAQ</Link>
-            <Link href="/about" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">About</Link>
-            <Link href="/updates" className="text-sm text-gray-500 hover:text-gray-800 font-medium transition-colors">What&apos;s new</Link>
-          </div>
-        </div>
-      </header>
+      <Navigation currentPage="check" />
 
       {/* Hero */}
       <div className="bg-gradient-to-b from-white to-red-50 text-center pt-10 pb-7 px-4">

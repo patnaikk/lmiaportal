@@ -44,19 +44,19 @@ export default async function RecentlyBanned() {
           Live data
         </span>
       </div>
-      <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm divide-y divide-gray-100">
+      <div className="rounded-2xl overflow-hidden bg-white shadow-lg shadow-gray-200/80 divide-y divide-gray-100">
         {rows.map((row, i) => (
           <Link
             key={i}
             href={`/results?employer=${encodeURIComponent(row.business_operating_name)}`}
-            className="flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors group"
+            className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors group"
           >
             {/* Red dot */}
             <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" aria-hidden="true" />
 
             {/* Name + province */}
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-red-700 transition-colors">
+              <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-gray-700 transition-colors">
                 {row.business_operating_name}
               </p>
               <p className="text-xs text-gray-400 mt-0.5">
@@ -65,7 +65,7 @@ export default async function RecentlyBanned() {
             </div>
 
             {/* Chevron */}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 flex-shrink-0 group-hover:text-red-400 transition-colors" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 flex-shrink-0 group-hover:text-gray-500 transition-colors" aria-hidden="true">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
           </Link>

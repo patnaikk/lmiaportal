@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type { VerifyResult } from '@/lib/types'
 
 interface Props {
@@ -6,37 +7,77 @@ interface Props {
 
 function EsdcContact() {
   return (
-    <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-      <p className="text-xs text-gray-600 leading-relaxed">
-        If you believe you have been targeted by LMIA fraud, contact ESDC:{' '}
-        <a href="tel:18003675693" className="font-bold text-red-600 hover:text-red-800 whitespace-nowrap">
-          1-800-367-5693
-        </a>
+    <a
+      href="tel:18003675693"
+      className="mt-6 w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-red-600 text-white text-sm font-semibold rounded-xl hover:bg-red-700 transition-colors"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+      Report this to ESDC · 1-800-367-5693
+    </a>
+  )
+}
+
+function ResultCard({
+  role,
+  ariaLabel,
+  children,
+}: {
+  role?: string
+  ariaLabel?: string
+  children: ReactNode
+}) {
+  return (
+    <div
+      className="bg-white rounded-3xl shadow-lg shadow-gray-200/80 p-7 sm:p-8"
+      role={role}
+      aria-label={ariaLabel}
+    >
+      {children}
+    </div>
+  )
+}
+
+function VerdictLayout({
+  icon,
+  iconBg,
+  iconShadow,
+  verdict,
+  verdictColor,
+  employerName,
+  description,
+  children,
+}: {
+  icon: ReactNode
+  iconBg: string
+  iconShadow: string
+  verdict: string
+  verdictColor: string
+  employerName: string
+  description: ReactNode
+  children?: ReactNode
+}) {
+  return (
+    <>
+      <div className={`w-16 h-16 rounded-full ${iconBg} flex items-center justify-center flex-shrink-0 shadow-md ${iconShadow} mb-5`} aria-hidden="true">
+        {icon}
+      </div>
+
+      <h2 className={`text-5xl sm:text-6xl font-bold tracking-tight ${verdictColor} mb-3 leading-none`}>
+        {verdict}
+      </h2>
+
+      <p className="text-base font-semibold text-gray-900 leading-snug break-words mb-2">
+        {employerName}
       </p>
-    </div>
-  )
-}
 
-function CardHeader({ employer }: { employer: string }) {
-  return (
-    <div className="mb-3 pb-3 border-b border-gray-100">
-      <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Employer checked</p>
-      <p className="text-sm font-bold text-gray-900 leading-snug break-words">{employer}</p>
-    </div>
-  )
-}
+      <p className="text-[15px] text-gray-500 leading-relaxed">
+        {description}
+      </p>
 
-function CardFooter() {
-  const date = new Date().toLocaleDateString('en-CA', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
-  return (
-    <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-      <span className="text-[10px] text-gray-400">lmiacheck.ca · Free · Official Gov Data</span>
-      <span className="text-[10px] text-gray-400">{date}</span>
-    </div>
+      {children}
+    </>
   )
 }
 
@@ -45,154 +86,114 @@ export default function RiskIndicator({ result }: Props) {
 
   if (risk === 'GREEN') {
     return (
-      <div
-        className="bg-white rounded-xl border border-gray-200 border-l-4 border-l-green-500 p-5 shadow-sm"
-        role="status"
-        aria-label="Verification result: Verified"
-      >
-        <CardHeader employer={employerQuery} />
-        <div className="flex items-center gap-2.5 mb-3">
-          <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
+      <ResultCard role="status" ariaLabel="Verification result: Verified">
+        <VerdictLayout
+          verdict="Verified"
+          verdictColor="text-green-600"
+          iconBg="bg-green-500"
+          iconShadow="shadow-green-200"
+          icon={
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
-          </div>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-700">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" aria-hidden="true" />
-            Verified
-          </span>
-        </div>
-        <h3 className="text-base font-bold text-gray-900 mb-1.5">Legitimate employer</h3>
-        <p className="text-sm text-gray-600 leading-relaxed">
-          This employer appears in official Canadian government LMIA records and has not been flagged for violations.
-        </p>
-        <CardFooter />
-      </div>
+          }
+          employerName={employerQuery}
+          description="Appears in official Canadian government LMIA records and has not been flagged for violations."
+        />
+      </ResultCard>
     )
   }
 
   if (risk === 'YELLOW') {
-    let title = 'Review carefully'
-    let message = ''
+    let verdict = 'Caution'
+    let description: ReactNode = ''
 
     if (reason === 'address_mismatch') {
-      title = 'Location details don\'t match'
-      message =
-        'This employer was found in government records but some details do not match your offer. Ask your employer to clarify before proceeding.'
+      description = 'Found in government records, but the LMIA on file is for a different location than the one you specified. Confirm directly with the employer before proceeding.'
     } else if (reason === 'pr_only_stream') {
-      title = 'Not a TFW position'
-      message =
-        'This employer was found in government records, but all approved positions are under the Permanent Resident Only stream — not for temporary foreign workers. This offer may not be legitimate for your situation.'
+      verdict = 'Wrong stream'
+      description = 'All approved LMIAs for this employer are under the Permanent Resident stream — not for temporary foreign workers. An offer claiming to be a TFW LMIA may not be legitimate.'
     } else {
-      title = 'Previously penalised — now eligible'
-      message =
-        'This employer was previously penalised by the Canadian government for Temporary Foreign Worker violations but is currently eligible to hire. Proceed with caution and verify all offer details independently.'
+      description = 'Previously penalised by the Canadian government for Temporary Foreign Worker violations but is currently eligible to hire. Proceed with caution and verify offer details independently.'
     }
 
     return (
-      <div
-        className="bg-white rounded-xl border border-gray-200 border-l-4 border-l-amber-400 p-5 shadow-sm"
-        role="status"
-        aria-label="Verification result: Verify Further"
-      >
-        <CardHeader employer={employerQuery} />
-        <div className="flex items-center gap-2.5 mb-3">
-          <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-amber-600">
+      <ResultCard role="status" ariaLabel="Verification result: Caution">
+        <VerdictLayout
+          verdict={verdict}
+          verdictColor="text-amber-500"
+          iconBg="bg-amber-400"
+          iconShadow="shadow-amber-200"
+          icon={
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
               <line x1="12" y1="9" x2="12" y2="13"/>
               <line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
-          </div>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 inline-block" aria-hidden="true" />
-            Verify Further
-          </span>
-        </div>
-        <h3 className="text-base font-bold text-gray-900 mb-1.5">{title}</h3>
-        <p className="text-sm text-gray-600 leading-relaxed">{message}</p>
-        <CardFooter />
-      </div>
+          }
+          employerName={employerQuery}
+          description={description}
+        />
+      </ResultCard>
     )
   }
 
   if (risk === 'RED') {
     const isBannedTemporary = subtype === 'BANNED_TEMPORARY'
-    const title = isBannedTemporary ? 'Currently banned from hiring' : 'Outstanding unpaid penalty'
+    const verdict = isBannedTemporary ? 'Banned' : 'Penalised'
 
-    let message = ''
+    let description: ReactNode = ''
     if (isBannedTemporary && ban_end_date) {
       const formatted = new Date(ban_end_date).toLocaleDateString('en-CA', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+        year: 'numeric', month: 'long', day: 'numeric',
       })
-      message = `This employer has been found non-compliant by the Canadian government and is BANNED from hiring temporary foreign workers until ${formatted}. This ban is active.`
+      description = <>Found non-compliant and <span className="font-semibold text-gray-700">banned from hiring</span> temporary foreign workers until <span className="font-semibold text-gray-700">{formatted}</span>. This ban is active.</>
     } else if (isBannedTemporary) {
-      message =
-        'This employer has been found non-compliant by the Canadian government and is BANNED from hiring temporary foreign workers. This ban is active.'
+      description = 'Found non-compliant and banned from hiring temporary foreign workers. This ban is active.'
     } else {
-      message =
-        'This employer has an outstanding unpaid monetary penalty issued by the Canadian government and cannot hire temporary foreign workers until it is paid.'
+      description = 'Has an outstanding unpaid monetary penalty from the Canadian government and cannot hire temporary foreign workers until it is paid.'
     }
 
     return (
-      <div
-        className="bg-white rounded-xl border border-gray-200 border-l-4 border-l-red-600 p-5 shadow-sm"
-        role="alert"
-        aria-label={`Verification result: ${title}`}
-      >
-        <CardHeader employer={employerQuery} />
-        <div className="flex items-center gap-2.5 mb-3">
-          <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-red-600">
+      <ResultCard role="alert" ariaLabel={`Verification result: ${verdict}`}>
+        <VerdictLayout
+          verdict={verdict}
+          verdictColor="text-red-600"
+          iconBg="bg-red-500"
+          iconShadow="shadow-red-200"
+          icon={
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"/>
               <line x1="15" y1="9" x2="9" y2="15"/>
               <line x1="9" y1="9" x2="15" y2="15"/>
             </svg>
-          </div>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-red-100 text-red-700">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block" aria-hidden="true" />
-            High Risk
-          </span>
-        </div>
-        <h3 className="text-base font-bold text-gray-900 mb-1.5">{title}</h3>
-        <p className="text-sm text-gray-600 leading-relaxed">{message}</p>
-        <EsdcContact />
-        <CardFooter />
-      </div>
+          }
+          employerName={employerQuery}
+          description={description}
+        >
+          <EsdcContact />
+        </VerdictLayout>
+      </ResultCard>
     )
   }
 
   // GREY — not found
   return (
-    <div
-      className="bg-white rounded-xl border border-gray-200 border-l-4 border-l-gray-400 p-5 shadow-sm"
-      role="status"
-      aria-label="Verification result: Not Found"
-    >
-      <CardHeader employer={employerQuery} />
-      <div className="flex items-center gap-2.5 mb-3">
-        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
+    <ResultCard role="status" ariaLabel="Verification result: Not Found">
+      <VerdictLayout
+        verdict="Not found"
+        verdictColor="text-gray-400"
+        iconBg="bg-gray-200"
+        iconShadow="shadow-gray-200"
+        icon={
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/>
           </svg>
-        </div>
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">
-          <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block" aria-hidden="true" />
-          Not Found
-        </span>
-      </div>
-      <h3 className="text-base font-bold text-gray-900 mb-1.5">Not found in government records</h3>
-      <p className="text-sm text-gray-600 leading-relaxed">
-        This employer does not appear in the LMIA database. This is common — many legitimate employers file under a different legal or numbered company name, or are too new to appear yet. It does not automatically mean the offer is fraudulent.
-      </p>
-      <p className="text-sm text-gray-600 leading-relaxed mt-2">
-        Follow the steps below to verify before making any decision or payment.
-      </p>
-      <CardFooter />
-    </div>
+        }
+        employerName={employerQuery}
+        description="Not in the LMIA database. Many legitimate employers file under a different legal or numbered company name, or are too new to appear. This does not automatically mean the offer is fraudulent — follow the steps below to verify."
+      />
+    </ResultCard>
   )
 }

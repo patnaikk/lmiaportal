@@ -133,7 +133,7 @@ export default function EmployerInput({
     <div>
       <div className="flex items-center justify-between mb-1">
         <label htmlFor="employer" className="block text-sm font-medium text-gray-700">
-          Employer name <span className="text-red-600" aria-label="required">*</span>
+          Employer name <span className="text-gray-300 font-normal" aria-label="required">*</span>
         </label>
         <button
           type="button"
@@ -176,7 +176,7 @@ export default function EmployerInput({
           onChange={(e) => handleChange(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="e.g. Sunrise Senior Care or 1234567 BC Ltd."
-          className="w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50"
+          className="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-gray-50"
           autoComplete="off"
           inputMode="text"
           aria-autocomplete="list"
@@ -189,9 +189,9 @@ export default function EmployerInput({
             className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden"
             role="listbox"
           >
-            <div className="px-3 py-1.5 bg-amber-50 border-b border-amber-100">
-              <p className="text-[11px] text-amber-700 font-medium">
-                Known trade → legal name matches — click to search the registered name
+            <div className="px-3 py-2 bg-amber-50/70 border-b border-amber-100">
+              <p className="text-[11px] text-amber-800">
+                These employers file under a different legal name. Pick one to search the registered version.
               </p>
             </div>
             {suggestions.map((entry, i) => {
@@ -204,7 +204,7 @@ export default function EmployerInput({
                   aria-selected={i === activeSuggestion}
                   onClick={() => selectSuggestion(entry)}
                   className={`w-full text-left px-4 py-2.5 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0 ${
-                    i === activeSuggestion ? 'bg-red-50' : ''
+                    i === activeSuggestion ? 'bg-gray-100' : ''
                   }`}
                 >
                   <span className="block text-sm font-semibold text-gray-900">{entry.displayTrade}</span>

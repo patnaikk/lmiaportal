@@ -27,24 +27,22 @@ export default async function ResultQRCode({ employer, city, province }: Props) 
   }
 
   return (
-    <div className="mt-6 p-4 border border-gray-200 rounded-xl">
-      <p className="text-sm font-medium text-gray-700 mb-1">Share this result</p>
-      <p className="text-xs text-gray-500 mb-3">
+    <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+      <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-1">Share this result</p>
+      <p className="text-sm text-gray-500 mb-4">
         Scan or screenshot this QR code to send the result directly to anyone via WhatsApp or chat.
       </p>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-5">
         <div
-          className="w-[96px] h-[96px] flex-shrink-0 rounded-lg overflow-hidden border border-gray-100"
+          className="w-[88px] h-[88px] flex-shrink-0 rounded-xl overflow-hidden bg-white"
           dangerouslySetInnerHTML={{ __html: svgString }}
           aria-label="QR code linking to this result"
         />
-        <div className="text-xs text-gray-400 leading-relaxed">
-          <p className="font-medium text-gray-600 mb-1">How to use:</p>
-          <ol className="list-decimal list-inside space-y-1">
-            <li>Screenshot this page</li>
-            <li>Send via WhatsApp to a family member or friend</li>
-            <li>They scan the QR to see the same result</li>
-          </ol>
+        <div className="text-xs text-gray-400 leading-relaxed space-y-1.5">
+          <p className="text-xs font-semibold text-gray-500 mb-2">How to use</p>
+          <p>1. Screenshot this page</p>
+          <p>2. Send via WhatsApp to a family member</p>
+          <p>3. They scan the QR to see the same result</p>
         </div>
       </div>
     </div>

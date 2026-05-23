@@ -49,7 +49,7 @@ export default function EmailCapture({ employerQuery, employerNormalized, lastRe
 
   if (status === 'success') {
     return (
-      <div className="mt-6 p-4 border border-gray-200 rounded-xl bg-gray-50">
+      <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
         <p className="text-sm text-gray-700">
           <span className="text-green-600 font-semibold">✓ Got it.</span> We&apos;ll notify you if anything changes.
         </p>
@@ -58,7 +58,7 @@ export default function EmailCapture({ employerQuery, employerNormalized, lastRe
   }
 
   return (
-    <div className="mt-6 p-4 border border-gray-200 rounded-xl bg-gray-50">
+    <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
       <div className="flex items-start gap-2 mb-3">
         <span className="text-gray-500 mt-0.5" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

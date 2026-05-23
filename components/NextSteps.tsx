@@ -171,18 +171,18 @@ export default function NextSteps({ result }: Props) {
   }[risk]
 
   return (
-    <div className="mt-4">
-      <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">{title}</h2>
+    <div className="mt-4 bg-white rounded-2xl shadow-lg shadow-gray-200/80 p-5">
+      <h2 className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-4">{title}</h2>
       <ul className="space-y-3">
         {steps.map((step, i) => (
           <li key={i} className="flex gap-3 items-start">
             <span
-              className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold mt-0.5 ${iconColor}`}
+              className={`flex-shrink-0 w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold mt-0.5 ${iconColor}`}
               aria-hidden="true"
             >
               {step.icon}
             </span>
-            <span className="text-sm text-gray-800 leading-relaxed">{step.text}</span>
+            <span className="text-sm text-gray-600 leading-relaxed">{step.text}</span>
           </li>
         ))}
       </ul>
