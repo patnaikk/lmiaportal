@@ -14,7 +14,17 @@ import Footer from '@/components/Footer'
 import SearchForm from '@/components/SearchForm'
 import ScrollToTop from '@/components/ScrollToTop'
 import Navigation from '@/components/Navigation'
+import StickyResultHeader from '@/components/StickyResultHeader'
+import ReportTemplate from '@/components/ReportTemplate'
+import DataFreshness from '@/components/DataFreshness'
 import type { Metadata } from 'next'
+
+const VERDICT_LABEL: Record<'GREEN' | 'YELLOW' | 'RED' | 'GREY', string> = {
+  GREEN: 'Verified',
+  YELLOW: 'Caution',
+  RED: 'Banned',
+  GREY: 'Not found',
+}
 
 const SITE_URL = 'https://lmiacheck.ca'
 
@@ -56,11 +66,31 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
   if (!employer) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen bg-gray-50">
         <Navigation />
-        <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8">
-          <p className="text-gray-600">Please enter an employer name to search.</p>
-          <Link href="/" className="mt-4 inline-block text-blue-700 underline">← Back to search</Link>
+        <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-12">
+          <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/80 p-8 sm:p-10 text-center">
+            <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+              </svg>
+            </div>
+            <h1 className="text-xl font-bold text-gray-900 mb-2">No employer to check</h1>
+            <p className="text-sm text-gray-500 mb-6 max-w-xs mx-auto leading-relaxed">
+              Enter an employer name on the search page to verify them against the official Canadian government LMIA records.
+            </p>
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors"
+            >
+              Go to search
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </Link>
+          </div>
         </main>
         <Footer />
       </div>
@@ -83,6 +113,11 @@ export default async function ResultsPage({ searchParams }: PageProps) {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Navigation />
+      <StickyResultHeader
+        risk={result.risk}
+        verdict={VERDICT_LABEL[result.risk]}
+        employer={employer}
+      />
 
       <ScrollToTop query={employer} />
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
@@ -107,6 +142,20 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
         {/* Risk Indicator — most prominent */}
         <RiskIndicator result={result} />
+
+        {/* Ready-to-send templates for banned employers */}
+        {result.risk === 'RED' && (
+          <ReportTemplate
+            employer={employer}
+            banUntil={
+              result.ban_end_date
+                ? new Date(result.ban_end_date).toLocaleDateString('en-CA', {
+                    year: 'numeric', month: 'long', day: 'numeric',
+                  })
+                : null
+            }
+          />
+        )}
 
         {/* Violation details (if from violators list) */}
         {result.violatorMatches.length > 0 && (
@@ -243,6 +292,9 @@ export default async function ResultsPage({ searchParams }: PageProps) {
           <h2 className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Search another employer</h2>
           <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/80 p-5">
             <SearchForm />
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <DataFreshness />
+            </div>
           </div>
         </div>
       </main>

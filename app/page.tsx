@@ -3,6 +3,7 @@ import Footer from '@/components/Footer'
 import RecentlyBanned from '@/components/RecentlyBanned'
 import LatestBanBanner from '@/components/LatestBanBanner'
 import Navigation from '@/components/Navigation'
+import DataFreshness from '@/components/DataFreshness'
 import { supabase } from '@/lib/supabase'
 
 export const revalidate = 3600 // refresh stats every hour
@@ -56,16 +57,25 @@ export default async function HomePage() {
       <div className="max-w-2xl mx-auto w-full px-4">
         <div className="grid grid-cols-3 divide-x divide-gray-100 border border-gray-100 rounded-2xl bg-white overflow-hidden shadow-sm">
           <div className="py-4 text-center">
-            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight">{stats.employers > 0 ? formatCount(stats.employers) : '11K+'}</div>
+            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.employers > 0 ? formatCount(stats.employers) : '11K+'}</div>
             <div className="text-[11px] text-gray-400 font-medium mt-1 uppercase tracking-wider">Employers</div>
           </div>
           <div className="py-4 text-center">
-            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight">{stats.violators > 0 ? stats.violators.toLocaleString() : '1,329'}</div>
+            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.violators > 0 ? stats.violators.toLocaleString() : '1,329'}</div>
             <div className="text-[11px] text-gray-400 font-medium mt-1 uppercase tracking-wider">Violators</div>
           </div>
           <div className="py-4 text-center">
-            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight">Free</div>
-            <div className="text-[11px] text-gray-400 font-medium mt-1 uppercase tracking-wider">Always</div>
+            {stats.searches > 0 ? (
+              <>
+                <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{formatCount(stats.searches)}</div>
+                <div className="text-[11px] text-gray-400 font-medium mt-1 uppercase tracking-wider">This week</div>
+              </>
+            ) : (
+              <>
+                <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight">Free</div>
+                <div className="text-[11px] text-gray-400 font-medium mt-1 uppercase tracking-wider">Always</div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -93,7 +103,10 @@ export default async function HomePage() {
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-5">
         <div className="bg-white border border-gray-100 rounded-2xl p-5 sm:p-6 shadow-md shadow-gray-200/60">
           <SearchForm />
-          <p className="text-center text-xs text-gray-400 mt-4">No data stored · No login required</p>
+          <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <DataFreshness />
+            <p className="text-xs text-gray-400">No data stored · No login required</p>
+          </div>
         </div>
         <a
           href="/verify-lmia"
