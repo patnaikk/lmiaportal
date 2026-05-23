@@ -10,6 +10,19 @@ export const metadata: Metadata = {
 
 const updates: { date: string; items: React.ReactNode[] }[] = [
   {
+    date: 'May 23, 2026',
+    items: [
+      'Redesign: full Apple-style UI overhaul across the site — every card now floats on a light gray background with no borders, status is communicated through a single large icon, and the result verdict ("Banned", "Verified", "Caution", "Not found") appears as a 48–56pt headline so the answer hits you first',
+      'Redesign: the "Government Violation Record" no longer reads like a database dump — it\'s now a single plain-English sentence (e.g. "On April 30, 2026, the Government of Canada found this employer non-compliant... A fine of $25,250 and a 1-year ban was issued"). The raw label/value record is still available behind a "View raw record" disclosure',
+      'Redesign: the "Found in government records" card on verified employers also rewritten as prose — "Sunrise Farms Limited was approved to hire 1 worker as Harvesting labourers (NOC 85101) in Ontario under Primary Agriculture..." instead of an Address/Province/Stream/NOC label grid',
+      'Redesign: banned-employer result page now has a full-width "Report this to ESDC · 1-800-367-5693" button as the single primary action, instead of burying the phone number in a small callout',
+      'Redesign: share zone consolidated — QR code and 4 social buttons (Copy link, WhatsApp, Facebook, Email) now live together in one card instead of two separate sections',
+      'Redesign: color discipline — red is now reserved only for actual warnings (fraud banner, the danger icon, ESDC phone number, banned status pill). The "Verify offer" button, primary CTAs, and hero text are now neutral black/gray so the eye lands on what actually matters',
+      'Redesign: fraud warning banner at the top of every page slimmed down to one line and made dismissable for the session — was previously a heavy 2-line bar that dominated every screen',
+      'Redesign: homepage hero scaled up — "Got a Canadian job offer? Check the employer first." is now a 48–56pt headline with a quieter gray accent, instead of small red text',
+    ],
+  },
+  {
     date: 'May 17, 2026',
     items: [
       <>
