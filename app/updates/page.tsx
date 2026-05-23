@@ -10,6 +10,19 @@ export const metadata: Metadata = {
 
 const updates: { date: string; items: React.ReactNode[] }[] = [
   {
+    date: 'May 23, 2026 · Pass 2',
+    items: [
+      'New: Ready-to-send messages on banned-employer results — three pre-written templates (reply to a recruiter, report to Service Canada / ESDC, tell your family) auto-populate with the employer name and ban date. One-tap copy to clipboard. Users no longer have to figure out what to say to a fraudulent recruiter — professional words ready to send',
+      'New: Trust signal — "Updated [date] · Direct from canada.ca" now appears with a live green dot next to the search form on both the home and results pages. Shows users explicitly that data is current and where it comes from',
+      'New: Sticky condensed result header — when you scroll past the verdict on a result page, a thin frosted bar slides in at the top showing back arrow + risk dot + verdict + employer name. Matches iOS scroll-to-condense pattern',
+      'New: Loading skeleton on results page — instead of a blank flash while checking, users see a shimmer card with "Checking government records…" indicator',
+      'New: Improved empty state when visiting /results without a query — clean card with icon and a clear "Go to search" call-to-action instead of a sad line of text',
+      'Polish: Apple-tier typography — added SF Pro Display to the font stack, font-feature-settings for SF-style numerals, tabular-nums on stat numbers (so digits align across rows), tighter -0.02em tracking on display headlines',
+      'Polish: Subtle verdict entry animation — the result word (Banned / Verified / etc) fades and slides in over 360ms when the page loads. Respects prefers-reduced-motion',
+      'Polish: Stats card now shows real "This week" search count when data is available, instead of always showing the "Free / Always" placeholder',
+    ],
+  },
+  {
     date: 'May 23, 2026',
     items: [
       'Redesign: full Apple-style UI overhaul across the site — every card now floats on a light gray background with no borders, status is communicated through a single large icon, and the result verdict ("Banned", "Verified", "Caution", "Not found") appears as a 48–56pt headline so the answer hits you first',
