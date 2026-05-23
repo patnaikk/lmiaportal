@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 
 interface Props {
   variant?: 'inline' | 'badge'
@@ -72,7 +73,7 @@ export default async function DataFreshness({ variant = 'inline', className = ''
         rel="noopener noreferrer"
         className="underline hover:text-gray-700"
       >
-        canada.ca
+        canada.ca<ExternalLinkIcon />
       </a>
     </p>
   )

@@ -1,20 +1,12 @@
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import { formatTimeAgo } from '@/lib/format-time'
 
 interface BannedRow {
   business_operating_name: string
   province: string
   decision_date: string | null
   compliance_status: string
-}
-
-function formatDecisionDate(date: string | null): string {
-  if (!date) return 'Date unknown'
-  return new Date(date).toLocaleDateString('en-CA', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
 }
 
 export default async function RecentlyBanned() {
@@ -44,7 +36,7 @@ export default async function RecentlyBanned() {
           Live data
         </span>
       </div>
-      <div className="rounded-2xl overflow-hidden bg-white shadow-lg shadow-gray-200/80 divide-y divide-gray-100">
+      <div className="rounded-2xl overflow-hidden bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-8px_rgba(15,23,42,0.08)] ring-1 ring-black/[0.04] divide-y divide-gray-100">
         {rows.map((row, i) => (
           <Link
             key={i}
@@ -59,8 +51,8 @@ export default async function RecentlyBanned() {
               <p className="text-sm font-semibold text-gray-900 truncate group-hover:text-gray-700 transition-colors">
                 {row.business_operating_name}
               </p>
-              <p className="text-xs text-gray-400 mt-0.5">
-                {row.province || 'Canada'} · Banned {formatDecisionDate(row.decision_date)}
+              <p className="text-xs text-gray-500 mt-0.5">
+                {row.province || 'Canada'} · Banned {formatTimeAgo(row.decision_date)}
               </p>
             </div>
 

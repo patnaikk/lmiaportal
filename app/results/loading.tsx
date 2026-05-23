@@ -14,7 +14,7 @@ export default function Loading() {
         </div>
 
         {/* Verdict card skeleton */}
-        <div className="bg-white rounded-3xl shadow-lg shadow-gray-200/80 p-7 sm:p-8">
+        <div className="card-elevated-lg p-7 sm:p-8">
           <div className="w-16 h-16 rounded-full bg-gray-200 animate-pulse mb-5" />
           <div className="h-12 w-48 bg-gray-200 rounded-lg animate-pulse mb-4" />
           <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse mb-2" />
@@ -24,7 +24,7 @@ export default function Loading() {
         </div>
 
         {/* Secondary card skeleton */}
-        <div className="mt-4 bg-white rounded-2xl shadow-lg shadow-gray-200/80 p-6">
+        <div className="mt-4 card-elevated p-6">
           <div className="h-5 w-1/2 bg-gray-200 rounded animate-pulse mb-4" />
           <div className="space-y-2">
             <div className="h-3 w-full bg-gray-100 rounded animate-pulse" />

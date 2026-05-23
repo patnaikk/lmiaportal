@@ -27,7 +27,11 @@ export default function FraudWarningBanner() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Report fraud →
+            Report fraud
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="inline-block ml-0.5 opacity-80" aria-hidden="true">
+              <path d="M7 17L17 7"/>
+              <path d="M7 7h10v10"/>
+            </svg>
           </a>
         </p>
         <button

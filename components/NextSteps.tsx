@@ -171,7 +171,7 @@ export default function NextSteps({ result }: Props) {
   }[risk]
 
   return (
-    <div className="mt-4 bg-white rounded-2xl shadow-lg shadow-gray-200/80 p-5">
+    <div className="mt-4 card-elevated p-5">
       <h2 className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-4">{title}</h2>
       <ul className="space-y-3">
         {steps.map((step, i) => (

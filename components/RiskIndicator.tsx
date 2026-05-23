@@ -30,7 +30,7 @@ function ResultCard({
 }) {
   return (
     <div
-      className="bg-white rounded-3xl shadow-lg shadow-gray-200/80 p-7 sm:p-8"
+      className="card-elevated-lg p-7 sm:p-8"
       role={role}
       aria-label={ariaLabel}
     >

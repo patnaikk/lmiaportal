@@ -50,7 +50,7 @@ function MatchCard({ match }: { match: PositiveLmia }) {
   const quarterClause = quarter ? <> The LMIA was issued in <span className="font-semibold text-gray-900">{quarter}</span>.</> : null
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/80 overflow-hidden">
+    <div className="card-elevated overflow-hidden">
       <div className="p-6 sm:p-7">
         {/* Headline stats — kept prominent because they're the answer */}
         {(positions || lmias) && (

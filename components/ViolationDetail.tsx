@@ -39,7 +39,7 @@ export default function ViolationDetail({ violators }: Props) {
   const hasUnpaidPenalty = v.compliance_status === 'INELIGIBLE_UNPAID' || v.compliance_status === 'INELIGIBLE'
 
   return (
-    <div className="mt-4 bg-white rounded-2xl shadow-lg shadow-gray-200/80 overflow-hidden">
+    <div className="mt-4 card-elevated overflow-hidden">
       {/* Prose summary */}
       <div className="p-6 sm:p-7">
         <h2 className="text-lg font-bold text-gray-900 mb-3">Why this employer was banned</h2>

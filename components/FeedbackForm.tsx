@@ -49,7 +49,7 @@ export default function FeedbackForm({ employerQuery }: Props) {
 
   if (status === 'success') {
     return (
-      <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+      <div className="mt-4 p-5 card-elevated">
         <p className="text-sm text-gray-600">
           <span className="font-semibold text-green-600">Thanks for your feedback.</span> We review every submission to improve data quality.
         </p>
@@ -71,7 +71,7 @@ export default function FeedbackForm({ employerQuery }: Props) {
   }
 
   return (
-    <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+    <div className="mt-4 p-5 card-elevated">
       <div className="flex items-center justify-between mb-4">
         <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Send feedback</p>
         <button

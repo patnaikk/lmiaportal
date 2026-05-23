@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 
 export default function Footer() {
   return (
@@ -34,7 +35,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              ESDC Positive LMIA List
+              ESDC Positive LMIA List<ExternalLinkIcon />
             </a>
             {' '}·{' '}
             <a
@@ -43,7 +44,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Non-Compliant Employers
+              Non-Compliant Employers<ExternalLinkIcon />
             </a>
           </span>
           <Link href="/about" className="underline hover:text-gray-600">About</Link>
@@ -54,7 +55,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="underline hover:text-gray-600"
           >
-            Financial tools for newcomers
+            Financial tools for newcomers<ExternalLinkIcon />
           </a>
         </div>
       </div>

@@ -27,7 +27,7 @@ export default async function ResultQRCode({ employer, city, province }: Props) 
   }
 
   return (
-    <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+    <div className="mt-4 p-5 card-elevated">
       <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-1">Share this result</p>
       <p className="text-sm text-gray-500 mb-4">
         Scan or screenshot this QR code to send the result directly to anyone via WhatsApp or chat.

@@ -54,7 +54,7 @@ export default function ShareComponent({ riskResult, qrSvg }: Props) {
   const btnClass = 'flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors min-h-[44px]'
 
   return (
-    <div className="mt-4 p-5 sm:p-6 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+    <div className="mt-4 p-5 sm:p-6 card-elevated">
       <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-1">Share this result</p>
       <p className="text-sm text-gray-500 mb-5">{COPY_BY_RESULT[riskResult]}</p>
 

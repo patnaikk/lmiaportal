@@ -34,7 +34,7 @@ export default function MappingContribution({ queriedName, province }: Props) {
 
   if (status === 'done') {
     return (
-      <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80 flex items-start gap-3">
+      <div className="mt-4 p-5 card-elevated flex items-start gap-3">
         <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
           <svg className="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -48,7 +48,7 @@ export default function MappingContribution({ queriedName, province }: Props) {
   }
 
   return (
-    <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+    <div className="mt-4 p-5 card-elevated">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}

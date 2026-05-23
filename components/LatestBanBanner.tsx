@@ -32,17 +32,20 @@ export default async function LatestBanBanner() {
 
   return (
     <div className="max-w-2xl mx-auto w-full px-4 pt-3 pb-1">
-      <div className="flex items-center justify-between gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-2.5">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0 animate-pulse" aria-hidden="true" />
-          <p className="text-sm text-red-800 truncate">
+      <div className="flex items-center justify-between gap-3 bg-red-50/70 ring-1 ring-red-100 rounded-xl px-4 py-2.5">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span className="relative flex h-2 w-2 flex-shrink-0" aria-hidden="true">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-60"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+          </span>
+          <p className="text-sm text-red-900 truncate">
             <span className="font-semibold">New ban:</span>{' '}
-            {name}{province ? ` (${province})` : ''}
+            {name}{province ? <span className="text-red-700"> · {province}</span> : null}
           </p>
         </div>
         <Link
           href="#recently-banned"
-          className="text-xs font-semibold text-red-600 hover:text-red-800 whitespace-nowrap flex-shrink-0 transition-colors"
+          className="text-xs font-semibold text-red-700 hover:text-red-900 whitespace-nowrap flex-shrink-0 transition-colors"
         >
           See all ↓
         </Link>

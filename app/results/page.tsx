@@ -69,7 +69,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
       <div className="flex flex-col min-h-screen bg-gray-50">
         <Navigation />
         <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-12">
-          <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/80 p-8 sm:p-10 text-center">
+          <div className="card-elevated p-8 sm:p-10 text-center">
             <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500">
                 <circle cx="11" cy="11" r="8"/>
@@ -211,7 +211,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
         {/* LMIA number verifier prompt — shown for GREY results */}
         {result.risk === 'GREY' && (
-          <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+          <div className="mt-4 p-5 card-elevated">
             <p className="text-sm font-semibold text-gray-900 mb-1">Have an LMIA number on your document?</p>
             <p className="text-xs text-gray-500 mb-3">Check whether the number format is valid and get the exact script to verify it with Service Canada in 5 minutes.</p>
             <a
@@ -230,7 +230,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
         {/* Numbered company hint — shown when no results found */}
         {result.risk === 'GREY' && (
-          <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+          <div className="mt-4 p-5 card-elevated">
             <p className="text-sm font-semibold text-gray-900 mb-1.5">
               Is your employer a numbered company?
             </p>
@@ -261,7 +261,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
         />
 
         {/* Download PDF */}
-        <div className="mt-4 p-5 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+        <div className="mt-4 p-5 card-elevated">
           <p className="text-sm font-semibold text-gray-900 mb-1">Download & Print</p>
           <p className="text-xs text-gray-500 mb-3">
             Save this result as a PDF to share with family or for your records.
@@ -290,7 +290,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
         {/* Search again — bottom CTA */}
         <div className="mt-8">
           <h2 className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Search another employer</h2>
-          <div className="bg-white rounded-2xl shadow-lg shadow-gray-200/80 p-5">
+          <div className="card-elevated p-5">
             <SearchForm />
             <div className="mt-4 pt-4 border-t border-gray-100">
               <DataFreshness />

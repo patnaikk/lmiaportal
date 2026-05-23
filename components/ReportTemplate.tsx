@@ -64,7 +64,7 @@ export default function ReportTemplate({ employer, banUntil }: Props) {
   }
 
   return (
-    <div className="mt-4 p-5 sm:p-6 bg-white rounded-2xl shadow-lg shadow-gray-200/80">
+    <div className="mt-4 p-5 sm:p-6 card-elevated">
       <div className="flex items-start gap-3 mb-4">
         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-600">
