@@ -10,6 +10,16 @@ export const metadata: Metadata = {
 
 const updates: { date: string; items: React.ReactNode[] }[] = [
   {
+    date: 'May 24, 2026 · Pass 6',
+    items: [
+      <>
+        New: <Link href="/reports" className="text-blue-700 hover:underline font-medium">Monthly enforcement reports</Link> now include an email signup — enter your address to get the report delivered to your inbox each month. New bans, expiring bans, provincial trends, free.
+      </>,
+      'Reports page: email signup widget placed above the report list so it\'s the first thing visitors see — indigo card with a single email field and "Notify me" button. Confirms with a green success state on submit.',
+      'Infrastructure: new /api/monthly-subscribe endpoint stores emails in Supabase with deduplication — signing up twice with the same address silently succeeds without creating duplicates.',
+    ],
+  },
+  {
     date: 'May 24, 2026 · Pass 5',
     items: [
       'UX: "Did you receive a job offer from this employer?" — RED results no longer assume the user is a victim. A two-path question replaces the immediate ESDC call button. "Yes, I got an offer" reveals the report button with clear guidance. "No, just checking" shows a calm green "You\'re protected" card instead of an alarm.',
