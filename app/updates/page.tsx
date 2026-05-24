@@ -10,6 +10,21 @@ export const metadata: Metadata = {
 
 const updates: { date: string; items: React.ReactNode[] }[] = [
   {
+    date: 'May 24, 2026 · Pass 5',
+    items: [
+      'UX: "Did you receive a job offer from this employer?" — RED results no longer assume the user is a victim. A two-path question replaces the immediate ESDC call button. "Yes, I got an offer" reveals the report button with clear guidance. "No, just checking" shows a calm green "You\'re protected" card instead of an alarm.',
+      'UX: Latest ban banner promoted above the fold — the most recently banned employer now appears between the activity ticker and the search form, visible on first load without scrolling. Previously buried below the search card, stats bar, and offer check CTA.',
+      'Design: Unified primary button colour — all submit buttons are now bg-gray-900 across the site. The /check form previously used red ("Run all checks") which alarmed users before anything had happened.',
+      'Design: /check feature cards redesigned as a 2-column tinted grid. Each check now has its own colour: LMIA records (blue), Banned employers (red), Fee detection (amber), Offer source (purple), Duration match (gray), Web presence (green). Previously six identical white rectangles.',
+      'Design: /check disclaimer replaced — removed border-l-4 left-border band, now an amber tinted card with an info icon. Consistent with Apple card language.',
+      'Design: Fraud banner slimmed to a single-line strip at half the previous height. Less aggressive, stays out of the way of the hero.',
+      'Design: Disabled button opacity raised from 40% to 60% — was reading as broken rather than inactive.',
+      'Design: Next steps on RED and YELLOW results now use numbered circles (1, 2, 3, 4) instead of ✕ icons. "Contact a licensed RCIC" no longer looks like an error state.',
+      'Mobile nav rewritten — fixed overflow bug and added active-state highlighting for current page.',
+      'text-balance applied to all h1 headlines sitewide for even line wrapping on mobile.',
+    ],
+  },
+  {
     date: 'May 23, 2026 · Pass 4',
     items: [
       <>
