@@ -5,6 +5,7 @@ import RecentlyBanned from '@/components/RecentlyBanned'
 import LatestBanBanner from '@/components/LatestBanBanner'
 import Navigation from '@/components/Navigation'
 import DataFreshness from '@/components/DataFreshness'
+import ActivityTicker from '@/components/ActivityTicker'
 import { supabase } from '@/lib/supabase'
 
 export const revalidate = 3600 // refresh stats every hour
@@ -58,6 +59,9 @@ export default async function HomePage() {
           Charging workers for LMIAs is illegal. Verify any employer against official government records — free, in seconds.
         </p>
       </div>
+
+      {/* Live activity ticker — proves the site is current and working */}
+      <ActivityTicker />
 
       {/* Search card — moved up so the primary action is immediate */}
       <main className="max-w-2xl mx-auto w-full px-4 pt-2 pb-5">
