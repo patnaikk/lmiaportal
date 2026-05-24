@@ -7,6 +7,7 @@ export interface MonthlyReport {
   newBans: NewBan[]
   provinceBreakdown: ProvinceStat[]
   topViolations: ViolationStat[]
+  expiringThisMonth: ExpiringBan[]
   expiringNextMonth: ExpiringBan[]
   snapshot: Snapshot
 }
@@ -46,6 +47,7 @@ export interface Snapshot {
   currentlyBanned: number
   newThisMonth: number
   newLastMonth: number
+  expiringThisMonth: number
   expiringNextMonth: number
   totalPenalties: number
 }
@@ -139,7 +141,23 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
     .sort((a, b) => b.count - a.count)
     .slice(0, 8)
 
-  // 4. Bans expiring next month
+  // 4a. Bans expiring THIS month
+  const { data: expiringThisRaw } = await supabase
+    .from('violators')
+    .select('business_operating_name, province, ineligible_until_date, penalty_amount')
+    .eq('compliance_status', 'INELIGIBLE_UNTIL')
+    .gte('ineligible_until_date', start)
+    .lte('ineligible_until_date', end)
+    .order('ineligible_until_date', { ascending: true })
+
+  const expiringThisMonth: ExpiringBan[] = (expiringThisRaw ?? []).map((r) => ({
+    name: r.business_operating_name ?? 'Unknown',
+    province: r.province ?? '',
+    banUntil: r.ineligible_until_date ?? '',
+    penalty: r.penalty_amount ?? null,
+  }))
+
+  // 4b. Bans expiring next month
   const { data: expiringRaw } = await supabase
     .from('violators')
     .select('business_operating_name, province, ineligible_until_date, penalty_amount')
@@ -161,12 +179,14 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
     { count: currentlyBanned },
     { count: newThisMonth },
     { count: newLastMonth },
-    { count: expiringCount },
+    { count: expiringThisCount },
+    { count: expiringNextCount },
   ] = await Promise.all([
     supabase.from('violators').select('*', { count: 'exact', head: true }).in('compliance_status', INELIGIBLE_STATUSES),
     supabase.from('violators').select('*', { count: 'exact', head: true }).in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL']),
     supabase.from('violators').select('*', { count: 'exact', head: true }).in('compliance_status', INELIGIBLE_STATUSES).gte('decision_date', start).lte('decision_date', end),
     supabase.from('violators').select('*', { count: 'exact', head: true }).in('compliance_status', INELIGIBLE_STATUSES).gte('decision_date', prevStart).lte('decision_date', prevEnd),
+    supabase.from('violators').select('*', { count: 'exact', head: true }).eq('compliance_status', 'INELIGIBLE_UNTIL').gte('ineligible_until_date', start).lte('ineligible_until_date', end),
     supabase.from('violators').select('*', { count: 'exact', head: true }).eq('compliance_status', 'INELIGIBLE_UNTIL').gte('ineligible_until_date', nextStart).lte('ineligible_until_date', nextEnd),
   ])
 
@@ -189,13 +209,15 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
     newBans,
     provinceBreakdown,
     topViolations,
+    expiringThisMonth,
     expiringNextMonth,
     snapshot: {
       totalBanned: totalBanned ?? 0,
       currentlyBanned: currentlyBanned ?? 0,
       newThisMonth: newThisMonth ?? 0,
       newLastMonth: newLastMonth ?? 0,
-      expiringNextMonth: expiringCount ?? 0,
+      expiringThisMonth: expiringThisCount ?? 0,
+      expiringNextMonth: expiringNextCount ?? 0,
       totalPenalties,
     },
   }

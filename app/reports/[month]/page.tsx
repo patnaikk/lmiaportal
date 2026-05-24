@@ -88,6 +88,7 @@ export default async function ReportPage({ params }: Props) {
               { label: 'New bans this month', value: report.snapshot.newThisMonth, sub: trendLabel, subColor: trendColor },
               { label: 'Currently banned', value: report.snapshot.currentlyBanned.toLocaleString(), sub: 'active bans', subColor: 'text-gray-400' },
               { label: 'Total on record', value: report.snapshot.totalBanned.toLocaleString(), sub: 'all time', subColor: 'text-gray-400' },
+              { label: 'Bans expired this month', value: report.snapshot.expiringThisMonth, sub: 'now eligible again', subColor: report.snapshot.expiringThisMonth > 0 ? 'text-amber-500' : 'text-gray-400' },
               { label: 'Total fines issued', value: report.snapshot.totalPenalties > 0 ? formatMoney(report.snapshot.totalPenalties) : '—', sub: 'all time', subColor: 'text-gray-400' },
             ].map((s) => (
               <div key={s.label} className="bg-white rounded-2xl p-4 ring-1 ring-black/[0.04] shadow-sm">
@@ -216,6 +217,51 @@ export default async function ReportPage({ params }: Props) {
               )
             })}
           </div>
+        </div>
+
+        {/* ── Expiring THIS month ── */}
+        <div>
+          <SectionHeader
+            title={`Bans that expired this month — ${report.label}`}
+            sub={
+              report.expiringThisMonth.length === 0
+                ? `No bans expired in ${report.label}`
+                : `${report.expiringThisMonth.length} employer${report.expiringThisMonth.length === 1 ? '' : 's'} became eligible to hire again this month — verify any offers from these employers carefully`
+            }
+          />
+          {report.expiringThisMonth.length === 0 ? (
+            <div className="bg-gray-50 rounded-2xl px-5 py-4">
+              <p className="text-sm text-gray-500">No bans expired in {report.label}.</p>
+            </div>
+          ) : (
+            <>
+              <div className="card-elevated divide-y divide-gray-50">
+                {report.expiringThisMonth.map((ban, i) => (
+                  <div key={i} className="px-5 py-3.5 flex items-center justify-between gap-3 first:rounded-t-2xl last:rounded-b-2xl">
+                    <div className="min-w-0">
+                      <Link
+                        href={`/results?employer=${encodeURIComponent(ban.name)}${ban.province ? `&province=${ban.province}` : ''}`}
+                        className="text-sm font-semibold text-gray-900 hover:text-indigo-700 transition-colors leading-snug"
+                      >
+                        {ban.name}
+                      </Link>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {PROVINCE_NAMES[ban.province] ?? ban.province}
+                        {ban.penalty ? ` · ${ban.penalty}` : ''}
+                      </p>
+                    </div>
+                    <div className="text-right flex-shrink-0">
+                      <p className="text-xs font-semibold text-gray-500">Expired</p>
+                      <p className="text-xs text-gray-400">{formatDate(ban.banUntil)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-3 bg-indigo-50 border border-indigo-100 rounded-xl px-4 py-3 text-xs text-indigo-800 leading-relaxed">
+                <span className="font-semibold">Heads up:</span> These employers are now technically eligible to hire again — but a past ban is a serious red flag. Always verify independently and check their full violation history before accepting any offer.
+              </div>
+            </>
+          )}
         </div>
 
         {/* ── Expiring next month ── */}
