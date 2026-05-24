@@ -45,12 +45,9 @@ export default async function HomePage() {
 
       {/* Hero */}
       <div className="bg-gradient-to-b from-gray-50 to-white text-center pt-12 pb-8 px-4">
-        {/* Designed maple-leaf mark — replaces 🇨🇦 emoji (which renders differently on every OS) */}
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-red-50 mb-5" aria-label="Canada">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="#DC2626" aria-hidden="true">
-            <path d="M14.7 17.2L17 18l-.6-3.1 4.4-3.8-2.2-.9.7-2.8-3.9 1 .1-3.2L13 7l-1-5-1 5-2.5-1.8.1 3.2-3.9-1 .7 2.8-2.2.9 4.4 3.8L7 18l2.3-.8L9 22h1l1.5-3 .5 4 .5-4 1.5 3h1l-.3-4.8z"/>
-          </svg>
-        </div>
+        {/* Canada flag */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/canada-flag.svg" alt="Canada flag" width="72" height="36" className="mx-auto mb-5 rounded-sm shadow-sm" />
         <h1 className="text-3xl sm:text-5xl font-bold text-gray-900 leading-[1.1] tracking-tight mb-4">
           Got a Canadian job offer?<br />
           <span className="text-gray-500">Check the employer first.</span>
