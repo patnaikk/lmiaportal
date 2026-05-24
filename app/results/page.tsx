@@ -145,6 +145,19 @@ export default async function ResultsPage({ searchParams }: PageProps) {
         {/* Risk Indicator — most prominent */}
         <RiskIndicator result={result} />
 
+        {/* Next steps — immediately after verdict */}
+        <NextSteps result={result} />
+
+        {/* Violation details (if from violators list) */}
+        {result.violatorMatches.length > 0 && (
+          <ViolationDetail violators={result.violatorMatches} />
+        )}
+
+        {/* Matched government data (if from positive LMIA list) */}
+        {result.positiveMatches.length > 0 && (
+          <MatchedData matches={result.positiveMatches} />
+        )}
+
         {/* Ready-to-send templates — all result types */}
         {result.risk === 'RED' && (
           <ReportTemplate
@@ -168,19 +181,6 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
         {/* CICC consultant verification — shown on all results */}
         <CICCWidget />
-
-        {/* Violation details (if from violators list) */}
-        {result.violatorMatches.length > 0 && (
-          <ViolationDetail violators={result.violatorMatches} />
-        )}
-
-        {/* Matched government data (if from positive LMIA list) */}
-        {result.positiveMatches.length > 0 && (
-          <MatchedData matches={result.positiveMatches} />
-        )}
-
-        {/* Next steps */}
-        <NextSteps result={result} />
 
         {/* Financial setup prompt — shown for GREEN results only */}
         {result.risk === 'GREEN' && (

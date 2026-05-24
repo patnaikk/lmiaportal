@@ -1,16 +1,14 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import Footer from '@/components/Footer'
 import Navigation from '@/components/Navigation'
-import type { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: 'LMIA FAQ 2026 — Common Questions About Verification & Fraud',
-  description: 'FAQ on LMIA scams, how to spot fake job offers, employer verification, banned employers, and your rights as a foreign worker in Canada.',
-}
 
 const sections = [
   {
-    heading: '🔍 Understanding the Checker',
+    id: 'checker',
+    heading: 'Understanding the Checker',
     questions: [
       {
         q: 'What is an LMIA?',
@@ -59,7 +57,8 @@ const sections = [
     ],
   },
   {
-    heading: '🚩 Identifying Red Flags & Scams',
+    id: 'redflags',
+    heading: 'Identifying Red Flags & Scams',
     questions: [
       {
         q: 'What does it mean if an employer is marked as "banned"?',
@@ -105,7 +104,8 @@ const sections = [
     ],
   },
   {
-    heading: '🛡️ Your Rights & Next Steps',
+    id: 'rights',
+    heading: 'Your Rights & Next Steps',
     questions: [
       {
         q: 'I already paid money for an LMIA. What should I do?',
@@ -114,14 +114,16 @@ const sections = [
             Collect all your evidence — bank transfers, chat screenshots, and emails. Report the employer to ESDC and
             IRCC. You may also be eligible for an{' '}
             <a
-              href="https://www.canada.ca/en/immigration-refugees-citizenship/services/work-canada/permit/temporary/vulnerable-workers.html"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/owp-vw"
               className="text-blue-600 hover:text-blue-800 font-medium underline"
             >
               Open Work Permit for Vulnerable Workers
             </a>
             , which is designed to help you leave an abusive employer without losing your status in Canada.
+            See our full guide:{' '}
+            <a href="/help/i-paid" className="text-blue-600 hover:text-blue-800 font-medium underline">
+              I already paid — what do I do now? →
+            </a>
           </>
         ),
       },
@@ -173,7 +175,8 @@ const sections = [
     ],
   },
   {
-    heading: '🏦 Life After LMIA: Financial Setup',
+    id: 'financial',
+    heading: 'Life After LMIA: Financial Setup',
     questions: [
       {
         q: 'My employer is verified. What should I do to prepare financially for Canada?',
@@ -236,7 +239,8 @@ const sections = [
     ],
   },
   {
-    heading: '💡 Final Thoughts',
+    id: 'misc',
+    heading: 'Privacy & Other Questions',
     questions: [
       {
         q: 'Are most LMIA job offers scams?',
@@ -261,15 +265,54 @@ const sections = [
   },
 ]
 
+const SECTION_ICONS: Record<string, string> = {
+  checker: '🔍',
+  redflags: '🚩',
+  rights: '🛡️',
+  financial: '🏦',
+  misc: '💡',
+}
+
+function AccordionItem({ q, a }: { q: string; a: React.ReactNode }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div className="border-b border-gray-100 last:border-0">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-start justify-between gap-4 py-4 text-left group"
+        aria-expanded={open}
+      >
+        <span className={`text-[15px] font-semibold leading-snug transition-colors ${open ? 'text-gray-900' : 'text-gray-700 group-hover:text-gray-900'}`}>
+          {q}
+        </span>
+        <span className={`flex-shrink-0 mt-0.5 w-5 h-5 rounded-full flex items-center justify-center transition-all ${open ? 'bg-gray-900 text-white rotate-45' : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200'}`} aria-hidden="true">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </span>
+      </button>
+      {open && (
+        <div className="pb-4 pr-8">
+          <p className="text-[15px] text-gray-600 leading-relaxed">{a}</p>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function FAQPage() {
+  const [activeSection, setActiveSection] = useState<string | null>(null)
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Navigation currentPage="faq" />
 
-      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10 space-y-10">
+      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10">
 
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-3 leading-tight">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2 leading-tight">
             Frequently Asked Questions
           </h1>
           <p className="text-gray-500 text-[15px] leading-relaxed">
@@ -277,24 +320,62 @@ export default function FAQPage() {
           </p>
         </div>
 
-        {sections.map((section) => (
-          <section key={section.heading} className="space-y-6">
-            <h2 className="text-lg font-bold text-gray-900 border-b border-gray-100 pb-3">{section.heading}</h2>
-            <div className="space-y-6">
-              {section.questions.map((item) => (
-                <div key={item.q}>
-                  <p className="font-semibold text-gray-900 mb-1.5 text-[15px]">{item.q}</p>
-                  <p className="text-[15px] text-gray-600 leading-relaxed">{item.a}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
+        {/* Jump nav */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {sections.map((s) => (
+            <a
+              key={s.id}
+              href={`#${s.id}`}
+              onClick={() => setActiveSection(s.id)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full bg-white border border-gray-200 text-gray-600 hover:border-gray-400 hover:text-gray-900 transition-colors shadow-sm"
+            >
+              <span>{SECTION_ICONS[s.id]}</span>
+              {s.heading}
+            </a>
+          ))}
+        </div>
 
-        <hr className="border-gray-100" />
+        {/* Accordion sections */}
+        <div className="space-y-4">
+          {sections.map((section) => (
+            <section key={section.id} id={section.id} className="card-elevated overflow-hidden">
+              {/* Section header — click to expand/collapse whole section */}
+              <button
+                onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}
+                className="w-full flex items-center justify-between px-5 py-4 text-left group"
+                aria-expanded={activeSection === section.id}
+              >
+                <span className="flex items-center gap-2.5">
+                  <span className="text-base" aria-hidden="true">{SECTION_ICONS[section.id]}</span>
+                  <span className="text-sm font-bold text-gray-900">{section.heading}</span>
+                  <span className="text-[11px] font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+                    {section.questions.length}
+                  </span>
+                </span>
+                <svg
+                  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                  className={`flex-shrink-0 text-gray-400 transition-transform duration-200 ${activeSection === section.id ? 'rotate-180' : ''}`}
+                  aria-hidden="true"
+                >
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+
+              {/* Questions — shown when section is open */}
+              {activeSection === section.id && (
+                <div className="px-5 border-t border-gray-100">
+                  {section.questions.map((item) => (
+                    <AccordionItem key={item.q} q={item.q} a={item.a} />
+                  ))}
+                </div>
+              )}
+            </section>
+          ))}
+        </div>
 
         {/* Disclaimer */}
-        <div className="card-elevated p-5">
+        <div className="mt-8 card-elevated p-5">
           <p className="text-sm text-gray-600 leading-relaxed">
             <strong className="text-gray-900">Note:</strong> This tool is for informational purposes only and does not
             constitute legal or immigration advice. If you are in a complex or dangerous situation, please speak with a{' '}
@@ -310,10 +391,12 @@ export default function FAQPage() {
           </p>
         </div>
 
-        {/* Back link */}
-        <div className="pt-2 pb-4">
+        <div className="pt-6 pb-4">
           <Link href="/" className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
-            ← Back to search
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            Back to search
           </Link>
         </div>
 
