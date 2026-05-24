@@ -83,6 +83,15 @@ export default function NextSteps({ result }: Props) {
         ),
       },
       { icon: '✕', text: 'Contact a licensed RCIC or legal aid for advice' },
+      {
+        icon: '✕',
+        text: (
+          <>
+            If you are in Canada and feel unsafe or trapped,{' '}
+            <a href="/owp-vw" className="font-bold underline text-blue-700">apply for an Open Work Permit for Vulnerable Workers (free, 5 days) →</a>
+          </>
+        ),
+      },
     ]
   } else if (risk === 'RED') {
     steps = [
@@ -99,6 +108,15 @@ export default function NextSteps({ result }: Props) {
         ),
       },
       { icon: '✕', text: 'Contact a licensed RCIC or legal aid for advice' },
+      {
+        icon: '✕',
+        text: (
+          <>
+            If you are in Canada and feel unsafe or trapped,{' '}
+            <a href="/owp-vw" className="font-bold underline text-blue-700">apply for an Open Work Permit for Vulnerable Workers (free, 5 days) →</a>
+          </>
+        ),
+      },
     ]
   } else {
     // GREY

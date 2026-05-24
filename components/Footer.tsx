@@ -49,6 +49,9 @@ export default function Footer() {
           </span>
           <Link href="/about" className="underline hover:text-gray-600">About</Link>
           <Link href="/updates" className="underline hover:text-gray-600">What&apos;s new</Link>
+          <Link href="/owp-vw" className="underline hover:text-gray-600">Open Work Permit (OWP-VW)</Link>
+          <Link href="/help/i-paid" className="underline hover:text-gray-600">I already paid</Link>
+          <Link href="/recruiter-blacklist" className="underline hover:text-gray-600">Recruiter blacklist</Link>
           <a
             href="https://buildcreditcanada.ca?utm_source=lmiacheck&utm_medium=referral&utm_campaign=footer"
             target="_blank"

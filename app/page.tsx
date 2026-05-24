@@ -158,20 +158,30 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Full offer check CTA — for users who already have an offer in hand */}
+      {/* 3rd path — full offer check */}
       <div className="max-w-2xl mx-auto w-full px-4 mt-4">
-        <div className="bg-gray-950 rounded-2xl px-5 py-4 flex items-center justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold text-white">Have a job offer in hand?</p>
-            <p className="text-xs text-gray-400 mt-0.5">Analyze fee, wage, source, and duration for red flags.</p>
+        <Link
+          href="/check"
+          className="group block card-elevated p-5 sm:p-6 hover:shadow-[0_2px_4px_rgba(15,23,42,0.05),0_16px_40px_-12px_rgba(99,102,241,0.15)] hover:ring-indigo-100 transition-all"
+        >
+          <div className="flex items-center gap-4 sm:gap-5">
+            <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-indigo-50 flex items-center justify-center" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-700 mb-0.5">Got a message about a job?</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Full offer check</p>
+              <p className="text-sm text-gray-500 mt-1 leading-snug">
+                Paste your offer details — fee, wage, duration, source. We flag every red flag.
+              </p>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 text-gray-300 group-hover:text-indigo-500 group-hover:translate-x-0.5 transition-all" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
           </div>
-          <a
-            href="/check"
-            className="flex-shrink-0 px-4 py-2 bg-white text-gray-950 text-xs font-bold rounded-xl hover:bg-gray-100 transition-colors whitespace-nowrap"
-          >
-            Full check →
-          </a>
-        </div>
+        </Link>
       </div>
 
       {/* How it works */}

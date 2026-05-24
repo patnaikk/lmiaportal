@@ -5,6 +5,7 @@ import { useState } from 'react'
 interface Props {
   employer: string
   banUntil?: string | null
+  mode?: 'red' | 'grey' | 'green'
 }
 
 type Template = {
@@ -16,16 +17,23 @@ type Template = {
 
 const TEMPLATES: Template[] = [
   {
+    id: 'buytime',
+    label: 'Buy time',
+    description: 'Pause pressure without committing — use when you need 48 hours to verify',
+    build: () =>
+      `Thank you for reaching out about this opportunity.\n\nBefore I can proceed, I need 48 hours to speak with my family and verify the details of this offer with Service Canada directly. This is standard practice I follow for all job offers.\n\nI will be in touch by [date]. Please do not contact me again before then.\n\nThank you for understanding.`,
+  },
+  {
     id: 'recruiter',
-    label: 'Reply to a recruiter',
-    description: 'When a recruiter is offering you a position with this employer',
+    label: 'Reply to recruiter',
+    description: 'When a recruiter is offering you a position and you want to decline or push back',
     build: (employer, banUntil) =>
       `Hello,\n\nI have verified ${employer} on the official Government of Canada non-compliant employer list at canada.ca. This employer is currently banned from hiring temporary foreign workers${banUntil ? ` until ${banUntil}` : ''}.\n\nPlease do not contact me again about this position. I will be reporting this offer to Service Canada (ESDC) at 1-800-367-5693.\n\nThank you.`,
   },
   {
     id: 'esdc',
-    label: 'Report to Service Canada / ESDC',
-    description: 'Send to Service Canada when you suspect fraud or were targeted',
+    label: 'Report to Service Canada',
+    description: 'Send to Service Canada (ESDC) when you suspect fraud or were targeted',
     build: (employer) =>
       `I would like to report a suspected fraudulent job offer from ${employer}.\n\nThis employer appears on the Government of Canada non-compliant employer list, yet I have been approached with what was presented as a valid LMIA offer.\n\nDetails:\n- Employer name: ${employer}\n- How I was contacted: [describe — e.g. WhatsApp, Facebook, email]\n- Date contacted: [date]\n- Amount asked for (if any): [amount or "none"]\n- Documents I was sent: [LMIA copy / offer letter / job description]\n\nPlease let me know what further information you require.`,
   },
@@ -38,8 +46,27 @@ const TEMPLATES: Template[] = [
   },
 ]
 
-export default function ReportTemplate({ employer, banUntil }: Props) {
-  const [activeId, setActiveId] = useState<string>(TEMPLATES[0].id)
+const MODE_CONFIG = {
+  red: {
+    headline: 'Ready-to-send messages',
+    sub: "Don't know what to say? Use one of these — edit as needed.",
+    defaultTab: 'recruiter',
+  },
+  grey: {
+    headline: 'Suspicious offer? Reply with this',
+    sub: "Employer not found doesn't mean the offer is safe. Use these if anything feels off.",
+    defaultTab: 'buytime',
+  },
+  green: {
+    headline: 'Still want to push back on fees?',
+    sub: 'Even verified employers cannot legally charge you recruitment fees. Use these if anyone asks.',
+    defaultTab: 'buytime',
+  },
+}
+
+export default function ReportTemplate({ employer, banUntil, mode = 'red' }: Props) {
+  const config = MODE_CONFIG[mode]
+  const [activeId, setActiveId] = useState<string>(config.defaultTab)
   const [copied, setCopied] = useState(false)
 
   const active = TEMPLATES.find((t) => t.id === activeId) || TEMPLATES[0]
@@ -51,7 +78,6 @@ export default function ReportTemplate({ employer, banUntil }: Props) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      // Fallback
       const ta = document.createElement('textarea')
       ta.value = text
       document.body.appendChild(ta)
@@ -75,8 +101,8 @@ export default function ReportTemplate({ employer, banUntil }: Props) {
           </svg>
         </div>
         <div>
-          <p className="text-sm font-semibold text-gray-900">Ready-to-send messages</p>
-          <p className="text-xs text-gray-500 mt-0.5">Don&apos;t know what to say? Use one of these — edit as needed.</p>
+          <p className="text-sm font-semibold text-gray-900">{config.headline}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{config.sub}</p>
         </div>
       </div>
 
@@ -99,7 +125,6 @@ export default function ReportTemplate({ employer, banUntil }: Props) {
 
       <p className="text-xs text-gray-400 mb-2">{active.description}</p>
 
-      {/* Message text */}
       <div className="relative">
         <pre className="text-sm text-gray-700 bg-gray-50 rounded-xl p-4 whitespace-pre-wrap leading-relaxed font-sans break-words max-h-64 overflow-y-auto">
           {text}

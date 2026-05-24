@@ -16,6 +16,8 @@ import ScrollToTop from '@/components/ScrollToTop'
 import Navigation from '@/components/Navigation'
 import StickyResultHeader from '@/components/StickyResultHeader'
 import ReportTemplate from '@/components/ReportTemplate'
+import CICCWidget from '@/components/CICCWidget'
+import ServiceCanadaCallCard from '@/components/ServiceCanadaCallCard'
 import DataFreshness from '@/components/DataFreshness'
 import type { Metadata } from 'next'
 
@@ -143,10 +145,11 @@ export default async function ResultsPage({ searchParams }: PageProps) {
         {/* Risk Indicator — most prominent */}
         <RiskIndicator result={result} />
 
-        {/* Ready-to-send templates for banned employers */}
+        {/* Ready-to-send templates — all result types */}
         {result.risk === 'RED' && (
           <ReportTemplate
             employer={employer}
+            mode="red"
             banUntil={
               result.ban_end_date
                 ? new Date(result.ban_end_date).toLocaleDateString('en-CA', {
@@ -156,6 +159,15 @@ export default async function ResultsPage({ searchParams }: PageProps) {
             }
           />
         )}
+        {result.risk === 'GREY' && (
+          <ReportTemplate employer={employer} mode="grey" />
+        )}
+        {result.risk === 'GREEN' && (
+          <ReportTemplate employer={employer} mode="green" />
+        )}
+
+        {/* CICC consultant verification — shown on all results */}
+        <CICCWidget />
 
         {/* Violation details (if from violators list) */}
         {result.violatorMatches.length > 0 && (
@@ -253,7 +265,10 @@ export default async function ResultsPage({ searchParams }: PageProps) {
           </div>
         )}
 
-{/* Email notification capture */}
+{/* Service Canada verification call */}
+        <ServiceCanadaCallCard />
+
+        {/* Email notification capture */}
         <EmailCapture
           employerQuery={employer}
           employerNormalized={employerNormalized}

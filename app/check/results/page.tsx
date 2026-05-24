@@ -4,6 +4,7 @@ import { findBenchmark, toHourly } from '@/lib/wage-benchmarks'
 import Footer from '@/components/Footer'
 import ScrollToTop from '@/components/ScrollToTop'
 import Navigation from '@/components/Navigation'
+import ServiceCanadaCallCard from '@/components/ServiceCanadaCallCard'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -447,6 +448,9 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
             )}
           </div>
         </div>
+
+        {/* Service Canada verification call */}
+        <ServiceCanadaCallCard />
 
         {/* Share prompt */}
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-5 text-center">
