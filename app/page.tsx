@@ -60,6 +60,9 @@ export default async function HomePage() {
       {/* Live activity ticker — proves the site is current and working */}
       <ActivityTicker />
 
+      {/* Latest ban callout — above the fold, before the search */}
+      <LatestBanBanner />
+
       {/* Search card — moved up so the primary action is immediate */}
       <main className="max-w-2xl mx-auto w-full px-4 pt-2 pb-5">
         <div className="card-elevated p-5 sm:p-6">
@@ -124,9 +127,6 @@ export default async function HomePage() {
           </div>
         </Link>
       </main>
-
-      {/* Latest ban callout — context after the search */}
-      <LatestBanBanner />
 
       {/* Stats bar — trust signals after the action */}
       <div className="max-w-2xl mx-auto w-full px-4 mt-4">

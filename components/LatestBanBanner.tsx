@@ -31,7 +31,7 @@ export default async function LatestBanBanner() {
   if (!name) return null
 
   return (
-    <div className="max-w-2xl mx-auto w-full px-4 pt-3 pb-1">
+    <div className="max-w-2xl mx-auto w-full px-4 pt-2 pb-0">
       <div className="flex items-center justify-between gap-3 bg-red-50/70 ring-1 ring-red-100 rounded-xl px-4 py-2.5">
         <div className="flex items-center gap-2.5 min-w-0">
           <span className="relative flex h-2 w-2 flex-shrink-0" aria-hidden="true">
