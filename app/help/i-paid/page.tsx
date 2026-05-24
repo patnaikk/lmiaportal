@@ -48,7 +48,7 @@ export default function IPaidPage() {
             </svg>
             Emergency guidance
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight text-balance tracking-tight mb-3">
             I already paid.<br />What do I do now?
           </h1>
           <p className="text-gray-500 text-[15px] leading-relaxed">

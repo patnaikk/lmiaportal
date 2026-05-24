@@ -40,23 +40,23 @@ export default function NextSteps({ result }: Props) {
     ]
   } else if (risk === 'YELLOW' && reason === 'address_mismatch') {
     steps = [
-      { icon: '⚠', text: 'Contact the employer directly using contact information you find independently (not from the offer letter)' },
-      { icon: '⚠', text: 'Ask them to confirm their LMIA number and address match what is on your offer' },
-      { icon: '⚠', text: 'Confirm all offer details before proceeding with your application' },
+      { icon: '1', text: 'Contact the employer directly using contact information you find independently (not from the offer letter)' },
+      { icon: '2', text: 'Ask them to confirm their LMIA number and address match what is on your offer' },
+      { icon: '3', text: 'Confirm all offer details before proceeding with your application' },
     ]
   } else if (risk === 'YELLOW' && reason === 'prior_violation_now_eligible') {
     steps = [
-      { icon: '⚠', text: 'This employer has a history of non-compliance with the Temporary Foreign Worker Program' },
-      { icon: '⚠', text: 'Review the violation details shown — understand what rule they broke and when' },
-      { icon: '⚠', text: 'Contact the employer directly to verify all offer details independently' },
-      { icon: '⚠', text: 'Consider consulting a licensed RCIC before proceeding' },
+      { icon: '1', text: 'This employer has a history of non-compliance with the Temporary Foreign Worker Program' },
+      { icon: '2', text: 'Review the violation details shown — understand what rule they broke and when' },
+      { icon: '3', text: 'Contact the employer directly to verify all offer details independently' },
+      { icon: '4', text: 'Consider consulting a licensed RCIC before proceeding' },
     ]
   } else if (risk === 'YELLOW' && reason === 'pr_only_stream') {
     steps = [
-      { icon: '⚠', text: 'The government records for this employer only cover Permanent Resident positions — not temporary foreign workers' },
-      { icon: '⚠', text: 'Contact the employer directly using independently verified contact information' },
-      { icon: '⚠', text: 'Ask them to show you their LMIA approval letter for your specific position' },
-      { icon: '⚠', text: 'Ask them to show you their LMIA approval letter confirming the correct stream for your position' },
+      { icon: '1', text: 'The government records for this employer only cover Permanent Resident positions — not temporary foreign workers' },
+      { icon: '2', text: 'Contact the employer directly using independently verified contact information' },
+      { icon: '3', text: 'Ask them to show you their LMIA approval letter for your specific position' },
+      { icon: '4', text: 'Ask them to show you their LMIA approval letter confirming the correct stream for your position' },
     ]
   } else if (risk === 'RED' && subtype === 'BANNED_TEMPORARY') {
     const banDate = ban_end_date
@@ -68,11 +68,11 @@ export default function NextSteps({ result }: Props) {
       : 'an active date'
     steps = [
       {
-        icon: '✕',
+        icon: '1',
         text: `This employer is BANNED from hiring temporary workers until ${banDate} — any offer is illegitimate`,
       },
       {
-        icon: '✕',
+        icon: '2',
         text: (
           <>
             Report this offer to ESDC:{' '}
@@ -82,9 +82,9 @@ export default function NextSteps({ result }: Props) {
           </>
         ),
       },
-      { icon: '✕', text: 'Contact a licensed RCIC or legal aid for advice' },
+      { icon: '3', text: 'Contact a licensed RCIC or legal aid for advice' },
       {
-        icon: '✕',
+        icon: '4',
         text: (
           <>
             If you are in Canada and feel unsafe or trapped,{' '}
@@ -95,9 +95,9 @@ export default function NextSteps({ result }: Props) {
     ]
   } else if (risk === 'RED') {
     steps = [
-      { icon: '✕', text: 'This employer has an outstanding government penalty and cannot legally hire temporary workers' },
+      { icon: '1', text: 'This employer has an outstanding government penalty and cannot legally hire temporary workers' },
       {
-        icon: '✕',
+        icon: '2',
         text: (
           <>
             Report this offer to ESDC:{' '}
@@ -107,9 +107,9 @@ export default function NextSteps({ result }: Props) {
           </>
         ),
       },
-      { icon: '✕', text: 'Contact a licensed RCIC or legal aid for advice' },
+      { icon: '3', text: 'Contact a licensed RCIC or legal aid for advice' },
       {
-        icon: '✕',
+        icon: '4',
         text: (
           <>
             If you are in Canada and feel unsafe or trapped,{' '}

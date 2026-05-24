@@ -17,7 +17,7 @@ export default function AboutPage() {
 
         {/* Hero headline */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-3 leading-tight">
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-3 leading-tight text-balance">
             Built for people who can&apos;t afford to be fooled.
           </h1>
           <p className="text-gray-400 text-sm font-medium">March 2026 · Free, forever</p>

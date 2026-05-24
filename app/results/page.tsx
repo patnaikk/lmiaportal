@@ -140,6 +140,17 @@ export default async function ResultsPage({ searchParams }: PageProps) {
             {city && <>, {city}</>}
             {province && <>, {province}</>}
           </span>
+          {result.risk === 'GREY' && province && (
+            <>
+              <span className="text-gray-300">|</span>
+              <Link
+                href={`/results?employer=${encodeURIComponent(employer)}${city ? `&city=${encodeURIComponent(city)}` : ''}`}
+                className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+              >
+                Try without province →
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Risk Indicator — most prominent */}
@@ -147,6 +158,56 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
         {/* Next steps — immediately after verdict */}
         <NextSteps result={result} />
+
+        {/* GREY: full offer check CTA — most valuable recovery path */}
+        {result.risk === 'GREY' && (
+          <div className="mt-4 p-5 bg-indigo-50 rounded-2xl">
+            <div className="flex items-start gap-3 mb-3">
+              <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-indigo-100 flex items-center justify-center">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-indigo-900 leading-snug">Run a full offer check</p>
+                <p className="text-xs text-indigo-700 mt-0.5 leading-relaxed">
+                  Even without a database match we can still check for illegal fees, below-market wages, suspicious delivery, and more.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/check"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-colors"
+            >
+              Check this offer
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </Link>
+          </div>
+        )}
+
+        {/* GREY: Google search — elevated to standalone button */}
+        {result.risk === 'GREY' && (
+          <div className="mt-4 p-5 card-elevated">
+            <p className="text-sm font-semibold text-gray-900 mb-1">Search for this employer online</p>
+            <p className="text-xs text-gray-500 mb-3">Does a real business come up? Look for a working website, Google reviews, and a physical address that matches your offer.</p>
+            <a
+              href={`https://www.google.com/search?q=${encodeURIComponent(employer + (province ? ' ' + province : '') + ' Canada employer')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              Search &ldquo;{employer}{province ? ` ${province}` : ''}&rdquo; on Google
+            </a>
+          </div>
+        )}
 
         {/* Violation details (if from violators list) */}
         {result.violatorMatches.length > 0 && (

@@ -1,11 +1,28 @@
 import Link from 'next/link'
+import QRCode from 'qrcode'
 import { verifyEmployer } from '@/lib/verify'
 import { findBenchmark, toHourly } from '@/lib/wage-benchmarks'
 import Footer from '@/components/Footer'
 import ScrollToTop from '@/components/ScrollToTop'
 import Navigation from '@/components/Navigation'
 import ServiceCanadaCallCard from '@/components/ServiceCanadaCallCard'
+import ShareComponent from '@/components/ShareComponent'
+import FeedbackForm from '@/components/FeedbackForm'
 import type { Metadata } from 'next'
+import type { RiskResult } from '@/lib/types'
+
+const SITE_URL = 'https://lmiacheck.ca'
+
+async function generateQR(url: string): Promise<string> {
+  try {
+    return await QRCode.toString(url, {
+      type: 'svg', margin: 1, width: 120,
+      color: { dark: '#111827', light: '#ffffff' },
+    })
+  } catch {
+    return ''
+  }
+}
 
 interface PageProps {
   searchParams: {
@@ -78,7 +95,19 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
   }
 
   // ── Run employer database checks ─────────────────────────────────────────
-  const employerResult = await verifyEmployer(employer, undefined, province)
+  const pageParams = new URLSearchParams(
+    Object.fromEntries(
+      Object.entries({ employer, province: province ?? '', job_title: jobTitle, wage,
+        wage_period: wagePeriod, offer_months: offerMonths?.toString() ?? '',
+        lmia_months: lmiaMonths?.toString() ?? '', fee, delivery }).filter(([, v]) => v)
+    )
+  ).toString()
+  const pageUrl = `${SITE_URL}/check/results?${pageParams}`
+
+  const [employerResult, qrSvg] = await Promise.all([
+    verifyEmployer(employer, undefined, province),
+    generateQR(pageUrl),
+  ])
 
   // ── Build flags ───────────────────────────────────────────────────────────
   const flags: Flag[] = []
@@ -452,19 +481,59 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
         {/* Service Canada verification call */}
         <ServiceCanadaCallCard />
 
-        {/* Share prompt */}
-        <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-5 text-center">
-          <p className="text-sm font-semibold text-gray-800 mb-1">Share this result</p>
-          <p className="text-xs text-gray-500 mb-3">The page URL contains your check — copy and share it with your community or a consultant.</p>
-          <p className="text-xs text-gray-400 font-mono break-all">{`lmiacheck.ca/check/results?employer=${encodeURIComponent(employer)}…`}</p>
+        {/* PDF download */}
+        <div className="mt-4 p-5 card-elevated">
+          <p className="text-sm font-semibold text-gray-900 mb-1">Download &amp; Print</p>
+          <p className="text-xs text-gray-500 mb-3">
+            Save this result as a PDF to share with family or for your records.
+          </p>
+          <a
+            href={`/api/download-result?employer=${encodeURIComponent(employer)}${province ? `&province=${encodeURIComponent(province)}` : ''}`}
+            download
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gray-900 rounded-xl hover:bg-gray-700 transition-colors"
+            aria-label="Download result as PDF"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download PDF
+          </a>
         </div>
 
+        {/* Share */}
+        <ShareComponent
+          riskResult={overall.toUpperCase() as RiskResult}
+          qrSvg={qrSvg}
+        />
+
+        {/* Feedback */}
+        <FeedbackForm employerQuery={employer} />
+
         {/* Disclaimer */}
-        <p className="text-xs text-gray-400 text-center leading-relaxed">
+        <p className="text-xs text-gray-400 text-center leading-relaxed mt-6">
           Results are based on publicly available Government of Canada data and user-provided information. This tool does not access real-time ESDC systems and cannot confirm or deny the authenticity of any specific LMIA. When in doubt, contact Service Canada directly.
         </p>
 
+        {/* Bottom padding so floating button never overlaps content */}
+        <div className="h-20" aria-hidden="true" />
       </main>
+
+      {/* Floating PDF download button */}
+      <a
+        href={`/api/download-result?employer=${encodeURIComponent(employer)}${province ? `&province=${encodeURIComponent(province)}` : ''}`}
+        download
+        aria-label="Download result as PDF"
+        className="fixed bottom-5 right-4 z-50 flex items-center gap-2 px-3 py-3 sm:px-4 bg-gray-900 text-white text-sm font-semibold rounded-full shadow-lg hover:bg-gray-700 active:scale-95 transition-all"
+      >
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span className="hidden sm:inline">Save PDF</span>
+      </a>
 
       <Footer />
     </div>

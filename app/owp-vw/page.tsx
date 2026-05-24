@@ -44,7 +44,7 @@ export default function OwpVwPage() {
             </svg>
             Worker protection
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight text-balance tracking-tight mb-3">
             Open Work Permit<br />for Vulnerable Workers
           </h1>
           <p className="text-gray-500 text-[15px] leading-relaxed mb-4">

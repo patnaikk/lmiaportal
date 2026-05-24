@@ -16,7 +16,7 @@ export default function SpotLmiaFraudPage() {
       {/* Hero */}
       <div className="bg-gradient-to-b from-gray-50 to-gray-50 text-center pt-10 pb-7 px-4">
         <div className="text-4xl mb-3">🚩</div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight text-balance tracking-tight mb-3">
           How to Spot LMIA Fraud<br />
           <span className="text-gray-500">9 red flags in any job offer</span>
         </h1>

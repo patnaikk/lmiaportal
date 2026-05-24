@@ -48,7 +48,7 @@ export default async function HomePage() {
         {/* Canada flag */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/canada-flag.svg" alt="Canada flag" width="72" height="36" className="mx-auto mb-5 rounded-sm shadow-sm" />
-        <h1 className="text-3xl sm:text-5xl font-bold text-gray-900 leading-[1.1] tracking-tight mb-4">
+        <h1 className="text-3xl sm:text-5xl font-bold text-gray-900 leading-[1.1] tracking-tight mb-4 text-balance">
           Got a Canadian job offer?<br />
           <span className="text-gray-500">Check the employer first.</span>
         </h1>
