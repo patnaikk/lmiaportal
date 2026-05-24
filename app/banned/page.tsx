@@ -49,6 +49,23 @@ const PROVINCES = [
   { code: 'YT', name: 'Yukon' },
 ]
 
+const PROVINCE_FULL_NAME: Record<string, string> = Object.fromEntries(
+  PROVINCES.map((p) => [p.code, p.name])
+)
+
+/** Extract a 2-letter province code from an address string, falling back to null. */
+function extractProvinceFromAddress(address?: string | null): string | null {
+  if (!address) return null
+  // Match ", XX " or ", XX\n" or ", XX," or ", XX$"
+  const m = address.match(/,\s*([A-Z]{2})(?=[\s\n,]|$)/)
+  if (m && PROVINCE_FULL_NAME[m[1]]) return m[1]
+  // Try matching full province name
+  for (const code of Object.keys(PROVINCE_FULL_NAME)) {
+    if (address.includes(PROVINCE_FULL_NAME[code])) return code
+  }
+  return null
+}
+
 const STATUS_LABEL: Record<ComplianceStatus, string> = {
   ELIGIBLE: 'Eligible again',
   INELIGIBLE_UNTIL: 'Banned',
@@ -74,7 +91,7 @@ async function fetchBanned(opts: { q: string; province: string; status: string; 
 
   let query = supabase
     .from('violators')
-    .select('id, business_operating_name, business_legal_name, province, decision_date, compliance_status, ineligible_until_date, penalty_amount, reasons', { count: 'exact' })
+    .select('id, business_operating_name, business_legal_name, province, address, decision_date, compliance_status, ineligible_until_date, penalty_amount, reasons', { count: 'exact' })
     .order('decision_date', { ascending: false, nullsFirst: false })
     .range(from, to)
 
@@ -84,7 +101,15 @@ async function fetchBanned(opts: { q: string; province: string; status: string; 
     query = query.or(`business_operating_name.ilike.%${q}%,business_legal_name.ilike.%${q}%`)
   }
   if (opts.province) {
-    query = query.eq('province', opts.province)
+    // The `province` column in violators is mostly empty — the actual province
+    // is embedded in the address text (e.g. "Edmonton, AB\nT5Y 2N5").
+    // PostgREST treats commas as OR-condition separators, so we must
+    // double-quote any ILIKE value that contains a comma.
+    const code = opts.province
+    const fullName = PROVINCE_FULL_NAME[code] || code
+    query = query.or(
+      `address.ilike."%, ${code}%",address.ilike."%${fullName}%",province.eq.${code}`
+    )
   }
   if (opts.status === 'banned') {
     query = query.in('compliance_status', ['INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID', 'INELIGIBLE'])
@@ -242,7 +267,7 @@ export default async function BannedPage({ searchParams }: PageProps) {
                         {STATUS_LABEL[cs]}
                       </span>
                       <span className="text-xs text-gray-500">
-                        {r.province || 'Canada'}
+                        {r.province || extractProvinceFromAddress(r.address) || 'Canada'}
                       </span>
                       <span className="text-gray-300">·</span>
                       <span className="text-xs text-gray-500">
