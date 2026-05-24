@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import MonthlySignupWidget from '@/components/MonthlySignupWidget'
 import { getReportMonths } from '@/lib/reports'
 import type { Metadata } from 'next'
 
@@ -34,6 +35,8 @@ export default async function ReportsIndexPage() {
       </div>
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8 space-y-3">
+
+        <MonthlySignupWidget />
 
         {months.length === 0 ? (
           <div className="card-elevated p-8 text-center">
