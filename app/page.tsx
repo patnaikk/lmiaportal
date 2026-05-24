@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import SearchForm from '@/components/SearchForm'
 import Footer from '@/components/Footer'
 import RecentlyBanned from '@/components/RecentlyBanned'
@@ -58,55 +59,9 @@ export default async function HomePage() {
         </p>
       </div>
 
-      {/* Stats bar */}
-      <div className="max-w-2xl mx-auto w-full px-4">
-        <div className="grid grid-cols-3 divide-x divide-gray-100 border border-gray-100 rounded-2xl bg-white overflow-hidden shadow-sm">
-          <div className="py-4 text-center">
-            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.employers > 0 ? formatCount(stats.employers) : '11K+'}</div>
-            <div className="text-[11px] text-gray-400 font-medium mt-1 uppercase tracking-wider">Employers</div>
-          </div>
-          <div className="py-4 text-center">
-            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.violators > 0 ? stats.violators.toLocaleString() : '1,329'}</div>
-            <div className="text-[11px] text-gray-400 font-medium mt-1 uppercase tracking-wider">Violators</div>
-          </div>
-          <div className="py-4 text-center">
-            {stats.searches > 0 ? (
-              <>
-                <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{formatCount(stats.searches)}</div>
-                <div className="text-[11px] text-gray-400 font-medium mt-1 uppercase tracking-wider">This week</div>
-              </>
-            ) : (
-              <>
-                <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight">Free</div>
-                <div className="text-[11px] text-gray-400 font-medium mt-1 uppercase tracking-wider">Always</div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Full offer check CTA */}
-      <div className="max-w-2xl mx-auto w-full px-4 mt-4">
-        <div className="bg-gray-950 rounded-2xl px-5 py-4 flex items-center justify-between gap-4">
-          <div>
-            <p className="text-sm font-semibold text-white">Have a job offer in hand?</p>
-            <p className="text-xs text-gray-400 mt-0.5">Analyze fee, wage, source, and duration for red flags.</p>
-          </div>
-          <a
-            href="/check"
-            className="flex-shrink-0 px-4 py-2 bg-white text-gray-950 text-xs font-bold rounded-xl hover:bg-gray-100 transition-colors whitespace-nowrap"
-          >
-            Full check →
-          </a>
-        </div>
-      </div>
-
-      {/* Latest ban callout */}
-      <LatestBanBanner />
-
-      {/* Search card */}
-      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-5">
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 sm:p-6 shadow-md shadow-gray-200/60">
+      {/* Search card — moved up so the primary action is immediate */}
+      <main className="max-w-2xl mx-auto w-full px-4 pt-2 pb-5">
+        <div className="card-elevated p-5 sm:p-6">
           <SearchForm />
           <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <DataFreshness />
@@ -128,6 +83,52 @@ export default async function HomePage() {
           Have an LMIA number on your document? Check if it&apos;s real →
         </a>
       </main>
+
+      {/* Latest ban callout — context after the search */}
+      <LatestBanBanner />
+
+      {/* Stats bar — trust signals after the action */}
+      <div className="max-w-2xl mx-auto w-full px-4 mt-4">
+        <div className="grid grid-cols-3 divide-x divide-gray-100 rounded-2xl bg-white ring-1 ring-black/[0.04] overflow-hidden shadow-sm">
+          <Link href="/" className="py-4 text-center hover:bg-gray-50/50 transition-colors">
+            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.employers > 0 ? formatCount(stats.employers) : '11K+'}</div>
+            <div className="text-[11px] text-gray-500 font-medium mt-1 uppercase tracking-wider">Employers</div>
+          </Link>
+          <Link href="/banned" className="py-4 text-center hover:bg-gray-50/50 transition-colors">
+            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.violators > 0 ? stats.violators.toLocaleString() : '1,329'}</div>
+            <div className="text-[11px] text-gray-500 font-medium mt-1 uppercase tracking-wider">Banned</div>
+          </Link>
+          <div className="py-4 text-center">
+            {stats.searches > 0 ? (
+              <>
+                <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{formatCount(stats.searches)}</div>
+                <div className="text-[11px] text-gray-500 font-medium mt-1 uppercase tracking-wider">This week</div>
+              </>
+            ) : (
+              <>
+                <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight">Free</div>
+                <div className="text-[11px] text-gray-500 font-medium mt-1 uppercase tracking-wider">Always</div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Full offer check CTA — for users who already have an offer in hand */}
+      <div className="max-w-2xl mx-auto w-full px-4 mt-4">
+        <div className="bg-gray-950 rounded-2xl px-5 py-4 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-white">Have a job offer in hand?</p>
+            <p className="text-xs text-gray-400 mt-0.5">Analyze fee, wage, source, and duration for red flags.</p>
+          </div>
+          <a
+            href="/check"
+            className="flex-shrink-0 px-4 py-2 bg-white text-gray-950 text-xs font-bold rounded-xl hover:bg-gray-100 transition-colors whitespace-nowrap"
+          >
+            Full check →
+          </a>
+        </div>
+      </div>
 
       {/* How it works */}
       <div className="max-w-2xl mx-auto w-full px-4 py-8">

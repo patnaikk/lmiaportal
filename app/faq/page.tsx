@@ -117,7 +117,7 @@ const sections = [
               href="https://www.canada.ca/en/immigration-refugees-citizenship/services/work-canada/permit/temporary/vulnerable-workers.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-red-600 hover:text-red-800 font-medium underline"
+              className="text-blue-600 hover:text-blue-800 font-medium underline"
             >
               Open Work Permit for Vulnerable Workers
             </a>
@@ -136,7 +136,7 @@ const sections = [
               href="https://www.canada.ca/en/immigration-refugees-citizenship/services/work-canada/permit/temporary/vulnerable-workers.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-red-600 hover:text-red-800 font-medium underline"
+              className="text-blue-600 hover:text-blue-800 font-medium underline"
             >
               abuse-reporting channels
             </a>
@@ -153,7 +153,7 @@ const sections = [
               href="https://www.canada.ca/en/employment-social-development/services/foreign-workers/report-abuse/tool.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-red-600 hover:text-red-800 font-medium underline"
+              className="text-blue-600 hover:text-blue-800 font-medium underline"
             >
               Service Canada fraud reporting form
             </a>{' '}
@@ -162,7 +162,7 @@ const sections = [
               href="https://www.jobbank.gc.ca/report_abuse"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-red-600 hover:text-red-800 font-medium underline"
+              className="text-blue-600 hover:text-blue-800 font-medium underline"
             >
               Job Bank
             </a>{' '}
@@ -263,7 +263,7 @@ const sections = [
 
 export default function FAQPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Navigation currentPage="faq" />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10 space-y-10">
@@ -294,15 +294,15 @@ export default function FAQPage() {
         <hr className="border-gray-100" />
 
         {/* Disclaimer */}
-        <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
-          <p className="text-sm text-gray-500 leading-relaxed">
-            <strong className="text-gray-700">Note:</strong> This tool is for informational purposes only and does not
+        <div className="card-elevated p-5">
+          <p className="text-sm text-gray-600 leading-relaxed">
+            <strong className="text-gray-900">Note:</strong> This tool is for informational purposes only and does not
             constitute legal or immigration advice. If you are in a complex or dangerous situation, please speak with a{' '}
             <a
               href="https://college-ic.ca/protecting-the-public/find-an-immigration-consultant"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-red-600 hover:text-red-800 font-medium underline"
+              className="text-blue-600 hover:text-blue-800 font-medium underline"
             >
               licensed immigration consultant (RCIC)
             </a>{' '}
@@ -312,7 +312,7 @@ export default function FAQPage() {
 
         {/* Back link */}
         <div className="pt-2 pb-4">
-          <Link href="/" className="text-sm text-red-600 hover:text-red-800 font-semibold flex items-center gap-1">
+          <Link href="/" className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
             ← Back to search
           </Link>
         </div>

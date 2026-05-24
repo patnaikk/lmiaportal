@@ -44,10 +44,10 @@ export default async function LatestBanBanner() {
           </p>
         </div>
         <Link
-          href="#recently-banned"
+          href="/banned"
           className="text-xs font-semibold text-red-700 hover:text-red-900 whitespace-nowrap flex-shrink-0 transition-colors"
         >
-          See all ↓
+          See all →
         </Link>
       </div>
     </div>

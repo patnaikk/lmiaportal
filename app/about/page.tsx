@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Navigation currentPage="about" />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10 space-y-10">
@@ -191,7 +191,7 @@ export default function AboutPage() {
 
         {/* Back link */}
         <div className="pt-2 pb-4">
-          <Link href="/" className="text-sm text-red-600 hover:text-red-800 font-semibold flex items-center gap-1">
+          <Link href="/" className="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1">
             ← Back to search
           </Link>
         </div>

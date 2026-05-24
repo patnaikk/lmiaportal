@@ -31,10 +31,10 @@ export default async function RecentlyBanned() {
   return (
     <div id="recently-banned" className="max-w-2xl mx-auto w-full px-4 pb-6">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Recently banned employers</h2>
-        <span className="text-[10px] font-medium text-red-500 bg-red-50 border border-red-100 px-2 py-0.5 rounded-full">
-          Live data
-        </span>
+        <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-widest">Recently banned employers</h2>
+        <Link href="/banned" className="text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors">
+          See all →
+        </Link>
       </div>
       <div className="rounded-2xl overflow-hidden bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04),0_8px_24px_-8px_rgba(15,23,42,0.08)] ring-1 ring-black/[0.04] divide-y divide-gray-100">
         {rows.map((row, i) => (
