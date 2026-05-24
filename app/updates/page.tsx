@@ -10,6 +10,17 @@ export const metadata: Metadata = {
 
 const updates: { date: string; items: React.ReactNode[] }[] = [
   {
+    date: 'May 23, 2026 · Pass 4',
+    items: [
+      <>
+        New: <Link href="/banned" className="text-blue-700 hover:underline font-medium">Browse all banned employers</Link> at /banned — full searchable, filterable list of every employer found non-compliant by ESDC. Filter by province (13 options), status (currently banned / previously banned / all), and search by name. Paginated 50 per page. Click any row to see the full result. Linked from the homepage stats card, RecentlyBanned, and the latest-ban banner. Big value for foreign workers wanting to verify scale, researchers, and journalists
+      </>,
+      'Homepage reorder: search card moved above stats and CTAs. Users who land on the site with an employer name in hand can now type immediately — the primary action is the first thing below the hero. Stats moved below, with the "Banned" tile linking to /banned',
+      'Design consistency: FAQ, About, and Spot LMIA Fraud pages now share the same gray-50 background, card-elevated style, and blue link color used on /results and /banned. Site no longer feels split between "polished" and "old" sections',
+      'Color: standardized red usage across content pages — red reserved only for warnings, phone numbers, and danger states. Underlined RCIC / report / generic links converted to blue (system link color)',
+    ],
+  },
+  {
     date: 'May 23, 2026 · Pass 3',
     items: [
       'Polish: Cards now have a 1px hairline edge (ring-black/[0.04]) in addition to their shadow. Apple\'s actual cards have BOTH — pure-shadow cards look like blobs without definition. Combined with a refined multi-layer shadow (tight contact + soft ambient) so cards feel physical instead of computer-generated',
