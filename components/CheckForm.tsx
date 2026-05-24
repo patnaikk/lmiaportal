@@ -59,7 +59,7 @@ export default function CheckForm() {
   }
 
   const inputClass =
-    'w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50'
+    'w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-gray-50'
   const radioClass =
     'flex items-center gap-2.5 px-4 py-3 border rounded-lg cursor-pointer transition-colors text-sm font-medium'
 
@@ -137,7 +137,7 @@ export default function CheckForm() {
             <select
               value={wagePeriod}
               onChange={(e) => setWagePeriod(e.target.value)}
-              className="px-3 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-gray-50 appearance-none"
+              className="px-3 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50 appearance-none"
             >
               <option value="hourly">/ hour</option>
               <option value="monthly">/ month</option>
@@ -264,7 +264,7 @@ export default function CheckForm() {
         type="submit"
         disabled={!canSubmit}
         className="w-full px-8 py-3.5 bg-red-600 text-white text-base font-bold rounded-lg
-          hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+          hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2
           disabled:opacity-50 disabled:cursor-not-allowed transition-colors
           flex items-center justify-center gap-2"
       >

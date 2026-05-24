@@ -17,7 +17,7 @@ export default function AboutPage() {
 
         {/* Hero headline */}
         <div>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-3 leading-tight">
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-3 leading-tight">
             Built for people who can&apos;t afford to be fooled.
           </h1>
           <p className="text-gray-400 text-sm font-medium">March 2026 · Free, forever</p>
@@ -79,7 +79,7 @@ export default function AboutPage() {
           </div>
 
           {/* Callout box */}
-          <div className="bg-red-50 border-l-4 border-l-red-500 rounded-r-xl px-5 py-4 mt-2">
+          <div className="rounded-2xl px-5 py-4 bg-red-50 ring-1 ring-red-100 mt-2">
             <p className="text-sm font-semibold text-red-800">
               🔒 If someone charges you to verify an employer — that itself is a red flag.
             </p>
@@ -118,14 +118,14 @@ export default function AboutPage() {
         <section>
           <h2 className="text-lg font-bold text-gray-900 mb-4">What the results mean</h2>
           <div className="space-y-3">
-            <div className="bg-white border border-gray-200 border-l-4 border-l-green-500 rounded-xl px-4 py-3">
+            <div className="rounded-xl px-4 py-3 bg-white ring-1 ring-green-100 shadow-sm">
               <p className="text-sm font-bold text-gray-900 mb-0.5">🟢 Verified</p>
               <p className="text-sm text-gray-600 leading-relaxed">
                 The employer is in government LMIA records with no flagged violations. A good sign — but always
                 request a copy of the actual LMIA approval letter and verify the employer directly with Service Canada.
               </p>
             </div>
-            <div className="bg-white border border-gray-200 border-l-4 border-l-amber-400 rounded-xl px-4 py-3">
+            <div className="rounded-xl px-4 py-3 bg-white ring-1 ring-amber-100 shadow-sm">
               <p className="text-sm font-bold text-gray-900 mb-0.5">🟡 Verify Further</p>
               <p className="text-sm text-gray-600 leading-relaxed">
                 The employer exists but something doesn&apos;t fully match — the location may be different, all records
@@ -133,14 +133,14 @@ export default function AboutPage() {
                 Ask questions before proceeding.
               </p>
             </div>
-            <div className="bg-white border border-gray-200 border-l-4 border-l-red-600 rounded-xl px-4 py-3">
+            <div className="rounded-xl px-4 py-3 bg-white ring-1 ring-red-100 shadow-sm">
               <p className="text-sm font-bold text-gray-900 mb-0.5">🔴 High Risk</p>
               <p className="text-sm text-gray-600 leading-relaxed">
                 This employer is currently banned from hiring temporary foreign workers, or has an outstanding
                 unpaid penalty. Any job offer from this employer is illegitimate.
               </p>
             </div>
-            <div className="bg-white border border-gray-200 border-l-4 border-l-gray-400 rounded-xl px-4 py-3">
+            <div className="rounded-xl px-4 py-3 bg-white ring-1 ring-gray-200 shadow-sm">
               <p className="text-sm font-bold text-gray-900 mb-0.5">⚪ Not Found</p>
               <p className="text-sm text-gray-600 leading-relaxed">
                 No government LMIA records for this employer. Could be a new or niche employer — or a red flag.
@@ -179,7 +179,7 @@ export default function AboutPage() {
         </section>
 
         {/* Report fraud */}
-        <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl">
+        <div className="card-elevated p-5">
           <p className="text-sm font-semibold text-gray-900 mb-1">Report LMIA fraud</p>
           <p className="text-sm text-gray-600">
             Contact Employment and Social Development Canada:{' '}

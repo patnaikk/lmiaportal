@@ -231,7 +231,7 @@ export default function UpdatesPage() {
       <Navigation currentPage="updates" />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8">
-        <h1 className="text-2xl font-extrabold text-gray-900 mb-1">What's new</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">What's new</h1>
         <p className="text-sm text-gray-500 mb-8">Feature updates and data refreshes for LMIA Check.</p>
 
         <div className="space-y-8">

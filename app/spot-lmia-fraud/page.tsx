@@ -14,11 +14,11 @@ export default function SpotLmiaFraudPage() {
       <Navigation />
 
       {/* Hero */}
-      <div className="bg-gradient-to-b from-white to-red-50 text-center pt-10 pb-7 px-4">
+      <div className="bg-gradient-to-b from-gray-50 to-gray-50 text-center pt-10 pb-7 px-4">
         <div className="text-4xl mb-3">🚩</div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-tight mb-3">
           How to Spot LMIA Fraud<br />
-          <em className="not-italic text-red-600">9 red flags in any job offer</em>
+          <span className="text-gray-500">9 red flags in any job offer</span>
         </h1>
         <p className="text-gray-500 text-[15px] leading-relaxed max-w-sm mx-auto">
           Scammers target foreign workers with fake Canadian job offers. Employees never pay for an LMIA — the employer does. Learn to spot the warning signs.
@@ -28,14 +28,14 @@ export default function SpotLmiaFraudPage() {
       {/* Main content */}
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8">
 
-        <section className="bg-red-50 border-l-4 border-red-600 rounded-lg p-6 mb-8">
+        <section className="card-elevated p-6 mb-8 bg-red-50/40">
           <h2 className="text-lg font-bold text-red-900 mb-2">⚠️ Golden Rule</h2>
           <p className="text-red-800 font-semibold">Legitimate Canadian employers never charge workers for an LMIA, job offer, or visa processing. If someone is asking for money upfront, it is a scam.</p>
         </section>
 
         <div className="space-y-6">
           {/* Red Flag 1 */}
-          <div className="border border-gray-200 rounded-lg p-6">
+          <div className="card-elevated p-6">
             <div className="flex gap-3 items-start mb-2">
               <span className="text-2xl font-bold text-red-600">1</span>
               <h3 className="text-lg font-bold text-gray-900">Asking for upfront payment</h3>
@@ -46,7 +46,7 @@ export default function SpotLmiaFraudPage() {
           </div>
 
           {/* Red Flag 2 */}
-          <div className="border border-gray-200 rounded-lg p-6">
+          <div className="card-elevated p-6">
             <div className="flex gap-3 items-start mb-2">
               <span className="text-2xl font-bold text-red-600">2</span>
               <h3 className="text-lg font-bold text-gray-900">Wages that seem too good to be true</h3>
@@ -57,7 +57,7 @@ export default function SpotLmiaFraudPage() {
           </div>
 
           {/* Red Flag 3 */}
-          <div className="border border-gray-200 rounded-lg p-6">
+          <div className="card-elevated p-6">
             <div className="flex gap-3 items-start mb-2">
               <span className="text-2xl font-bold text-red-600">3</span>
               <h3 className="text-lg font-bold text-gray-900">No verifiable company details</h3>
@@ -68,7 +68,7 @@ export default function SpotLmiaFraudPage() {
           </div>
 
           {/* Red Flag 4 */}
-          <div className="border border-gray-200 rounded-lg p-6">
+          <div className="card-elevated p-6">
             <div className="flex gap-3 items-start mb-2">
               <span className="text-2xl font-bold text-red-600">4</span>
               <h3 className="text-lg font-bold text-gray-900">Refusing to let you contact the employer directly</h3>
@@ -79,7 +79,7 @@ export default function SpotLmiaFraudPage() {
           </div>
 
           {/* Red Flag 5 */}
-          <div className="border border-gray-200 rounded-lg p-6">
+          <div className="card-elevated p-6">
             <div className="flex gap-3 items-start mb-2">
               <span className="text-2xl font-bold text-red-600">5</span>
               <h3 className="text-lg font-bold text-gray-900">Spelling and grammar errors in official emails</h3>
@@ -90,7 +90,7 @@ export default function SpotLmiaFraudPage() {
           </div>
 
           {/* Red Flag 6 */}
-          <div className="border border-gray-200 rounded-lg p-6">
+          <div className="card-elevated p-6">
             <div className="flex gap-3 items-start mb-2">
               <span className="text-2xl font-bold text-red-600">6</span>
               <h3 className="text-lg font-bold text-gray-900">Pressure to decide immediately</h3>
@@ -101,7 +101,7 @@ export default function SpotLmiaFraudPage() {
           </div>
 
           {/* Red Flag 7 */}
-          <div className="border border-gray-200 rounded-lg p-6">
+          <div className="card-elevated p-6">
             <div className="flex gap-3 items-start mb-2">
               <span className="text-2xl font-bold text-red-600">7</span>
               <h3 className="text-lg font-bold text-gray-900">Asking for personal documents upfront</h3>
@@ -112,7 +112,7 @@ export default function SpotLmiaFraudPage() {
           </div>
 
           {/* Red Flag 8 */}
-          <div className="border border-gray-200 rounded-lg p-6">
+          <div className="card-elevated p-6">
             <div className="flex gap-3 items-start mb-2">
               <span className="text-2xl font-bold text-red-600">8</span>
               <h3 className="text-lg font-bold text-gray-900">Vague job duties or location</h3>
@@ -123,7 +123,7 @@ export default function SpotLmiaFraudPage() {
           </div>
 
           {/* Red Flag 9 */}
-          <div className="border border-gray-200 rounded-lg p-6">
+          <div className="card-elevated p-6">
             <div className="flex gap-3 items-start mb-2">
               <span className="text-2xl font-bold text-red-600">9</span>
               <h3 className="text-lg font-bold text-gray-900">The employer is on a government ban list</h3>
@@ -140,16 +140,16 @@ export default function SpotLmiaFraudPage() {
           <p className="text-blue-800 mb-4">
             Use LMIA Check to instantly verify if an employer is legitimate. It only takes seconds and could protect you from fraud and exploitation.
           </p>
-          <Link href="/check" className="inline-block px-6 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">
+          <Link href="/check" className="inline-block px-6 py-2.5 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-colors">
             Check Employer Now
           </Link>
         </div>
 
         {/* Report section */}
-        <div className="mt-8 bg-red-50 border border-red-200 rounded-lg p-6">
+        <div className="mt-8 card-elevated p-6 bg-red-50/40">
           <h2 className="text-lg font-bold text-red-900 mb-2">Suspect You've Been Scammed?</h2>
           <p className="text-red-800 mb-3">Stop all communication immediately and report to Canada's Employment & Social Development Canada (ESDC):</p>
-          <a href="tel:18003675693" className="inline-block px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors">
+          <a href="tel:18003675693" className="inline-block px-6 py-2.5 bg-red-600 text-white font-bold rounded-xl hover:bg-red-700 transition-colors">
             📞 1-800-367-5693
           </a>
           <p className="text-sm text-red-700 mt-3">Also contact a licensed immigration consultant or your nearest Canadian embassy for additional support.</p>

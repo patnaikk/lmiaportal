@@ -32,9 +32,9 @@ export default function VerifyLmiaPage() {
       <Navigation />
 
       {/* Hero */}
-      <div className="bg-gradient-to-b from-white to-red-50 text-center pt-10 pb-7 px-4">
+      <div className="bg-gradient-to-b from-gray-50 to-gray-50 text-center pt-10 pb-7 px-4">
         <div className="text-4xl mb-3">🔢</div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-tight mb-3">
           Is my LMIA number real?
         </h1>
         <p className="text-gray-500 text-[15px] leading-relaxed max-w-sm mx-auto">
@@ -45,7 +45,7 @@ export default function VerifyLmiaPage() {
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6 space-y-5">
 
         {/* Checker card */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-md">
+        <div className="card-elevated p-5">
           <label htmlFor="lmia-number" className="block text-sm font-semibold text-gray-800 mb-1">
             LMIA number from your document
           </label>
@@ -58,12 +58,12 @@ export default function VerifyLmiaPage() {
             onChange={(e) => { setInput(e.target.value); setResult('idle') }}
             onKeyDown={(e) => e.key === 'Enter' && handleCheck()}
             placeholder="e.g. 9783145"
-            className="w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-gray-50 font-mono"
+            className="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-gray-50 font-mono"
           />
           <button
             onClick={handleCheck}
             disabled={!input.trim() && !inputRef.current?.value}
-            className="mt-3 w-full px-4 py-3 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            className="mt-3 w-full px-4 py-3 bg-red-600 text-white text-sm font-semibold rounded-xl hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
           >
             Check format
           </button>
@@ -101,7 +101,7 @@ export default function VerifyLmiaPage() {
         )}
 
         {/* What a real LMIA letter looks like */}
-        <div className="bg-white border border-gray-200 rounded-xl p-4">
+        <div className="card-elevated p-5">
           <h2 className="text-sm font-semibold text-gray-800 mb-3">What a real LMIA approval letter looks like</h2>
           <ul className="space-y-2.5">
             {[
@@ -175,7 +175,7 @@ export default function VerifyLmiaPage() {
           <p className="text-xs text-gray-500 mb-3">An LMIA number check is not complete without also checking whether the employer is on the government non-compliant list.</p>
           <a
             href="/"
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-red-600 text-white text-sm font-semibold rounded-xl hover:bg-red-700 transition-colors"
           >
             Check the employer →
           </a>

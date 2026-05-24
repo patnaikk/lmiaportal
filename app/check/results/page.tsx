@@ -287,7 +287,7 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
           <div className="flex items-start gap-3">
             <span className="text-3xl leading-none mt-0.5" aria-hidden="true">{tl.emoji}</span>
             <div>
-              <p className={`text-xl font-extrabold ${tl.text}`}>{tl.label}</p>
+              <p className={`text-xl font-bold ${tl.text}`}>{tl.label}</p>
               <p className={`text-sm mt-1 leading-relaxed ${tl.text} opacity-80`}>{tl.sub}</p>
             </div>
           </div>

@@ -269,7 +269,7 @@ export default function FAQPage() {
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10 space-y-10">
 
         <div>
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-3 leading-tight">
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-3 leading-tight">
             Frequently Asked Questions
           </h1>
           <p className="text-gray-500 text-[15px] leading-relaxed">

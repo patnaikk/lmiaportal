@@ -15,7 +15,7 @@ export default function GuidePage() {
       {/* Hero */}
       <div className="bg-gradient-to-b from-white to-blue-50 text-center pt-10 pb-7 px-4">
         <div className="text-4xl mb-3">📚</div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-tight mb-3">
           How LMIA Works<br />
           <em className="not-italic text-blue-600">A guide for foreign workers</em>
         </h1>
@@ -28,8 +28,8 @@ export default function GuidePage() {
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8 space-y-6">
 
         {/* What is LMIA */}
-        <section className="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-6">
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-3 flex items-center gap-2">
+        <section className="rounded-2xl p-6 bg-blue-50 ring-1 ring-blue-100">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3 flex items-center gap-2">
             <span>❓</span> What is LMIA?
           </h2>
           <p className="text-gray-700 leading-relaxed mb-3">
@@ -41,8 +41,8 @@ export default function GuidePage() {
         </section>
 
         {/* Who needs it */}
-        <section className="bg-white border border-gray-200 rounded-lg p-6">
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-4 flex items-center gap-2">
+        <section className="card-elevated p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
             <span>👥</span> Who Needs LMIA?
           </h2>
           <div className="space-y-3">
@@ -71,8 +71,8 @@ export default function GuidePage() {
         </section>
 
         {/* Timeline */}
-        <section className="bg-white border border-gray-200 rounded-lg p-6">
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-5 flex items-center gap-2">
+        <section className="card-elevated p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2">
             <span>⏱️</span> The 4-Step Process
           </h2>
           <p className="text-sm text-gray-600 mb-5 font-medium">Total time: 3–6 months from job offer to arrival in Canada</p>
@@ -81,7 +81,7 @@ export default function GuidePage() {
             {/* Step 1 */}
             <div className="flex gap-4">
               <div className="flex flex-col items-center">
-                <div className="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-extrabold">1</div>
+                <div className="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-bold">1</div>
                 <div className="w-1 h-16 bg-gray-200 mt-2"></div>
               </div>
               <div className="pb-4">
@@ -94,7 +94,7 @@ export default function GuidePage() {
             {/* Step 2 */}
             <div className="flex gap-4">
               <div className="flex flex-col items-center">
-                <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-extrabold">2</div>
+                <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">2</div>
                 <div className="w-1 h-16 bg-gray-200 mt-2"></div>
               </div>
               <div className="pb-4">
@@ -107,7 +107,7 @@ export default function GuidePage() {
             {/* Step 3 */}
             <div className="flex gap-4">
               <div className="flex flex-col items-center">
-                <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-extrabold">3</div>
+                <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold">3</div>
                 <div className="w-1 h-16 bg-gray-200 mt-2"></div>
               </div>
               <div className="pb-4">
@@ -120,7 +120,7 @@ export default function GuidePage() {
             {/* Step 4 */}
             <div className="flex gap-4">
               <div className="flex flex-col items-center">
-                <div className="w-10 h-10 rounded-full bg-red-100 text-red-700 flex items-center justify-center font-extrabold">4</div>
+                <div className="w-10 h-10 rounded-full bg-red-100 text-red-700 flex items-center justify-center font-bold">4</div>
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">✅ Approved! You get your work permit</h3>
@@ -131,8 +131,8 @@ export default function GuidePage() {
         </section>
 
         {/* Your Costs */}
-        <section className="bg-orange-50 border-l-4 border-orange-500 rounded-lg p-6">
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-4 flex items-center gap-2">
+        <section className="rounded-2xl p-6 bg-orange-50 ring-1 ring-orange-100">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
             <span>💰</span> What Will You Actually Pay?
           </h2>
 
@@ -167,7 +167,7 @@ export default function GuidePage() {
             </div>
           </div>
 
-          <div className="bg-white border-l-4 border-red-500 p-4 rounded">
+          <div className="rounded-xl p-4 bg-red-50 ring-1 ring-red-100">
             <p className="font-semibold text-red-700 mb-2">❌ NEVER pay for:</p>
             <ul className="text-sm text-gray-700 space-y-1">
               <li>• "LMIA application fee" to a recruiter</li>
@@ -179,8 +179,8 @@ export default function GuidePage() {
         </section>
 
         {/* Red Flags */}
-        <section className="bg-red-50 border-l-4 border-red-600 rounded-lg p-6">
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-4 flex items-center gap-2">
+        <section className="rounded-2xl p-6 bg-red-50 ring-1 ring-red-100">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
             <span>🚩</span> Red Flags — Don't Proceed If:
           </h2>
           <div className="space-y-2">
@@ -217,7 +217,7 @@ export default function GuidePage() {
 
         {/* Next Steps */}
         <section className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6">
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-4 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
             <span>✅</span> What to Do Next
           </h2>
 
@@ -255,12 +255,12 @@ export default function GuidePage() {
         </section>
 
         {/* FAQ */}
-        <section className="bg-white border border-gray-200 rounded-lg p-6">
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-5 flex items-center gap-2">
+        <section className="card-elevated p-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-5 flex items-center gap-2">
             <span>❓</span> Common Questions
           </h2>
           <div className="space-y-3">
-            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+            <details className="group card-elevated p-4 open:bg-blue-50 cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
                 Is LMIA free or do I have to pay?
                 <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
@@ -270,7 +270,7 @@ export default function GuidePage() {
               </p>
             </details>
 
-            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+            <details className="group card-elevated p-4 open:bg-blue-50 cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
                 How long does the LMIA process take?
                 <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
@@ -280,7 +280,7 @@ export default function GuidePage() {
               </p>
             </details>
 
-            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+            <details className="group card-elevated p-4 open:bg-blue-50 cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
                 What if my employer says the LMIA is already approved?
                 <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
@@ -290,7 +290,7 @@ export default function GuidePage() {
               </p>
             </details>
 
-            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+            <details className="group card-elevated p-4 open:bg-blue-50 cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
                 Can I work in Canada while my work permit is being processed?
                 <span className="text-gray-400 group-open:text-blue-700">▼</span>
@@ -300,7 +300,7 @@ export default function GuidePage() {
               </p>
             </details>
 
-            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+            <details className="group card-elevated p-4 open:bg-blue-50 cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
                 What's the difference between a work permit and an LMIA?
                 <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
@@ -310,7 +310,7 @@ export default function GuidePage() {
               </p>
             </details>
 
-            <details className="group border border-gray-200 rounded-lg p-4 open:bg-blue-50 open:border-blue-200 cursor-pointer">
+            <details className="group card-elevated p-4 open:bg-blue-50 cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-gray-900 group-open:text-blue-700">
                 What should I do if I already paid someone for an LMIA?
                 <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
@@ -323,9 +323,9 @@ export default function GuidePage() {
         </section>
 
         {/* April 2026 rule changes */}
-        <section className="bg-amber-50 border-l-4 border-amber-500 rounded-lg p-6">
+        <section className="rounded-2xl p-6 bg-amber-50 ring-1 ring-amber-100">
           <div className="flex items-center gap-2 mb-1">
-            <h2 className="text-2xl font-extrabold text-gray-900 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
               <span>📋</span> April 2026 Rule Changes
             </h2>
             <span className="text-[10px] font-semibold text-amber-700 bg-amber-100 border border-amber-200 px-2 py-0.5 rounded-full">New</span>
@@ -379,8 +379,8 @@ export default function GuidePage() {
         </section>
 
         {/* After Arrival: Financial Setup */}
-        <section className="bg-blue-50 border-l-4 border-blue-600 rounded-lg p-6">
-          <h2 className="text-2xl font-extrabold text-gray-900 mb-3 flex items-center gap-2">
+        <section className="rounded-2xl p-6 bg-blue-50 ring-1 ring-blue-100">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3 flex items-center gap-2">
             <span>🏦</span> After You Arrive: Financial Setup
           </h2>
           <p className="text-gray-700 leading-relaxed mb-5">
@@ -388,7 +388,7 @@ export default function GuidePage() {
           </p>
           <div className="space-y-4">
             <div className="flex gap-3 items-start">
-              <span className="font-extrabold text-blue-600 text-lg leading-tight mt-0.5">1.</span>
+              <span className="font-bold text-blue-600 text-lg leading-tight mt-0.5">1.</span>
               <div>
                 <p className="font-semibold text-gray-800">Open the right bank account</p>
                 <p className="text-sm text-gray-600 mt-0.5">
@@ -400,7 +400,7 @@ export default function GuidePage() {
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <span className="font-extrabold text-blue-600 text-lg leading-tight mt-0.5">2.</span>
+              <span className="font-bold text-blue-600 text-lg leading-tight mt-0.5">2.</span>
               <div>
                 <p className="font-semibold text-gray-800">Plan your first paycheque</p>
                 <p className="text-sm text-gray-600 mt-0.5">
@@ -412,7 +412,7 @@ export default function GuidePage() {
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <span className="font-extrabold text-blue-600 text-lg leading-tight mt-0.5">3.</span>
+              <span className="font-bold text-blue-600 text-lg leading-tight mt-0.5">3.</span>
               <div>
                 <p className="font-semibold text-gray-800">Start building Canadian credit</p>
                 <p className="text-sm text-gray-600 mt-0.5">
@@ -424,7 +424,7 @@ export default function GuidePage() {
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <span className="font-extrabold text-blue-600 text-lg leading-tight mt-0.5">4.</span>
+              <span className="font-bold text-blue-600 text-lg leading-tight mt-0.5">4.</span>
               <div>
                 <p className="font-semibold text-gray-800">Find the cheapest way to send money home</p>
                 <p className="text-sm text-gray-600 mt-0.5">

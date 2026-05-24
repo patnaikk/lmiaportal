@@ -15,9 +15,9 @@ export default function CheckPage() {
       <Navigation currentPage="check" />
 
       {/* Hero */}
-      <div className="bg-gradient-to-b from-white to-red-50 text-center pt-10 pb-7 px-4">
+      <div className="bg-gradient-to-b from-gray-50 to-gray-50 text-center pt-10 pb-7 px-4">
         <div className="text-4xl mb-3">🔍</div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight tracking-tight mb-3">
           Is my LMIA real?
         </h1>
         <p className="text-gray-500 text-[15px] leading-relaxed max-w-sm mx-auto">
@@ -56,7 +56,7 @@ export default function CheckPage() {
 
       {/* Form */}
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-5">
-        <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 shadow-md">
+        <div className="card-elevated p-5 sm:p-6">
           <CheckForm />
           <p className="text-center text-xs text-gray-400 mt-4">🔒 No data stored · No login required</p>
         </div>
