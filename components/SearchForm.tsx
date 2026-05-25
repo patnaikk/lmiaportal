@@ -49,6 +49,7 @@ export default function SearchForm({
     e.preventDefault()
     if (!canSubmit) return
     setLoading(true)
+    window.scrollTo({ top: 0, behavior: 'instant' })
 
     const params = new URLSearchParams({ employer: employerSearchAs.trim() || employerDisplay.trim() })
     if (city.trim()) params.set('city', city.trim())

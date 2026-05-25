@@ -43,6 +43,7 @@ export default function CheckForm() {
     e.preventDefault()
     if (!canSubmit) return
     setLoading(true)
+    window.scrollTo({ top: 0, behavior: 'instant' })
 
     const params = new URLSearchParams()
     params.set('employer', employerSearchAs.trim() || employerDisplay.trim())
