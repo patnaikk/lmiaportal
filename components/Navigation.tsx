@@ -25,7 +25,7 @@ export default function Navigation({ currentPage }: NavigationProps) {
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-lg font-bold text-gray-900 tracking-tight hover:text-gray-600 transition-colors"
+          className="flex items-center gap-1 text-lg font-bold text-gray-900 tracking-tight hover:text-gray-600 transition-colors whitespace-nowrap"
           onClick={() => setOpen(false)}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -41,20 +41,24 @@ export default function Navigation({ currentPage }: NavigationProps) {
           >
             Verify offer
           </Link>
-          {NAV_LINKS.map(({ href, label, page }) => (
-            <Link
-              key={href}
-              href={href}
-              aria-current={currentPage === page ? 'page' : undefined}
-              className={`text-sm font-medium transition-colors relative ${
-                currentPage === page
-                  ? 'text-gray-900 after:absolute after:-bottom-[17px] after:left-0 after:right-0 after:h-[2px] after:bg-gray-900 after:rounded-full'
-                  : 'text-gray-500 hover:text-gray-800'
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
+          {NAV_LINKS.map(({ href, label, page }) => {
+            const abbrev = label === 'Bulk Check' ? 'Bulk' : label === "What's new" ? 'New' : label
+            return (
+              <Link
+                key={href}
+                href={href}
+                aria-current={currentPage === page ? 'page' : undefined}
+                className={`text-sm font-medium transition-colors relative whitespace-nowrap ${
+                  currentPage === page
+                    ? 'text-gray-900 after:absolute after:-bottom-[17px] after:left-0 after:right-0 after:h-[2px] after:bg-gray-900 after:rounded-full'
+                    : 'text-gray-500 hover:text-gray-800'
+                }`}
+              >
+                <span className="hidden md:inline">{label}</span>
+                <span className="md:hidden">{abbrev}</span>
+              </Link>
+            )
+          })}
         </nav>
 
         {/* Mobile: CTA + hamburger */}
