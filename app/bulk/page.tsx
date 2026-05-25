@@ -129,10 +129,6 @@ export default function BulkPage() {
       setError('Please enter at least one employer name.')
       return
     }
-    if (!email || !email.includes('@')) {
-      setError('Please enter a valid email address.')
-      return
-    }
 
     setRunning(true)
 
@@ -144,7 +140,7 @@ export default function BulkPage() {
       })
 
       if (res.status === 429) {
-        setError('You have reached the 3 bulk checks per day limit. Check back tomorrow or contact us for Pro access.')
+        setError('You have reached the 3 bulk checks per day limit. Enter your email above to unlock Pro access and run unlimited checks.')
         setRunning(false)
         return
       }
@@ -190,6 +186,10 @@ export default function BulkPage() {
 
   // ── Download results as CSV ──────────────────────────────────────────────
   function downloadCSV() {
+    if (!email || !email.includes('@')) {
+      setError('Please enter your email address to download results.')
+      return
+    }
     const header = 'Employer,Status,Summary,Violator Name,Reasons\n'
     const rows = results.map((r) =>
       [r.employer, r.risk, r.summary, r.violatorName ?? '', r.reasons ?? '']

@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
   const { employers, email } = body
 
-  if (!email || !email.includes('@')) {
+  if (email && !email.includes('@')) {
     return new Response(JSON.stringify({ error: 'Valid email required' }), { status: 400 })
   }
 
@@ -62,10 +62,10 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // Insert run record upfront — captures email for the list
+  // Insert run record upfront — captures email for the list (if provided)
   const { data: runRow } = await supabaseAdmin
     .from('bulk_search_runs')
-    .insert({ email, employer_count: capped.length, ip_address: ip, tier: 'free' })
+    .insert({ email: email || null, employer_count: capped.length, ip_address: ip, tier: 'free' })
     .select('id')
     .single()
 
