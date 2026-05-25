@@ -259,7 +259,7 @@ export default async function ReferencePage() {
                         <div className="min-w-0">
                           <p className="text-sm font-semibold text-gray-900 leading-snug truncate">{ban.name}</p>
                           <p className="text-xs text-gray-400 mt-0.5">
-                            {PROVINCE_NAMES[ban.province] ?? ban.province || 'Canada'}
+                            {PROVINCE_NAMES[ban.province] ?? (ban.province || 'Canada')}
                             {ban.penalty ? ` · ${ban.penalty}` : ''}
                           </p>
                         </div>
