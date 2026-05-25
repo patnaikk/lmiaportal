@@ -65,12 +65,12 @@ export default async function ReportsIndexPage() {
 
             {/* Past reports */}
             {months.slice(1).length > 0 && (
-              <div className="card-elevated divide-y divide-gray-50">
-                {months.slice(1).map((m) => (
+              <div className="card-elevated">
+                {months.slice(1).map((m, idx) => (
                   <Link
                     key={m.month}
                     href={`/reports/${m.month}`}
-                    className="flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-colors first:rounded-t-2xl last:rounded-b-2xl group"
+                    className={`flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-colors group ${idx < months.slice(1).length - 1 ? 'border-b border-gray-100' : ''}`}
                   >
                     <div>
                       <p className="text-sm font-semibold text-gray-900">{m.label}</p>

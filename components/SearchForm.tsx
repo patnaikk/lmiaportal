@@ -79,7 +79,7 @@ export default function SearchForm({
             value={city}
             onChange={(e) => setCity(e.target.value)}
             placeholder="e.g. Toronto"
-            className="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-gray-50"
+            className="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
             inputMode="text"
           />
         </div>
@@ -93,7 +93,7 @@ export default function SearchForm({
             name="province"
             value={province}
             onChange={(e) => setProvince(e.target.value)}
-            className="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-gray-50 appearance-none"
+            className="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 appearance-none"
           >
             <option value="">Any province</option>
             {PROVINCES.map((p) => (
@@ -107,7 +107,7 @@ export default function SearchForm({
         type="submit"
         disabled={!canSubmit}
         className="w-full px-8 py-3.5 bg-gray-900 text-white text-base font-semibold rounded-xl
-          hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2
+          hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
           disabled:opacity-60 disabled:cursor-not-allowed transition-colors min-h-[44px]
           flex items-center justify-center gap-2"
       >

@@ -79,7 +79,7 @@ export default function MappingContribution({ queriedName, province }: Props) {
             value={submittedName}
             onChange={(e) => setSubmittedName(e.target.value)}
             placeholder="e.g. 1234567 BC Ltd. or Sunrise Senior Care"
-            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
+            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
             minLength={2}
             maxLength={200}
             autoComplete="off"

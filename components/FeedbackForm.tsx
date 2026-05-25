@@ -95,7 +95,7 @@ export default function FeedbackForm({ employerQuery }: Props) {
             id="feedback-type"
             value={feedbackType}
             onChange={(e) => setFeedbackType(e.target.value as 'missing_employer' | 'suggestion')}
-            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
+            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
           >
             <option value="missing_employer">Missing employer — should be in the database</option>
             <option value="suggestion">General suggestion or feedback</option>
@@ -113,7 +113,7 @@ export default function FeedbackForm({ employerQuery }: Props) {
             placeholder={placeholder}
             required
             rows={3}
-            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50 resize-none"
+            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 resize-none"
             aria-label="Your feedback"
           />
         </div>
@@ -128,7 +128,7 @@ export default function FeedbackForm({ employerQuery }: Props) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
-            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
+            className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
             aria-label="Email address for follow-up (optional)"
           />
         </div>

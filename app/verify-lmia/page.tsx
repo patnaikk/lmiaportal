@@ -58,7 +58,7 @@ export default function VerifyLmiaPage() {
             onChange={(e) => { setInput(e.target.value); setResult('idle') }}
             onKeyDown={(e) => e.key === 'Enter' && handleCheck()}
             placeholder="e.g. 9783145"
-            className="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-gray-50 font-mono"
+            className="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 font-mono"
           />
           <button
             onClick={handleCheck}

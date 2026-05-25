@@ -189,7 +189,7 @@ export default function RecruiterBlacklistPage() {
                     value={form.recruiter_name}
                     onChange={(e) => setForm({ ...form, recruiter_name: e.target.value })}
                     placeholder="e.g. Maria Santos or SkyBridge Immigration"
-                    className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
+                    className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                     required
                   />
                 </div>
@@ -202,7 +202,7 @@ export default function RecruiterBlacklistPage() {
                       value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
                       placeholder="+1 (416) 555-0123"
-                      className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
+                      className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                     />
                   </div>
                   <div>
@@ -210,7 +210,7 @@ export default function RecruiterBlacklistPage() {
                     <select
                       value={form.province}
                       onChange={(e) => setForm({ ...form, province: e.target.value })}
-                      className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
+                      className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                     >
                       {PROVINCES.map(({ code, label }) => (
                         <option key={code} value={code}>{label}</option>
@@ -226,7 +226,7 @@ export default function RecruiterBlacklistPage() {
                     value={form.social_handle}
                     onChange={(e) => setForm({ ...form, social_handle: e.target.value })}
                     placeholder="e.g. @mariaimmigration or facebook.com/..."
-                    className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
+                    className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                   />
                 </div>
 
@@ -239,7 +239,7 @@ export default function RecruiterBlacklistPage() {
                     onChange={(e) => setForm({ ...form, description: e.target.value })}
                     placeholder="Describe what happened — what they asked for, how much, how you were contacted. You don't need to include personal details about yourself."
                     rows={4}
-                    className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50 resize-none"
+                    className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 resize-none"
                     required
                     minLength={20}
                   />
@@ -272,12 +272,12 @@ export default function RecruiterBlacklistPage() {
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Search by name, handle…"
-            className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
+            className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           />
           <select
             value={provinceFilter}
             onChange={(e) => setProvinceFilter(e.target.value)}
-            className="px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-white"
+            className="px-3 py-2 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
           >
             {PROVINCES.map(({ code, label }) => (
               <option key={code} value={code}>{code || 'All'}</option>

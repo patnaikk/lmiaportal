@@ -267,7 +267,7 @@ export default function CheckForm() {
         type="submit"
         disabled={!canSubmit}
         className="w-full px-8 py-3.5 bg-gray-900 text-white text-base font-bold rounded-xl
-          hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2
+          hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
           disabled:opacity-30 disabled:cursor-not-allowed transition-colors
           flex items-center justify-center gap-2"
       >

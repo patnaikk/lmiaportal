@@ -176,7 +176,7 @@ export default function EmployerInput({
           onChange={(e) => handleChange(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="e.g. Sunrise Senior Care or 1234567 BC Ltd."
-          className="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-gray-50"
+          className="w-full px-4 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
           autoComplete="off"
           inputMode="text"
           aria-autocomplete="list"
