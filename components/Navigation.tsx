@@ -8,13 +8,13 @@ interface NavigationProps {
 }
 
 const NAV_LINKS = [
-  { href: '/bulk', label: 'Bulk Check', page: 'bulk' },
-  { href: '/guide', label: 'Guide', page: 'guide' },
-  { href: '/faq', label: 'FAQ', page: 'faq' },
-  { href: '/reports', label: 'Reports', page: 'reports' },
-  { href: '/reference', label: 'Reference', page: 'reference' },
-  { href: '/about', label: 'About', page: 'about' },
-  { href: '/updates', label: "What's new", page: 'updates' },
+  { href: '/bulk', label: 'Bulk Check', page: 'bulk', desktop: true },
+  { href: '/guide', label: 'Guide', page: 'guide', desktop: true },
+  { href: '/faq', label: 'FAQ', page: 'faq', desktop: true },
+  { href: '/reports', label: 'Reports', page: 'reports', desktop: true },
+  { href: '/reference', label: 'Reference', page: 'reference', desktop: true },
+  { href: '/about', label: 'About', page: 'about', desktop: false },
+  { href: '/updates', label: "What's new", page: 'updates', desktop: false },
 ] as const
 
 export default function Navigation({ currentPage }: NavigationProps) {
@@ -42,8 +42,8 @@ export default function Navigation({ currentPage }: NavigationProps) {
           >
             Verify offer
           </Link>
-          {NAV_LINKS.map(({ href, label, page }) => {
-            const displayLabel = label === 'Bulk Check' ? 'Bulk' : label === "What's new" ? 'New' : label
+          {NAV_LINKS.filter(({ desktop }) => desktop).map(({ href, label, page }) => {
+            const displayLabel = label === 'Bulk Check' ? 'Bulk' : label
             return (
               <Link
                 key={href}
