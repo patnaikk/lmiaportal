@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import EmployerInput from '@/components/EmployerInput'
 
 const PROVINCES = [
@@ -23,6 +23,8 @@ const PROVINCES = [
 export default function CheckForm() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => { router.prefetch('/check/results') }, [router])
 
   const [employerDisplay, setEmployerDisplay] = useState('')
   const [employerSearchAs, setEmployerSearchAs] = useState('')
@@ -59,7 +61,7 @@ export default function CheckForm() {
   }
 
   const inputClass =
-    'w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-gray-50'
+    'w-full px-4 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50'
   const radioClass =
     'flex items-center gap-2.5 px-4 py-3 border rounded-lg cursor-pointer transition-colors text-sm font-medium'
 
@@ -69,7 +71,7 @@ export default function CheckForm() {
       {/* Section 1 — Employer */}
       <div className="space-y-4">
         <div>
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">About the employer</h2>
+          <h2 className="text-sm font-semibold text-gray-700">About the employer</h2>
           <p className="text-xs text-gray-400 mt-0.5">Cross-referenced against 11K+ LMIA records and the non-compliant employer list</p>
         </div>
 
@@ -116,7 +118,7 @@ export default function CheckForm() {
       {/* Section 2 — Offer details */}
       <div className="space-y-4">
         <div>
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Offer details <span className="text-gray-300 font-normal normal-case tracking-normal">(optional)</span></h2>
+          <h2 className="text-sm font-semibold text-gray-700">Offer details <span className="text-gray-400 font-normal">(optional)</span></h2>
           <p className="text-xs text-gray-400 mt-0.5">Enables wage comparison and duration mismatch checks — takes 30 seconds to fill in</p>
         </div>
 
@@ -137,7 +139,7 @@ export default function CheckForm() {
             <select
               value={wagePeriod}
               onChange={(e) => setWagePeriod(e.target.value)}
-              className="px-3 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50 appearance-none"
+              className="px-3 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 appearance-none"
             >
               <option value="hourly">/ hour</option>
               <option value="monthly">/ month</option>
@@ -192,7 +194,7 @@ export default function CheckForm() {
       {/* Section 3 — Key questions */}
       <div className="space-y-5">
         <div>
-          <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Key questions <span className="text-red-500">*</span></h2>
+          <h2 className="text-sm font-semibold text-gray-700">Key questions <span className="text-red-500">*</span></h2>
           <p className="text-xs text-gray-400 mt-0.5">These two answers flag the most common scam indicators — required to run the check</p>
         </div>
 

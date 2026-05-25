@@ -85,9 +85,17 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
     return (
       <div className="flex flex-col min-h-screen">
         <Navigation />
-        <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-8">
-          <p className="text-gray-600">Please fill in the form to run a check.</p>
-          <Link href="/check" className="mt-4 inline-block text-red-600 underline font-medium">← Back to checker</Link>
+        <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-16 flex flex-col items-center text-center">
+          <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mb-5" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+          </div>
+          <h1 className="text-xl font-bold text-gray-900 mb-2">No employer entered</h1>
+          <p className="text-sm text-gray-500 max-w-xs mb-6">Fill in the employer name and answer the two questions to run your check.</p>
+          <Link href="/check" className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors">
+            Go to checker
+          </Link>
         </main>
         <Footer />
       </div>

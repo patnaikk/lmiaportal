@@ -44,8 +44,11 @@ export default function Navigation({ currentPage }: NavigationProps) {
             <Link
               key={href}
               href={href}
-              className={`text-sm font-medium transition-colors ${
-                currentPage === page ? 'text-gray-900' : 'text-gray-500 hover:text-gray-800'
+              aria-current={currentPage === page ? 'page' : undefined}
+              className={`text-sm font-medium transition-colors relative ${
+                currentPage === page
+                  ? 'text-gray-900 after:absolute after:-bottom-[17px] after:left-0 after:right-0 after:h-[2px] after:bg-gray-900 after:rounded-full'
+                  : 'text-gray-500 hover:text-gray-800'
               }`}
             >
               {label}
@@ -82,24 +85,27 @@ export default function Navigation({ currentPage }: NavigationProps) {
       </div>
 
       {/* Mobile drawer */}
-      {open && (
-        <div className="sm:hidden border-t border-gray-100 bg-white/95 backdrop-blur-sm">
-          <nav className="max-w-2xl mx-auto px-4 py-3 flex flex-col gap-0.5">
-            {NAV_LINKS.map(({ href, label, page }) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setOpen(false)}
-                className={`py-2.5 text-[15px] font-medium transition-colors ${
-                  currentPage === page ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'
-                }`}
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      )}
+      <div
+        className={`sm:hidden border-t border-gray-100 bg-white/95 backdrop-blur-sm overflow-hidden transition-[max-height,opacity] duration-200 ease-in-out ${
+          open ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <nav className="max-w-2xl mx-auto px-4 py-3 flex flex-col gap-0.5">
+          {NAV_LINKS.map(({ href, label, page }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setOpen(false)}
+              aria-current={currentPage === page ? 'page' : undefined}
+              className={`py-2.5 text-[15px] font-medium transition-colors ${
+                currentPage === page ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+      </div>
     </header>
   )
 }

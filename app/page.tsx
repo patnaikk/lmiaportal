@@ -89,7 +89,7 @@ export default async function HomePage() {
         </a>
 
         {/* — OR — divider */}
-        <div className="flex items-center gap-3 my-5 max-w-xs mx-auto">
+        <div className="flex items-center gap-3 my-3 max-w-xs mx-auto">
           <div className="flex-1 h-px bg-gray-200" />
           <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">or</span>
           <div className="flex-1 h-px bg-gray-200" />
@@ -132,11 +132,11 @@ export default async function HomePage() {
       {/* Stats bar — reassurance after the two main paths */}
       <div className="max-w-2xl mx-auto w-full px-4 mt-4">
         <div className="grid grid-cols-3 divide-x divide-gray-100 rounded-2xl bg-white ring-1 ring-black/[0.04] overflow-hidden shadow-sm">
-          <Link href="/" className="py-4 text-center hover:bg-gray-50/50 transition-colors">
+          <div className="py-4 text-center">
             <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.employers > 0 ? formatCount(stats.employers) : '11K+'}</div>
             <div className="text-[11px] text-gray-500 font-medium mt-1 uppercase tracking-wider">Employers</div>
-          </Link>
-          <Link href="/banned" className="py-4 text-center hover:bg-gray-50/50 transition-colors">
+          </div>
+          <Link href="/banned" className="py-4 text-center hover:bg-gray-50 transition-colors group">
             <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.violators > 0 ? stats.violators.toLocaleString() : '1,329'}</div>
             <div className="text-[11px] text-gray-500 font-medium mt-1 uppercase tracking-wider">Banned</div>
           </Link>

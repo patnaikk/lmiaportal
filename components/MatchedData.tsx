@@ -52,6 +52,9 @@ function MatchCard({ match }: { match: PositiveLmia }) {
   return (
     <div className="card-elevated overflow-hidden">
       <div className="p-6 sm:p-7">
+        {/* Matched record label */}
+        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-4">Matched record</p>
+
         {/* Headline stats — kept prominent because they're the answer */}
         {(positions || lmias) && (
           <div className="flex items-baseline gap-5 mb-5 pb-5 border-b border-gray-100">
