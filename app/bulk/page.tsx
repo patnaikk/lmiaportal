@@ -377,7 +377,7 @@ export default function BulkPage() {
             <p className="mt-3 text-xs text-red-700 bg-red-50 rounded-lg px-3 py-2">{error}</p>
           )}
 
-          <p className="text-center text-xs text-gray-400 mt-3">🔒 No login required · Free tier: {FREE_LIMIT} employers, 3 runs/day</p>
+          <p className="text-center text-xs text-gray-400 mt-3">No login required · Results shown on screen</p>
         </div>
 
         {/* Sample result preview */}
