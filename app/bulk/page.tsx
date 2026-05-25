@@ -275,14 +275,15 @@ export default function BulkPage() {
 
           {tab === 'paste' && (
             <div>
+              <p className="text-xs text-gray-600 mb-2 font-medium">Paste one employer name per line:</p>
               <textarea
                 value={pasteText}
                 onChange={(e) => { setPasteText(e.target.value); setResults([]); setDone(false) }}
-                placeholder={"Tim Hortons\nABC Trucking Ltd\nMcDonald's Canada\n..."}
+                placeholder={"Tim Hortons\nABC Trucking Ltd\nMcDonald's Canada"}
                 rows={6}
                 className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
               />
-              <p className="text-xs text-gray-400 mt-1.5">One employer name per line.</p>
+              <p className="text-xs text-gray-400 mt-1.5">💡 Each name on its own line. Not comma-separated.</p>
             </div>
           )}
 
