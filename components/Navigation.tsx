@@ -42,7 +42,7 @@ export default function Navigation({ currentPage }: NavigationProps) {
             Verify offer
           </Link>
           {NAV_LINKS.map(({ href, label, page }) => {
-            const abbrev = label === 'Bulk Check' ? 'Bulk' : label === "What's new" ? 'New' : label
+            const displayLabel = label === 'Bulk Check' ? 'Bulk' : label === "What's new" ? 'New' : label
             return (
               <Link
                 key={href}
@@ -54,8 +54,7 @@ export default function Navigation({ currentPage }: NavigationProps) {
                     : 'text-gray-500 hover:text-gray-800'
                 }`}
               >
-                <span className="hidden md:inline">{label}</span>
-                <span className="md:hidden">{abbrev}</span>
+                {displayLabel}
               </Link>
             )
           })}
