@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 interface NavigationProps {
-  currentPage?: 'home' | 'check' | 'bulk' | 'guide' | 'faq' | 'about' | 'updates' | 'reports'
+  currentPage?: 'home' | 'check' | 'bulk' | 'guide' | 'faq' | 'about' | 'updates' | 'reports' | 'reference'
 }
 
 const NAV_LINKS = [
@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: '/guide', label: 'Guide', page: 'guide' },
   { href: '/faq', label: 'FAQ', page: 'faq' },
   { href: '/reports', label: 'Reports', page: 'reports' },
+  { href: '/reference', label: 'Reference', page: 'reference' },
   { href: '/about', label: 'About', page: 'about' },
   { href: '/updates', label: "What's new", page: 'updates' },
 ] as const
