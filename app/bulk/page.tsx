@@ -495,26 +495,6 @@ export default function BulkPage() {
                 )
               })}
             </div>
-
-            {done && (
-              <div className="px-5 py-4 border-t border-gray-100 bg-indigo-50">
-                <p className="text-sm font-semibold text-indigo-900 mb-2">
-                  Need more than {FREE_LIMIT} employers per run?
-                </p>
-                <p className="text-xs text-indigo-800 leading-relaxed mb-3">
-                  Pro tier (launching soon): 50 employers/run, unlimited daily checks, saved history, and PDF export.
-                </p>
-                <a
-                  href="mailto:hello@lmiacheck.ca?subject=Pro+Tier+Interest&body=Hi%2C%0A%0AI'm interested in the Pro tier for bulk employer checks.%0A%0AFirm:%20[Your firm name]%0AEmail:%20[Your email]%0ACurrent caseload:%20[# of clients/year]%0A%0AThanks!"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 text-white text-xs font-semibold rounded-lg hover:bg-indigo-700 transition-colors"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" />
-                  </svg>
-                  Join the waitlist
-                </a>
-              </div>
-            )}
           </div>
         )}
 
