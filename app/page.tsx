@@ -129,32 +129,6 @@ export default async function HomePage() {
         </Link>
       </main>
 
-      {/* Monthly reports promo — pulled up: trust signal + email capture */}
-      <div className="max-w-2xl mx-auto w-full px-4 mt-4">
-        <div className="card-elevated p-5 sm:p-6">
-          <Link href="/reports" className="group flex items-center gap-4 sm:gap-5">
-            <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-red-50 flex items-center justify-center" aria-hidden="true">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
-              </svg>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-gray-700 mb-0.5">Updated every month</p>
-              <p className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Enforcement reports</p>
-              <p className="text-sm text-gray-500 mt-1 leading-snug">
-                New bans, expiring bans, province hotspots, top violations — sourced from official ESDC data.
-              </p>
-            </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 text-gray-300 group-hover:text-red-500 group-hover:translate-x-0.5 transition-all" aria-hidden="true">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-          </Link>
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <HomeSignupWidget />
-          </div>
-        </div>
-      </div>
-
       {/* Stats bar — reassurance after the two main paths */}
       <div className="max-w-2xl mx-auto w-full px-4 mt-4">
         <div className="grid grid-cols-3 divide-x divide-gray-100 rounded-2xl bg-white ring-1 ring-black/[0.04] overflow-hidden shadow-sm">
@@ -231,6 +205,32 @@ export default async function HomePage() {
         <p className="text-center text-xs text-gray-400 mt-6 pt-5 border-t border-gray-100">
           No signup · No tracking · No ads · Government of Canada data
         </p>
+      </div>
+
+      {/* Monthly reports + signup — end of session, for engaged users */}
+      <div className="max-w-2xl mx-auto w-full px-4 mt-4">
+        <div className="card-elevated p-5 sm:p-6">
+          <Link href="/reports" className="group flex items-center gap-4 sm:gap-5">
+            <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-red-50 flex items-center justify-center" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-gray-700 mb-0.5">Updated every month</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Enforcement reports</p>
+              <p className="text-sm text-gray-500 mt-1 leading-snug">
+                New bans, expiring bans, province hotspots, top violations — sourced from official ESDC data.
+              </p>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 text-gray-300 group-hover:text-red-500 group-hover:translate-x-0.5 transition-all" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </Link>
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <HomeSignupWidget />
+          </div>
+        </div>
       </div>
 
       <RecentlyBanned />
