@@ -24,12 +24,14 @@ interface SearchFormProps {
   initialEmployer?: string
   initialCity?: string
   initialProvince?: string
+  autoFocus?: boolean
 }
 
 export default function SearchForm({
   initialEmployer = '',
   initialCity = '',
   initialProvince = '',
+  autoFocus = false,
 }: SearchFormProps) {
   const router = useRouter()
   const [employerDisplay, setEmployerDisplay] = useState(initialEmployer)
@@ -61,7 +63,7 @@ export default function SearchForm({
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       <EmployerInput
         initialValue={initialEmployer}
-        autoFocus={!initialEmployer}
+        autoFocus={autoFocus}
         onValueChange={handleEmployerChange}
       />
 
