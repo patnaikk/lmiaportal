@@ -312,11 +312,13 @@ function AccordionItem({ q, a }: { q: string; a: React.ReactNode }) {
           </svg>
         </span>
       </button>
-      {open && (
-        <div className="pb-4 pr-8">
-          <p className="text-[15px] text-gray-600 leading-relaxed">{a}</p>
+      <div className={`grid transition-all duration-200 ease-in-out ${open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+        <div className="overflow-hidden">
+          <div className="pb-4 pr-8">
+            <p className="text-[15px] text-gray-600 leading-relaxed">{a}</p>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }
@@ -382,14 +384,16 @@ export default function FAQPage() {
                 </svg>
               </button>
 
-              {/* Questions — shown when section is open */}
-              {activeSection === section.id && (
-                <div className="px-5 border-t border-gray-100">
-                  {section.questions.map((item) => (
-                    <AccordionItem key={item.q} q={item.q} a={item.a} />
-                  ))}
+              {/* Questions — animated open/close */}
+              <div className={`grid transition-all duration-200 ease-in-out ${activeSection === section.id ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                <div className="overflow-hidden">
+                  <div className="px-5 border-t border-gray-100">
+                    {section.questions.map((item) => (
+                      <AccordionItem key={item.q} q={item.q} a={item.a} />
+                    ))}
+                  </div>
                 </div>
-              )}
+              </div>
             </section>
           ))}
         </div>

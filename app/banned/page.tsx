@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Footer from '@/components/Footer'
 import Navigation from '@/components/Navigation'
 import DataFreshness from '@/components/DataFreshness'
+import ScrollToTop from '@/components/ScrollToTop'
 import { supabase } from '@/lib/supabase'
 import { formatTimeAgo } from '@/lib/format-time'
 import type { ComplianceStatus, ViolatorRecord } from '@/lib/types'
@@ -150,6 +151,7 @@ export default async function BannedPage({ searchParams }: PageProps) {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      <ScrollToTop query={`${q}|${province}|${status}|${page}`} />
       <Navigation />
 
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-8">
@@ -183,14 +185,14 @@ export default async function BannedPage({ searchParams }: PageProps) {
                 name="q"
                 defaultValue={q}
                 placeholder="Search employer name…"
-                className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
+                className="w-full pl-10 pr-3 py-3 text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
                 aria-label="Search employer name"
               />
             </div>
             <select
               name="province"
               defaultValue={province}
-              className="px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
+              className="px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
               aria-label="Filter by province"
             >
               <option value="">All provinces</option>
@@ -201,14 +203,14 @@ export default async function BannedPage({ searchParams }: PageProps) {
             <select
               name="status"
               defaultValue={status}
-              className="px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-gray-50"
+              className="px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
               aria-label="Filter by status"
             >
               <option value="banned">Currently banned</option>
               <option value="eligible">Previously banned</option>
               <option value="all">All</option>
             </select>
-            <button type="submit" className="px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors">
+            <button type="submit" className="px-5 py-3 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors">
               Filter
             </button>
           </div>
