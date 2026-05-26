@@ -223,6 +223,83 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
   }
 }
 
+export interface LatestReportPreview {
+  month: string
+  label: string
+  newBansCount: number
+  topProvince: string | null
+  expiringCount: number
+  previewNames: string[]   // first 3 new ban employer names
+}
+
+// Lightweight query for homepage — avoids the full buildMonthlyReport cost
+export async function getLatestReportPreview(): Promise<LatestReportPreview | null> {
+  try {
+    // Find the most recent month with bans
+    const { data: dateRows } = await supabase
+      .from('violators')
+      .select('decision_date')
+      .in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID'])
+      .not('decision_date', 'is', null)
+      .order('decision_date', { ascending: false })
+      .limit(200)
+
+    if (!dateRows?.length) return null
+
+    // Find the latest month that has bans
+    const monthCount: Record<string, number> = {}
+    for (const r of dateRows) {
+      const m = (r.decision_date as string).slice(0, 7)
+      monthCount[m] = (monthCount[m] ?? 0) + 1
+    }
+    const latestMonth = Object.keys(monthCount).sort((a, b) => b.localeCompare(a))[0]
+    const { start, end } = (() => {
+      const [y, mo] = latestMonth.split('-').map(Number)
+      const endDate = new Date(y, mo, 0)
+      return {
+        start: `${latestMonth}-01`,
+        end: `${latestMonth}-${String(endDate.getDate()).padStart(2, '0')}`,
+      }
+    })()
+
+    // New bans this month + preview names + province
+    const { data: newBans } = await supabase
+      .from('violators')
+      .select('business_operating_name, province')
+      .in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID'])
+      .gte('decision_date', start)
+      .lte('decision_date', end)
+      .order('decision_date', { ascending: false })
+      .limit(50)
+
+    // Top province from new bans
+    const provCount: Record<string, number> = {}
+    for (const r of newBans ?? []) {
+      if (r.province) provCount[r.province] = (provCount[r.province] ?? 0) + 1
+    }
+    const topProvince = Object.entries(provCount).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null
+
+    // Expiring this month
+    const { count: expiringCount } = await supabase
+      .from('violators')
+      .select('*', { count: 'exact', head: true })
+      .eq('compliance_status', 'INELIGIBLE_UNTIL')
+      .gte('ineligible_until_date', start)
+      .lte('ineligible_until_date', end)
+
+    return {
+      month: latestMonth,
+      label: monthLabel(latestMonth),
+      newBansCount: newBans?.length ?? 0,
+      topProvince,
+      expiringCount: expiringCount ?? 0,
+      previewNames: (newBans ?? []).slice(0, 3).map((r) => r.business_operating_name ?? '').filter(Boolean),
+    }
+  } catch {
+    return null
+  }
+}
+
 // Returns list of months that have at least one new ban, for index page
 export async function getReportMonths(): Promise<{ month: string; label: string; count: number }[]> {
   const { data } = await supabase

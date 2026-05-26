@@ -8,6 +8,7 @@ import DataFreshness from '@/components/DataFreshness'
 import ActivityTicker from '@/components/ActivityTicker'
 import { supabase } from '@/lib/supabase'
 import HomeSignupWidget from '@/components/HomeSignupWidget'
+import { getLatestReportPreview } from '@/lib/reports'
 
 export const revalidate = 3600 // refresh stats every hour
 
@@ -38,7 +39,7 @@ function formatCount(n: number): string {
 }
 
 export default async function HomePage() {
-  const stats = await fetchStats()
+  const [stats, reportPreview] = await Promise.all([fetchStats(), getLatestReportPreview()])
 
   const howToSchema = {
     '@context': 'https://schema.org',
@@ -243,27 +244,77 @@ export default async function HomePage() {
         </p>
       </div>
 
-      {/* Monthly reports + signup — end of session, for engaged users */}
+      {/* Monthly enforcement report — data-rich card */}
       <div className="max-w-2xl mx-auto w-full px-4 mt-4">
-        <div className="card-elevated p-5 sm:p-6">
-          <Link href="/reports" className="group flex items-center gap-4 sm:gap-5">
-            <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-red-50 flex items-center justify-center" aria-hidden="true">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
-              </svg>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-gray-700 mb-0.5">Updated every month</p>
-              <p className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">Enforcement reports</p>
-              <p className="text-sm text-gray-500 mt-1 leading-snug">
-                New bans, expiring bans, province hotspots, top violations — sourced from official ESDC data.
+        <div className="card-elevated overflow-hidden">
+          {/* Header */}
+          <div className="bg-red-600 px-5 py-4 flex items-center justify-between">
+            <div>
+              <p className="text-red-200 text-[11px] font-semibold uppercase tracking-widest mb-0.5">Latest enforcement report</p>
+              <p className="text-white text-xl font-bold leading-tight">
+                {reportPreview ? reportPreview.label : 'Monthly ESDC Report'}
               </p>
             </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 text-gray-300 group-hover:text-red-500 group-hover:translate-x-0.5 transition-all" aria-hidden="true">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-          </Link>
-          <div className="mt-4 pt-4 border-t border-gray-100">
+            <Link
+              href={reportPreview ? `/reports/${reportPreview.month}` : '/reports'}
+              className="flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 rounded-lg text-white text-xs font-semibold transition-colors"
+            >
+              Full report
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </Link>
+          </div>
+
+          {/* Stats row */}
+          <div className="grid grid-cols-3 divide-x divide-gray-100 border-b border-gray-100">
+            <div className="py-3.5 px-4 text-center">
+              <p className="text-2xl font-bold text-gray-900 tabular-nums leading-tight">
+                {reportPreview ? reportPreview.newBansCount : '—'}
+              </p>
+              <p className="text-[11px] text-gray-500 font-medium mt-0.5 uppercase tracking-wider">New bans</p>
+            </div>
+            <div className="py-3.5 px-4 text-center">
+              <p className="text-2xl font-bold text-gray-900 tabular-nums leading-tight">
+                {reportPreview?.topProvince ?? '—'}
+              </p>
+              <p className="text-[11px] text-gray-500 font-medium mt-0.5 uppercase tracking-wider">Top province</p>
+            </div>
+            <div className="py-3.5 px-4 text-center">
+              <p className="text-2xl font-bold text-gray-900 tabular-nums leading-tight">
+                {reportPreview ? reportPreview.expiringCount : '—'}
+              </p>
+              <p className="text-[11px] text-gray-500 font-medium mt-0.5 uppercase tracking-wider">Expiring</p>
+            </div>
+          </div>
+
+          {/* Preview names */}
+          {reportPreview && reportPreview.previewNames.length > 0 && (
+            <div className="px-5 py-3 border-b border-gray-100">
+              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Newly banned</p>
+              <ul className="space-y-1.5">
+                {reportPreview.previewNames.map((name) => (
+                  <li key={name} className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" aria-hidden="true" />
+                    <Link
+                      href={`/employer/${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')}`}
+                      className="text-sm text-gray-700 hover:text-red-600 font-medium truncate transition-colors"
+                    >
+                      {name}
+                    </Link>
+                  </li>
+                ))}
+                {reportPreview.newBansCount > reportPreview.previewNames.length && (
+                  <li className="text-xs text-gray-400 pl-3.5">
+                    +{reportPreview.newBansCount - reportPreview.previewNames.length} more in this report
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+
+          {/* Signup widget */}
+          <div className="px-5 py-4">
             <HomeSignupWidget />
           </div>
         </div>
