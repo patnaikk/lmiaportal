@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { toSlug } from '@/lib/slug'
 import Footer from '@/components/Footer'
 import Navigation from '@/components/Navigation'
 import DataFreshness from '@/components/DataFreshness'
@@ -252,7 +253,7 @@ export default async function BannedPage({ searchParams }: PageProps) {
               return (
                 <Link
                   key={r.id}
-                  href={`/results?employer=${encodeURIComponent(r.business_operating_name || '')}`}
+                  href={`/employer/${toSlug(r.business_operating_name || '')}`}
                   className="flex items-start gap-3 px-5 py-3.5 hover:bg-gray-50 transition-colors group"
                 >
                   <div className="flex-1 min-w-0">

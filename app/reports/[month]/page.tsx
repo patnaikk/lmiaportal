@@ -13,9 +13,23 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const label = monthLabel(params.month)
+  const canonical = `https://lmiacheck.ca/reports/${params.month}`
   return {
     title: `${label} ESDC Enforcement Report — LMIA Check`,
     description: `New employer bans, province breakdown, top violation reasons, and expiring bans for ${label}. Official Government of Canada data.`,
+    alternates: { canonical },
+    openGraph: {
+      title: `${label} ESDC Enforcement Report`,
+      description: `New employer bans, province breakdown, and top TFWP violation reasons for ${label}. Official Government of Canada data.`,
+      url: canonical,
+      siteName: 'LMIA Check',
+      type: 'article',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${label} ESDC Enforcement Report`,
+      description: `New employer bans and TFWP violation data for ${label}.`,
+    },
   }
 }
 

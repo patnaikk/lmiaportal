@@ -63,6 +63,34 @@ export default function RootLayout({
             },
           }) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'LMIA Check',
+            url: 'https://lmiacheck.ca',
+            logo: 'https://lmiacheck.ca/favicon.svg',
+            description: 'Free public tool that helps foreign workers verify Canadian employer legitimacy against official ESDC LMIA records before paying recruitment fees.',
+            foundingDate: '2025',
+            areaServed: 'CA',
+            knowsAbout: [
+              'Labour Market Impact Assessment',
+              'Temporary Foreign Worker Program',
+              'ESDC employer compliance',
+              'Canadian immigration fraud',
+              'LMIA fraud detection',
+            ],
+            sameAs: [
+              'https://www.canada.ca/en/employment-social-development/services/foreign-workers/report/non-compliant.html',
+            ],
+            contactPoint: {
+              '@type': 'ContactPoint',
+              contactType: 'customer support',
+              url: 'https://lmiacheck.ca/faq',
+            },
+          }) }}
+        />
       </head>
       <body className="min-h-screen flex flex-col">
         <Script
