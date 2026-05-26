@@ -1,6 +1,22 @@
 import { supabase } from '@/lib/supabase'
 import { expandViolationReasons, VIOLATION_CODES } from '@/lib/violation-codes'
 
+const PROVINCE_CODES: Record<string, string> = {
+  AB: 'Alberta', BC: 'British Columbia', MB: 'Manitoba', NB: 'New Brunswick',
+  NL: 'Newfoundland', NS: 'Nova Scotia', NT: 'Northwest Territories', NU: 'Nunavut',
+  ON: 'Ontario', PE: 'PEI', QC: 'Quebec', SK: 'Saskatchewan', YT: 'Yukon',
+}
+
+function extractProvinceFromAddress(address?: string | null): string | null {
+  if (!address) return null
+  const m = address.match(/,\s*([A-Z]{2})(?=[\s\n,]|$)/)
+  if (m && PROVINCE_CODES[m[1]]) return m[1]
+  for (const code of Object.keys(PROVINCE_CODES)) {
+    if (address.includes(PROVINCE_CODES[code])) return code
+  }
+  return null
+}
+
 export interface MonthlyReport {
   month: string           // e.g. "2026-05"
   label: string           // e.g. "May 2026"
@@ -265,17 +281,18 @@ export async function getLatestReportPreview(): Promise<LatestReportPreview | nu
     // New bans this month + preview names + province
     const { data: newBans } = await supabase
       .from('violators')
-      .select('business_operating_name, province')
+      .select('business_operating_name, province, address')
       .in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID'])
       .gte('decision_date', start)
       .lte('decision_date', end)
       .order('decision_date', { ascending: false })
       .limit(50)
 
-    // Top province from new bans
+    // Top province — use province column, fall back to extracting from address
     const provCount: Record<string, number> = {}
     for (const r of newBans ?? []) {
-      if (r.province) provCount[r.province] = (provCount[r.province] ?? 0) + 1
+      const prov = r.province || extractProvinceFromAddress(r.address)
+      if (prov) provCount[prov] = (provCount[prov] ?? 0) + 1
     }
     const topProvince = Object.entries(provCount).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null
 
