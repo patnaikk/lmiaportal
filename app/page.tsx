@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import SearchForm from '@/components/SearchForm'
 import Footer from '@/components/Footer'
-import RecentlyBanned from '@/components/RecentlyBanned'
 import LatestBanBanner from '@/components/LatestBanBanner'
 import Navigation from '@/components/Navigation'
 import DataFreshness from '@/components/DataFreshness'
@@ -320,7 +319,28 @@ export default async function HomePage() {
         </div>
       </div>
 
-      <RecentlyBanned />
+      {/* Browse all employers — replaces recently-banned list */}
+      <div className="max-w-2xl mx-auto w-full px-4 pb-6">
+        <Link
+          href="/banned"
+          className="group block card-elevated p-5 sm:p-6 hover:shadow-[0_2px_4px_rgba(15,23,42,0.05),0_16px_40px_-12px_rgba(220,38,38,0.15)] hover:ring-red-100 transition-all"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-0.5">Full directory of banned employers</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
+                Browse all {stats.violators > 0 ? stats.violators.toLocaleString() : '1,345'} non-compliant employers
+              </p>
+              <p className="text-sm text-gray-500 mt-1 leading-snug">
+                Searchable by name, filterable by province. Official ESDC data.
+              </p>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 text-gray-300 group-hover:text-red-500 group-hover:translate-x-0.5 transition-all" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </div>
+        </Link>
+      </div>
 
       <Footer />
     </div>
