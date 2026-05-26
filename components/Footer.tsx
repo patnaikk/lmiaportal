@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
+import FooterFeedback from '@/components/FooterFeedback'
 
 export default function Footer() {
   return (
@@ -14,6 +15,9 @@ export default function Footer() {
             </a>
           </p>
         </div>
+
+        {/* Feedback */}
+        <FooterFeedback />
 
         {/* Disclaimer */}
         <p className="text-xs text-gray-400 leading-relaxed">

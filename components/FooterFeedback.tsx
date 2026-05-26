@@ -2,21 +2,13 @@
 
 import { useState } from 'react'
 
-interface Props {
-  employerQuery?: string
-}
-
-export default function FeedbackForm({ employerQuery }: Props) {
+export default function FooterFeedback() {
   const [isOpen, setIsOpen] = useState(false)
-  const [feedbackType, setFeedbackType] = useState<'missing_employer' | 'suggestion'>('missing_employer')
+  const [feedbackType, setFeedbackType] = useState<'suggestion' | 'missing_employer'>('suggestion')
   const [message, setMessage] = useState('')
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
-
-  const placeholder = feedbackType === 'missing_employer'
-    ? `e.g. "I searched for Sunrise Farms in BC — they have a valid LMIA but don't appear in results."`
-    : `e.g. "It would help to show the date the LMIA was approved."`
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -30,7 +22,6 @@ export default function FeedbackForm({ employerQuery }: Props) {
         body: JSON.stringify({
           feedback_type: feedbackType,
           message: message.trim(),
-          employer_query: employerQuery,
           email: email.trim() || null,
         }),
       })
@@ -49,9 +40,9 @@ export default function FeedbackForm({ employerQuery }: Props) {
 
   if (status === 'success') {
     return (
-      <div className="mt-4 p-5 card-elevated">
+      <div className="p-4 bg-white rounded-2xl shadow-sm shadow-gray-200/60 text-center">
         <p className="text-sm text-gray-600">
-          <span className="font-semibold text-green-600">Thanks for your feedback.</span> We review every submission to improve data quality.
+          <span className="font-semibold text-green-600">Thanks!</span> We read every submission.
         </p>
       </div>
     )
@@ -59,25 +50,25 @@ export default function FeedbackForm({ employerQuery }: Props) {
 
   if (!isOpen) {
     return (
-      <div className="mt-4 text-center">
+      <div className="text-center">
         <button
           onClick={() => setIsOpen(true)}
           className="text-xs text-gray-400 hover:text-gray-600 underline underline-offset-2 transition-colors"
         >
-          Found an error or missing employer? Let us know
+          Have a suggestion or feature request? Send feedback
         </button>
       </div>
     )
   }
 
   return (
-    <div className="mt-4 p-5 card-elevated">
-      <div className="flex items-center justify-between mb-4">
+    <div className="p-4 bg-white rounded-2xl shadow-sm shadow-gray-200/60">
+      <div className="flex items-center justify-between mb-3">
         <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">Send feedback</p>
         <button
           onClick={() => setIsOpen(false)}
           className="text-gray-300 hover:text-gray-500 transition-colors"
-          aria-label="Close feedback form"
+          aria-label="Close"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <line x1="18" y1="6" x2="6" y2="18"/>
@@ -88,48 +79,46 @@ export default function FeedbackForm({ employerQuery }: Props) {
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <div>
-          <label htmlFor="feedback-type" className="block text-xs font-medium text-gray-500 mb-1.5">
-            Type of feedback
+          <label htmlFor="footer-feedback-type" className="block text-xs font-medium text-gray-500 mb-1.5">
+            Type
           </label>
           <select
-            id="feedback-type"
+            id="footer-feedback-type"
             value={feedbackType}
-            onChange={(e) => setFeedbackType(e.target.value as 'missing_employer' | 'suggestion')}
+            onChange={(e) => setFeedbackType(e.target.value as 'suggestion' | 'missing_employer')}
             className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
           >
-            <option value="missing_employer">Missing employer — should be in the database</option>
-            <option value="suggestion">General suggestion or feedback</option>
+            <option value="suggestion">Feature request or general feedback</option>
+            <option value="missing_employer">Missing employer in the database</option>
           </select>
         </div>
 
         <div>
-          <label htmlFor="feedback-message" className="block text-xs font-medium text-gray-500 mb-1.5">
-            Your feedback <span className="text-gray-400">(required)</span>
+          <label htmlFor="footer-feedback-message" className="block text-xs font-medium text-gray-500 mb-1.5">
+            Message <span className="text-gray-400">(required)</span>
           </label>
           <textarea
-            id="feedback-message"
+            id="footer-feedback-message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder={placeholder}
+            placeholder="Tell us what you'd like to see…"
             required
             rows={3}
             className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 resize-none"
-            aria-label="Your feedback"
           />
         </div>
 
         <div>
-          <label htmlFor="feedback-email" className="block text-xs font-medium text-gray-500 mb-1.5">
-            Email <span className="text-gray-400">(optional)</span>
+          <label htmlFor="footer-feedback-email" className="block text-xs font-medium text-gray-500 mb-1.5">
+            Email <span className="text-gray-400">(optional — if you want a reply)</span>
           </label>
           <input
             type="email"
-            id="feedback-email"
+            id="footer-feedback-email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
             className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-            aria-label="Email address for follow-up (optional)"
           />
         </div>
 
