@@ -19,6 +19,18 @@ export const metadata: Metadata = {
 
 const updates: { date: string; items: React.ReactNode[] }[] = [
   {
+    date: 'May 26, 2026 · Pass 8',
+    items: [
+      <>
+        New: <strong>Knowledge & Prevention footer</strong> — 5-step accordion guide for foreign workers learning about LMIA fraud, fake job offers, and red flags. Each accordion is visually compact but fully expanded in HTML for search crawlers and AI scrapers. Topics: What is LMIA fraud?, How to spot fake offers (green/red comparison boxes), Common red flags checklist (10 items, color-coded by risk), Why employers get banned, Where to report fraud. Links directly to Service Canada, ESDC, Labour offices, IRCC, and police reporting channels.
+      </>,
+      <>
+        New: <strong>PGWP-to-LMIA Progress Auditor</strong> — Interactive 3-step wizard for international students and PGWP holders verifying if their employer is genuinely processing an LMIA or just stringing them along. Step 1: Did you get a 7-digit LMIA file number? (red flag if no — "Your employer hasn't officially submitted"). Step 2: Was your job posted on Job Bank for 30+ days? (red flag if no — "Legally impossible without recruitment period"). Step 3: Unusual wage/title changes? (caution if yes — "Wage anomaly detected"). Results display with actionable next steps and direct links to verify with Service Canada. Entry card matches "Full offer check" green theme.
+      </>,
+      'Placement: Auditor appears between "Browse all employers" card and Knowledge & Prevention footer — acts as a visual bridge from app utilities (top 60%) to reference content (bottom 40%). Red enforcement report card serves as the final "exclamation point" before transitioning to quiet reference content.',
+    ],
+  },
+  {
     date: 'May 24, 2026 · Pass 6',
     items: [
       <>
