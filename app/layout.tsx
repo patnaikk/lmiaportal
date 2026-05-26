@@ -43,6 +43,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="google-site-verification" content="o3Unps6sHSrFL6AeGvaFhPKzpqDSC0ewl4Nk_I1wq8s" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <script dangerouslySetInnerHTML={{ __html: `history.scrollRestoration='manual'` }} />
         <script
