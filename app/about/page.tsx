@@ -18,8 +18,45 @@ export const metadata: Metadata = {
 }
 
 export default function AboutPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'About LMIA Check',
+    url: 'https://lmiacheck.ca/about',
+    datePublished: '2026-03-01',
+    dateModified: '2026-05-26',
+    description: 'Why we built LMIA Check, and how it helps foreign workers verify Canadian employers against government records.',
+    author: {
+      '@type': 'Organization',
+      name: 'LMIA Check',
+      url: 'https://lmiacheck.ca',
+      description: 'Free public tool built to help foreign workers verify Canadian employer legitimacy using official ESDC records.',
+      knowsAbout: [
+        'Labour Market Impact Assessment',
+        'Temporary Foreign Worker Program',
+        'ESDC employer compliance',
+        'Canadian immigration fraud',
+        'LMIA fraud detection',
+      ],
+    },
+    about: {
+      '@type': 'Thing',
+      name: 'LMIA Fraud Prevention',
+      description: 'Protecting foreign workers from fraudulent Canadian job offers by providing free access to official ESDC employer compliance data.',
+    },
+    mainEntity: {
+      '@type': 'Organization',
+      name: 'LMIA Check',
+      url: 'https://lmiacheck.ca',
+      foundingDate: '2025',
+      areaServed: 'CA',
+      serviceType: 'Employer Verification',
+    },
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation currentPage="about" />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10 space-y-10">

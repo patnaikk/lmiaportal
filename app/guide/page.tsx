@@ -17,8 +17,24 @@ export const metadata = {
 }
 
 export default function GuidePage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'LMIA Guide 2026 — How to Verify a Canadian Job Offer',
+    url: 'https://lmiacheck.ca/guide',
+    datePublished: '2026-03-01',
+    dateModified: '2026-05-26',
+    author: { '@type': 'Organization', name: 'LMIA Check', url: 'https://lmiacheck.ca' },
+    publisher: { '@type': 'Organization', name: 'LMIA Check', url: 'https://lmiacheck.ca', logo: { '@type': 'ImageObject', url: 'https://lmiacheck.ca/favicon.svg' } },
+    description: 'Complete guide to understanding LMIA, spotting fraud, and verifying Canadian employers. Learn the 4-step work permit process, costs, red flags, and 2026 rule changes.',
+    about: { '@type': 'Thing', name: 'Labour Market Impact Assessment', description: 'Official Canadian government process allowing employers to hire temporary foreign workers.' },
+    inLanguage: 'en',
+    isPartOf: { '@type': 'WebSite', name: 'LMIA Check', url: 'https://lmiacheck.ca' },
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation currentPage="guide" />
 
       {/* Hero */}

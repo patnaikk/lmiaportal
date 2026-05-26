@@ -18,8 +18,24 @@ export const metadata: Metadata = {
 }
 
 export default function SpotLmiaFraudPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'How to Spot LMIA Fraud — 9 Red Flags in Canadian Job Offers',
+    url: 'https://lmiacheck.ca/spot-lmia-fraud',
+    datePublished: '2026-03-01',
+    dateModified: '2026-05-26',
+    author: { '@type': 'Organization', name: 'LMIA Check', url: 'https://lmiacheck.ca' },
+    publisher: { '@type': 'Organization', name: 'LMIA Check', url: 'https://lmiacheck.ca', logo: { '@type': 'ImageObject', url: 'https://lmiacheck.ca/favicon.svg' } },
+    description: 'Learn how to identify fake LMIA job offers and scams targeting foreign workers. 9 red flags to watch for before accepting a Canadian job.',
+    about: { '@type': 'Thing', name: 'LMIA Fraud', description: 'Fraudulent Canadian job offers that exploit the LMIA system to charge illegal fees from foreign workers.' },
+    inLanguage: 'en',
+    isPartOf: { '@type': 'WebSite', name: 'LMIA Check', url: 'https://lmiacheck.ca' },
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />
 
       {/* Hero */}

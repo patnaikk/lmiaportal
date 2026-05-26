@@ -29,8 +29,24 @@ const ELIGIBLE_SITUATIONS = [
 ]
 
 export default function OwpVwPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Open Work Permit for Vulnerable Workers (OWP-VW) — Eligibility & How to Apply',
+    url: 'https://lmiacheck.ca/owp-vw',
+    datePublished: '2026-03-01',
+    dateModified: '2026-05-26',
+    author: { '@type': 'Organization', name: 'LMIA Check', url: 'https://lmiacheck.ca' },
+    publisher: { '@type': 'Organization', name: 'LMIA Check', url: 'https://lmiacheck.ca', logo: { '@type': 'ImageObject', url: 'https://lmiacheck.ca/favicon.svg' } },
+    description: 'If you are a temporary foreign worker in a vulnerable or abusive situation in Canada, you may qualify for a free Open Work Permit that lets you leave your employer immediately.',
+    about: { '@type': 'Thing', name: 'Open Work Permit for Vulnerable Workers', description: 'Canadian immigration pathway allowing exploited temporary foreign workers to change employers without a new job offer.' },
+    inLanguage: 'en',
+    isPartOf: { '@type': 'WebSite', name: 'LMIA Check', url: 'https://lmiacheck.ca' },
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10">

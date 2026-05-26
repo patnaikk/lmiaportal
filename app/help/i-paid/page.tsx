@@ -30,8 +30,24 @@ const LEGAL_AID = [
 ]
 
 export default function IPaidPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'I Already Paid for an LMIA — What Do I Do Now?',
+    url: 'https://lmiacheck.ca/help/i-paid',
+    datePublished: '2026-03-01',
+    dateModified: '2026-05-26',
+    author: { '@type': 'Organization', name: 'LMIA Check', url: 'https://lmiacheck.ca' },
+    publisher: { '@type': 'Organization', name: 'LMIA Check', url: 'https://lmiacheck.ca', logo: { '@type': 'ImageObject', url: 'https://lmiacheck.ca/favicon.svg' } },
+    description: 'If you paid fees for a Canadian job offer or LMIA and suspect fraud: immediate steps, how to recover funds, free legal aid, and how to apply for an Open Work Permit.',
+    about: { '@type': 'Thing', name: 'LMIA Fraud Recovery', description: 'Steps for foreign workers who have already paid fees for a fraudulent Canadian job offer or LMIA.' },
+    inLanguage: 'en',
+    isPartOf: { '@type': 'WebSite', name: 'LMIA Check', url: 'https://lmiacheck.ca' },
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />
 
       <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-10">

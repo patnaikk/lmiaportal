@@ -44,6 +44,8 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="google-site-verification" content="o3Unps6sHSrFL6AeGvaFhPKzpqDSC0ewl4Nk_I1wq8s" />
+        {/* Get your code from bing.com/webmasters → Add site → HTML meta tag */}
+        <meta name="msvalidate.01" content="957AE5F53D4812BC2C585233153C7075" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <script dangerouslySetInnerHTML={{ __html: `history.scrollRestoration='manual'` }} />
         <script
