@@ -6,6 +6,7 @@ import Navigation from '@/components/Navigation'
 import DataFreshness from '@/components/DataFreshness'
 import ActivityTicker from '@/components/ActivityTicker'
 import KnowledgeFooter from '@/components/KnowledgeFooter'
+import PGWPAuditor from '@/components/PGWPAuditor'
 import { supabase } from '@/lib/supabase'
 import HomeSignupWidget from '@/components/HomeSignupWidget'
 import { getLatestReportPreview } from '@/lib/reports'
@@ -342,6 +343,9 @@ export default async function HomePage() {
           </div>
         </Link>
       </div>
+
+      {/* PGWP-to-LMIA Progress Auditor — bridges app section to knowledge footer */}
+      <PGWPAuditor />
 
       {/* Knowledge & Prevention footer */}
       <KnowledgeFooter />
