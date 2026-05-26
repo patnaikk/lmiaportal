@@ -26,6 +26,24 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <script dangerouslySetInnerHTML={{ __html: `history.scrollRestoration='manual'` }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'LMIA Check',
+            url: 'https://lmiacheck.ca',
+            description: 'Free tool to verify Canadian employers against official ESDC LMIA records. Protects foreign workers from job offer fraud.',
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: {
+                '@type': 'EntryPoint',
+                urlTemplate: 'https://lmiacheck.ca/results?employer={search_term_string}',
+              },
+              'query-input': 'required name=search_term_string',
+            },
+          }) }}
+        />
       </head>
       <body className="min-h-screen flex flex-col">
         <Script

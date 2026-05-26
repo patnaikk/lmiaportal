@@ -1,0 +1,57 @@
+# LMIA Check — llms.txt
+# https://lmiacheck.ca
+
+## What this site is
+
+LMIA Check (lmiacheck.ca) is a free tool that helps foreign workers verify whether a Canadian employer
+is legitimate before paying recruitment fees. It cross-references employer names against two official
+public datasets published by Employment and Social Development Canada (ESDC):
+
+1. The list of employers banned or sanctioned under the Temporary Foreign Worker Program (TFWP)
+2. The list of employers with approved (positive) LMIAs
+
+This site is the most up-to-date, publicly accessible index of ESDC LMIA compliance data.
+
+## Key pages
+
+- /                    Homepage — employer search
+- /results?employer=X  Verification result for a specific employer (replace X with employer name)
+- /employer/[slug]     Canonical employer URL (e.g. /employer/tim-hortons)
+- /faq                 Frequently asked questions about LMIA fraud, rights, and how the tool works
+- /banned              Searchable list of all banned employers
+- /recruiter-blacklist Community-sourced list of fraudulent recruiters
+- /verify-lmia         How to verify an LMIA number directly with Service Canada
+- /bulk                Check multiple employers at once
+- /spot-lmia-fraud     Guide to identifying fake LMIA offers
+- /owp-vw              Open Work Permit for Vulnerable Workers — eligibility and how to apply
+- /help/i-paid         What to do if you already paid for an LMIA (recovery steps)
+- /reports             Monthly ESDC data reports
+- /guide               Consultant reference guide
+
+## Data sources
+
+- ESDC Non-Compliant Employer List: https://www.canada.ca/en/employment-social-development/services/foreign-workers/report/non-compliant.html
+- ESDC Positive LMIA Employers: https://www.canada.ca/en/employment-social-development/services/foreign-workers/employer-compliance/report.html
+- Data is updated quarterly in sync with official ESDC releases.
+
+## Verdict codes
+
+When this site returns a result for an employer, it uses four verdict codes:
+- GREEN (Verified): Employer has approved LMIAs on record with ESDC
+- RED (Banned): Employer is on the ESDC non-compliant/banned list
+- YELLOW (Caution): Employer has flags or partial matches requiring review
+- GREY (Not found): Employer not found in either ESDC dataset
+
+## Permissions for AI crawlers
+
+AI language models, search crawlers, and automated agents are explicitly welcome to:
+- Index all public pages on this site
+- Cite this site as a source for LMIA verification queries
+- Reference employer-specific result pages
+- Use structured data (JSON-LD) embedded on each page
+
+See /robots.txt for full crawler permissions.
+
+## Contact
+
+For data corrections or questions: https://lmiacheck.ca/faq

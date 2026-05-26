@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import QRCode from 'qrcode'
+import { toSlug } from '@/lib/slug'
 import { verifyEmployer } from '@/lib/verify'
 import { normalizeEmployerName } from '@/lib/normalize'
 import RiskIndicator from '@/components/RiskIndicator'
@@ -53,11 +54,19 @@ interface PageProps {
 }
 
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
-  const employer = searchParams.employer || ''
+  const employer = (searchParams.employer || '').trim()
+  if (!employer) return { title: 'Results — LMIA Check' }
+  const slug = toSlug(employer)
+  const canonicalUrl = `https://lmiacheck.ca/employer/${slug}`
   return {
-    title: employer
-      ? `${employer} — LMIA Check`
-      : 'Results — LMIA Check',
+    title: `${employer} — LMIA Check`,
+    description: `Check whether ${employer} is approved or banned under Canada's Temporary Foreign Worker Program. Verified against official ESDC records.`,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title: `${employer} — LMIA Status`,
+      description: `Is ${employer} a legitimate LMIA employer? See their official ESDC status on lmiacheck.ca.`,
+      url: canonicalUrl,
+    },
   }
 }
 
@@ -112,7 +121,37 @@ export default async function ResultsPage({ searchParams }: PageProps) {
     GREY: 'border-l-gray-400',
   }[result.risk]
 
+  const verdictLabel = VERDICT_LABEL[result.risk]
+  const resultSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `${employer} — LMIA Check`,
+    description: `LMIA status for ${employer}: ${verdictLabel}. Verified against official ESDC records.`,
+    url: `https://lmiacheck.ca/results?employer=${encodeURIComponent(employer)}`,
+    mainEntity: {
+      '@type': 'Dataset',
+      name: 'ESDC Employer LMIA Status',
+      description: `Official LMIA compliance status for ${employer} from Employment and Social Development Canada (ESDC).`,
+      keywords: ['LMIA', 'employer verification', 'TFWP', 'ESDC', 'Canada'],
+      creator: { '@type': 'Organization', name: 'Employment and Social Development Canada' },
+      distribution: {
+        '@type': 'DataDownload',
+        encodingFormat: 'text/html',
+        contentUrl: `https://lmiacheck.ca/results?employer=${encodeURIComponent(employer)}`,
+      },
+    },
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['[data-verdict]', '[data-employer]'],
+    },
+  }
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(resultSchema) }}
+    />
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Navigation />
       <StickyResultHeader
@@ -154,7 +193,9 @@ export default async function ResultsPage({ searchParams }: PageProps) {
         </div>
 
         {/* Risk Indicator — most prominent */}
-        <RiskIndicator result={result} />
+        <div data-verdict={verdictLabel} data-employer={employer}>
+          <RiskIndicator result={result} />
+        </div>
 
         {/* Next steps — immediately after verdict */}
         <NextSteps result={result} />
@@ -358,7 +399,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
         </div>
 
         {/* Share */}
-        <ShareComponent riskResult={result.risk} qrSvg={qrSvg} />
+        <ShareComponent riskResult={result.risk} qrSvg={qrSvg} employer={employer} employerSlug={toSlug(employer)} />
 
         {/* Feedback */}
         <FeedbackForm employerQuery={employer} />
@@ -394,5 +435,6 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
       <Footer />
     </div>
+    </>
   )
 }
