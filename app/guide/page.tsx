@@ -5,6 +5,15 @@ import Navigation from '@/components/Navigation'
 export const metadata = {
   title: 'LMIA Guide 2026 — How to Verify a Canadian Job Offer | LMIA Check',
   description: 'Complete guide to understanding LMIA, spotting fraud, and verifying Canadian employers. Learn the 4-step work permit process, costs, red flags, and 2026 rule changes.',
+  openGraph: {
+    title: 'LMIA Guide 2026 — How to Verify a Canadian Job Offer',
+    description: 'Complete guide to understanding LMIA, spotting fraud, and verifying Canadian employers before paying any fees.',
+    url: 'https://lmiacheck.ca/guide',
+    siteName: 'LMIA Check',
+    type: 'article',
+  },
+  twitter: { card: 'summary_large_image', title: 'LMIA Guide 2026 — How to Verify a Canadian Job Offer', description: 'Complete guide to LMIA fraud, verification, and Canadian employer checks.' },
+  alternates: { canonical: 'https://lmiacheck.ca/guide' },
 }
 
 export default function GuidePage() {

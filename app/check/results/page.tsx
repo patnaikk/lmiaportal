@@ -39,9 +39,25 @@ interface PageProps {
 }
 
 export async function generateMetadata({ searchParams }: PageProps): Promise<Metadata> {
-  const employer = searchParams.employer || ''
+  const employer = (searchParams.employer || '').trim()
   return {
-    title: employer ? `${employer} — LMIA offer check` : 'Offer check — LMIA Check',
+    title: employer ? `${employer} — LMIA Offer Check` : 'Offer Check — LMIA Check',
+    description: employer
+      ? `Full offer analysis for ${employer}: fee legality, wage check, red flags, and LMIA compliance — based on official ESDC data.`
+      : 'Analyse a Canadian job offer for illegal fees, below-market wages, and LMIA red flags.',
+    openGraph: {
+      title: employer ? `${employer} — LMIA Offer Check` : 'Offer Check — LMIA Check',
+      description: employer
+        ? `Full offer analysis for ${employer}: fee legality, wage check, and LMIA red flags.`
+        : 'Analyse a Canadian job offer for illegal fees, below-market wages, and LMIA red flags.',
+      siteName: 'LMIA Check',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: employer ? `${employer} — LMIA Offer Check` : 'Offer Check — LMIA Check',
+      description: 'Full analysis of a Canadian job offer for LMIA fraud red flags.',
+    },
   }
 }
 

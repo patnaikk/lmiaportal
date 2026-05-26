@@ -6,6 +6,15 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Updates — LMIA Check',
   description: 'What\'s new on LMIA Check — feature updates and data refreshes.',
+  openGraph: {
+    title: 'Updates — LMIA Check',
+    description: 'Latest feature updates and ESDC data refreshes on LMIA Check.',
+    url: 'https://lmiacheck.ca/updates',
+    siteName: 'LMIA Check',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image', title: 'Updates — LMIA Check', description: 'Latest feature updates and ESDC data refreshes on LMIA Check.' },
+  alternates: { canonical: 'https://lmiacheck.ca/updates' },
 }
 
 const updates: { date: string; items: React.ReactNode[] }[] = [

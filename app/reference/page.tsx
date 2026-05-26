@@ -10,6 +10,15 @@ export const metadata: Metadata = {
   title: 'Consultant Reference Guide — LMIA Check',
   description:
     'Quick-reference for immigration consultants and paralegals: expiring bans, all 30 ESDC violation codes, red flags, penalty scale, and official government links.',
+  openGraph: {
+    title: 'LMIA Consultant Reference Guide',
+    description: 'Quick-reference for immigration consultants: all 30 ESDC violation codes, expiring bans, penalty scale, and official government links.',
+    url: 'https://lmiacheck.ca/reference',
+    siteName: 'LMIA Check',
+    type: 'article',
+  },
+  twitter: { card: 'summary_large_image', title: 'LMIA Consultant Reference Guide', description: 'All 30 ESDC violation codes, expiring bans, penalty scale — quick reference for immigration consultants.' },
+  alternates: { canonical: 'https://lmiacheck.ca/reference' },
 }
 
 const PROVINCE_NAMES: Record<string, string> = {

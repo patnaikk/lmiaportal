@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   title: 'I Already Paid — What Do I Do Now? | LMIA Check',
   description:
     'If you paid fees for a Canadian job offer or LMIA and suspect fraud: immediate steps, how to recover funds, free legal aid, and how to apply for an Open Work Permit.',
+  openGraph: {
+    title: 'I Already Paid for an LMIA — What Do I Do Now?',
+    description: 'Immediate steps to take if you paid fees for a Canadian job offer or LMIA: how to recover funds, free legal aid, and how to apply for an Open Work Permit.',
+    url: 'https://lmiacheck.ca/help/i-paid',
+    siteName: 'LMIA Check',
+    type: 'article',
+  },
+  twitter: { card: 'summary_large_image', title: 'I Already Paid for an LMIA — What Do I Do?', description: 'Immediate steps if you paid fees for a Canadian job offer: recover funds, free legal aid, Open Work Permit.' },
+  alternates: { canonical: 'https://lmiacheck.ca/help/i-paid' },
 }
 
 const LEGAL_AID = [

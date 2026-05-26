@@ -6,6 +6,15 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'About — LMIA Check',
   description: 'Why we built LMIA Check, and how it helps foreign workers verify Canadian employers against government records.',
+  openGraph: {
+    title: 'About LMIA Check',
+    description: 'Why we built LMIA Check, and how it helps foreign workers verify Canadian employers against government records.',
+    url: 'https://lmiacheck.ca/about',
+    siteName: 'LMIA Check',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image', title: 'About LMIA Check', description: 'Why we built LMIA Check and how it protects foreign workers from LMIA fraud.' },
+  alternates: { canonical: 'https://lmiacheck.ca/about' },
 }
 
 export default function AboutPage() {

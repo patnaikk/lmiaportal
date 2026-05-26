@@ -6,6 +6,15 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'How to Spot LMIA Fraud — Red Flags in Canadian Job Offers (2026)',
   description: 'Learn how to identify fake LMIA job offers and scams targeting foreign workers. 9 red flags to watch for before accepting a Canadian job.',
+  openGraph: {
+    title: 'How to Spot LMIA Fraud — 9 Red Flags (2026)',
+    description: 'Learn how to identify fake LMIA job offers targeting foreign workers. 9 red flags to check before accepting a Canadian job offer.',
+    url: 'https://lmiacheck.ca/spot-lmia-fraud',
+    siteName: 'LMIA Check',
+    type: 'article',
+  },
+  twitter: { card: 'summary_large_image', title: 'How to Spot LMIA Fraud — 9 Red Flags (2026)', description: '9 red flags that reveal a fake LMIA job offer targeting foreign workers.' },
+  alternates: { canonical: 'https://lmiacheck.ca/spot-lmia-fraud' },
 }
 
 export default function SpotLmiaFraudPage() {

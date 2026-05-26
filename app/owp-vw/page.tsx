@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   title: 'Open Work Permit for Vulnerable Workers (OWP-VW) | LMIA Check',
   description:
     'If you are a temporary foreign worker in a vulnerable or abusive situation in Canada, you may qualify for a free Open Work Permit that lets you leave your employer immediately.',
+  openGraph: {
+    title: 'Open Work Permit for Vulnerable Workers (OWP-VW)',
+    description: 'Temporary foreign workers in abusive situations in Canada may qualify for a free Open Work Permit to leave their employer immediately.',
+    url: 'https://lmiacheck.ca/owp-vw',
+    siteName: 'LMIA Check',
+    type: 'article',
+  },
+  twitter: { card: 'summary_large_image', title: 'Open Work Permit for Vulnerable Workers (OWP-VW)', description: 'Are you being exploited by your Canadian employer? You may qualify for a free Open Work Permit.' },
+  alternates: { canonical: 'https://lmiacheck.ca/owp-vw' },
 }
 
 const ELIGIBLE_SITUATIONS = [

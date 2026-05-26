@@ -40,7 +40,43 @@ function formatCount(n: number): string {
 export default async function HomePage() {
   const stats = await fetchStats()
 
+  const howToSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to verify a Canadian employer before accepting an LMIA job offer',
+    description: 'Use LMIA Check to verify whether a Canadian employer is legitimate and approved under the Temporary Foreign Worker Program before paying any recruitment fees.',
+    totalTime: 'PT2M',
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Enter the employer name',
+        text: 'Type the employer name exactly as it appears on your job offer or recruitment message into the search box at lmiacheck.ca.',
+        url: 'https://lmiacheck.ca/#search',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: 'We check official government records',
+        text: 'LMIA Check instantly cross-references the name against two official ESDC datasets: the non-compliant employer ban list and the approved positive LMIA employer list. Data is updated quarterly.',
+        url: 'https://lmiacheck.ca/#search',
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Get a clear verdict',
+        text: 'You receive one of four verdicts: Verified (approved LMIA on record), Banned (employer is on the ESDC non-compliant list), Caution (partial match requiring review), or Not found (no record in either dataset).',
+        url: 'https://lmiacheck.ca/results',
+      },
+    ],
+  }
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+    />
     <div className="flex flex-col min-h-screen bg-white">
       <Navigation currentPage="home" />
 
@@ -237,5 +273,6 @@ export default async function HomePage() {
 
       <Footer />
     </div>
+    </>
   )
 }

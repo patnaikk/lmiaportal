@@ -8,10 +8,29 @@ export const metadata: Metadata = {
   description:
     'Free tool to verify a Canadian employer and detect LMIA fraud. Check if your job offer is legitimate against official government records. No fees, no signup.',
   keywords: 'LMIA verification, LMIA fraud, Canadian employer check, job offer fraud, verify LMIA, is LMIA real, temporary foreign worker, ESDC',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-snippet': -1,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+    },
+  },
   openGraph: {
     title: 'LMIA Check — Verify if a Canadian Job Offer is Real (2026)',
     description: 'Free tool to verify a Canadian employer and detect LMIA fraud before you pay any fees.',
     type: 'website',
+    url: 'https://lmiacheck.ca',
+    siteName: 'LMIA Check',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'LMIA Check — Verify if a Canadian Job Offer is Real',
+    description: 'Free tool to verify a Canadian employer and detect LMIA fraud before you pay any fees.',
+    site: '@lmiacheck',
   },
 }
 
