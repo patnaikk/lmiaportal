@@ -111,60 +111,6 @@ export default async function HomePage() {
             <p className="text-xs text-gray-400">No data stored · No login required</p>
           </div>
         </div>
-        <a
-          href="/verify-lmia"
-          className="mt-3 flex items-center justify-center gap-1.5 text-xs text-gray-500 hover:text-gray-800 transition-colors"
-        >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <rect x="3" y="4" width="18" height="16" rx="2"/>
-            <line x1="9" y1="9" x2="9" y2="9.01"/>
-            <line x1="15" y1="9" x2="15" y2="9.01"/>
-            <line x1="9" y1="13" x2="9" y2="13.01"/>
-            <line x1="15" y1="13" x2="15" y2="13.01"/>
-            <line x1="9" y1="17" x2="15" y2="17"/>
-          </svg>
-          Have an LMIA number on your document? Check if it&apos;s real →
-        </a>
-
-        {/* — OR — divider */}
-        <div className="flex items-center gap-3 my-3 max-w-xs mx-auto">
-          <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">or</span>
-          <div className="flex-1 h-px bg-gray-200" />
-        </div>
-
-        {/* Browse all banned — prominent secondary path */}
-        <Link
-          href="/banned"
-          className="group block card-elevated p-5 sm:p-6 hover:shadow-[0_2px_4px_rgba(15,23,42,0.05),0_16px_40px_-12px_rgba(220,38,38,0.15)] hover:ring-red-100 transition-all"
-        >
-          <div className="flex items-center gap-4 sm:gap-5">
-            <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-red-50 flex items-center justify-center" aria-hidden="true">
-              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <line x1="3" y1="12" x2="21" y2="12"/>
-                <line x1="3" y1="18" x2="21" y2="18"/>
-                <circle cx="6" cy="6" r="1.5" fill="#DC2626"/>
-                <circle cx="6" cy="12" r="1.5" fill="#DC2626"/>
-                <circle cx="6" cy="18" r="1.5" fill="#DC2626"/>
-              </svg>
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-baseline gap-2">
-                <span className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight tabular-nums">
-                  {stats.violators > 0 ? stats.violators.toLocaleString() : '1,336'}
-                </span>
-                <span className="text-sm font-semibold text-gray-700">banned employers</span>
-              </div>
-              <p className="text-sm text-gray-500 mt-1 leading-snug">
-                Browse the full government list — searchable by name, filterable by province.
-              </p>
-            </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0 text-gray-300 group-hover:text-red-500 group-hover:translate-x-0.5 transition-all" aria-hidden="true">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-          </div>
-        </Link>
       </main>
 
       {/* Stats bar — reassurance after the two main paths */}
