@@ -156,11 +156,13 @@ export default function SearchForm({
       <button
         type="submit"
         disabled={!canSubmit}
-        className="w-full px-8 py-4 bg-red-600 text-white text-base font-bold rounded-xl
-          hover:bg-red-700 active:bg-red-800
-          focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
-          disabled:opacity-40 disabled:cursor-not-allowed transition-colors min-h-[52px]
-          flex items-center justify-center gap-2"
+        className={`w-full px-8 py-4 text-white text-base font-bold rounded-xl
+          focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors min-h-[52px]
+          flex items-center justify-center gap-2
+          ${canSubmit
+            ? 'bg-red-600 hover:bg-red-700 active:bg-red-800 focus:ring-red-500 cursor-pointer'
+            : 'bg-gray-300 text-gray-400 cursor-not-allowed'
+          }`}
       >
         {loading ? (
           <>
