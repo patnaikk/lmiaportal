@@ -64,7 +64,7 @@ export default function SearchForm({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!canSubmit) return
+    if (employerDisplay.trim().length < 3 || loading) return
     setLoading(true)
     window.scrollTo({ top: 0, behavior: 'instant' })
 
@@ -155,14 +155,9 @@ export default function SearchForm({
 
       <button
         type="submit"
-        disabled={!canSubmit}
-        className={`w-full px-8 py-4 text-white text-base font-bold rounded-xl
-          focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors min-h-[52px]
-          flex items-center justify-center gap-2
-          ${canSubmit
-            ? 'bg-red-600 hover:bg-red-700 active:bg-red-800 focus:ring-red-500 cursor-pointer'
-            : 'bg-gray-300 text-gray-400 cursor-not-allowed'
-          }`}
+        className="w-full px-8 py-4 bg-red-600 hover:bg-red-700 active:bg-red-800 text-white text-base font-bold rounded-xl
+          focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+          transition-colors min-h-[52px] flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
