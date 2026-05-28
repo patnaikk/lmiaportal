@@ -36,6 +36,7 @@ export default function CheckForm() {
   const [lmiaMonths, setLmiaMonths] = useState('')
   const [fee, setFee] = useState('')
   const [delivery, setDelivery] = useState('')
+  const [showOptional, setShowOptional] = useState(false)
 
   const canSubmit = employerDisplay.trim().length >= 3 && fee !== '' && delivery !== '' && !loading
 
@@ -82,114 +83,132 @@ export default function CheckForm() {
             setEmployerSearchAs(searchAs)
           }}
         />
-
-        <div>
-          <label htmlFor="province" className="block text-sm font-medium text-gray-700 mb-1">
-            Province / Territory <span className="text-gray-400 font-normal">(recommended)</span>
-          </label>
-          <select
-            id="province"
-            value={province}
-            onChange={(e) => setProvince(e.target.value)}
-            className={inputClass + ' appearance-none'}
-          >
-            <option value="">Select province…</option>
-            {PROVINCES.map((p) => (
-              <option key={p.code} value={p.code}>{p.name}</option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="job_title" className="block text-sm font-medium text-gray-700 mb-1">
-            Job title on offer <span className="text-gray-400 font-normal">(optional)</span>
-          </label>
-          <input
-            id="job_title"
-            type="text"
-            value={jobTitle}
-            onChange={(e) => setJobTitle(e.target.value)}
-            placeholder="e.g. General Farm Worker, Caregiver"
-            className={inputClass}
-            autoComplete="off"
-          />
-        </div>
       </div>
 
-      {/* Section 2 — Offer details */}
+      {/* Section 2 — Offer details (collapsed by default) */}
       <div className="space-y-4">
-        <div>
-          <h2 className="text-sm font-semibold text-gray-700">Offer details <span className="text-gray-400 font-normal">(optional)</span></h2>
-          <p className="text-xs text-gray-400 mt-0.5">Enables wage comparison and duration mismatch checks — takes 30 seconds to fill in</p>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Offered wage
-          </label>
-          <div className="flex gap-2">
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              value={wage}
-              onChange={(e) => setWage(e.target.value)}
-              placeholder="e.g. 18.50"
-              className={inputClass + ' flex-1'}
-            />
-            <select
-              value={wagePeriod}
-              onChange={(e) => setWagePeriod(e.target.value)}
-              className="px-3 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 appearance-none"
-            >
-              <option value="hourly">/ hour</option>
-              <option value="monthly">/ month</option>
-              <option value="annually">/ year</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={() => setShowOptional(!showOptional)}
+          className="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors text-left"
+        >
           <div>
-            <label htmlFor="offer_months" className="block text-sm font-medium text-gray-700 mb-1">
-              Job offer duration
-            </label>
-            <div className="relative">
-              <input
-                id="offer_months"
-                type="number"
-                min="1"
-                max="48"
-                value={offerMonths}
-                onChange={(e) => setOfferMonths(e.target.value)}
-                placeholder="e.g. 12"
-                className={inputClass}
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">months</span>
-            </div>
+            <span className="text-sm font-semibold text-gray-700">Add offer details</span>
+            <span className="text-xs text-gray-400 ml-2">optional — enables wage &amp; duration checks</span>
           </div>
-          <div>
-            <label htmlFor="lmia_months" className="block text-sm font-medium text-gray-700 mb-1">
-              LMIA duration
-            </label>
-            <div className="relative">
-              <input
-                id="lmia_months"
-                type="number"
-                min="1"
-                max="48"
-                value={lmiaMonths}
-                onChange={(e) => setLmiaMonths(e.target.value)}
-                placeholder="e.g. 12"
-                className={inputClass}
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">months</span>
+          <svg
+            width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+            className={`text-gray-400 transition-transform ${showOptional ? 'rotate-180' : ''}`}
+            aria-hidden="true"
+          >
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+
+        {showOptional && (
+          <div className="space-y-4 pt-1">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Offered wage
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={wage}
+                  onChange={(e) => setWage(e.target.value)}
+                  placeholder="e.g. 18.50"
+                  className={inputClass + ' flex-1'}
+                />
+                <select
+                  value={wagePeriod}
+                  onChange={(e) => setWagePeriod(e.target.value)}
+                  className="px-3 py-3 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 appearance-none"
+                >
+                  <option value="hourly">/ hour</option>
+                  <option value="monthly">/ month</option>
+                  <option value="annually">/ year</option>
+                </select>
+              </div>
             </div>
+
+            <div>
+              <label htmlFor="province" className="block text-sm font-medium text-gray-700 mb-1">
+                Province / Territory
+              </label>
+              <select
+                id="province"
+                value={province}
+                onChange={(e) => setProvince(e.target.value)}
+                className={inputClass + ' appearance-none'}
+              >
+                <option value="">Select province…</option>
+                {PROVINCES.map((p) => (
+                  <option key={p.code} value={p.code}>{p.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="job_title" className="block text-sm font-medium text-gray-700 mb-1">
+                Job title on offer
+              </label>
+              <input
+                id="job_title"
+                type="text"
+                value={jobTitle}
+                onChange={(e) => setJobTitle(e.target.value)}
+                placeholder="e.g. General Farm Worker, Caregiver"
+                className={inputClass}
+                autoComplete="off"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="offer_months" className="block text-sm font-medium text-gray-700 mb-1">
+                  Job offer duration
+                </label>
+                <div className="relative">
+                  <input
+                    id="offer_months"
+                    type="number"
+                    min="1"
+                    max="48"
+                    value={offerMonths}
+                    onChange={(e) => setOfferMonths(e.target.value)}
+                    placeholder="e.g. 12"
+                    className={inputClass}
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">months</span>
+                </div>
+              </div>
+              <div>
+                <label htmlFor="lmia_months" className="block text-sm font-medium text-gray-700 mb-1">
+                  LMIA duration
+                </label>
+                <div className="relative">
+                  <input
+                    id="lmia_months"
+                    type="number"
+                    min="1"
+                    max="48"
+                    value={lmiaMonths}
+                    onChange={(e) => setLmiaMonths(e.target.value)}
+                    placeholder="e.g. 12"
+                    className={inputClass}
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 pointer-events-none">months</span>
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-gray-400 -mt-2">
+              Duration on your job offer letter vs. what is stated on the LMIA document
+            </p>
           </div>
-        </div>
-        <p className="text-xs text-gray-400 -mt-2">
-          Duration on your job offer letter vs. what is stated on the LMIA document
-        </p>
+        )}
       </div>
 
       {/* Section 3 — Key questions */}
