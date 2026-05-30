@@ -58,7 +58,11 @@ export default function EmployerInput({
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (autoFocus && inputRef.current) inputRef.current.focus()
+    // Autofocus on desktop only — on mobile this pops the keyboard and yanks
+    // the user past the orienting hero, which is jarring.
+    if (autoFocus && inputRef.current && typeof window !== 'undefined' && window.innerWidth >= 640) {
+      inputRef.current.focus()
+    }
   }, [autoFocus])
 
   useEffect(() => {

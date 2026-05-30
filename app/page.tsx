@@ -83,10 +83,10 @@ export default async function HomePage() {
       <Navigation currentPage="home" />
 
       {/* Hero */}
-      <div className="bg-gradient-to-b from-gray-50 to-white text-center pt-12 pb-8 px-4">
+      <div className="bg-gradient-to-b from-gray-50 to-white text-center pt-8 sm:pt-12 pb-6 sm:pb-8 px-4">
         {/* Canada flag */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/canada-flag.svg" alt="Canada flag" width="72" height="36" className="mx-auto mb-5 rounded-sm shadow-sm" />
+        <img src="/canada-flag.svg" alt="Canada flag" width="72" height="36" className="mx-auto mb-4 sm:mb-5 rounded-sm shadow-sm" />
         <h1 className="text-3xl sm:text-5xl font-bold text-gray-900 leading-[1.1] tracking-tight mb-4 text-balance">
           Got a Canadian job offer?<br />
           <span className="text-gray-500">Check the employer first.</span>
@@ -94,6 +94,14 @@ export default async function HomePage() {
         <p className="text-gray-500 text-[15px] sm:text-base leading-relaxed max-w-sm mx-auto">
           Charging workers for LMIAs is illegal. Verify any employer against official government records — free, in seconds.
         </p>
+        {/* Trust signal — visible at first paint for visitors arriving cold (e.g. from AI assistants) */}
+        <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white ring-1 ring-gray-200 shadow-sm px-3 py-1.5">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M9 12l2 2 4-4" />
+            <path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7l7-4z" />
+          </svg>
+          <span className="text-xs font-semibold text-gray-700">Official Government of Canada (ESDC) data</span>
+        </div>
       </div>
 
       {/* Live activity ticker — proves the site is current and working */}
@@ -105,7 +113,7 @@ export default async function HomePage() {
       {/* Search card — moved up so the primary action is immediate */}
       <main className="max-w-2xl mx-auto w-full px-4 pt-2 pb-5">
         <div className="card-elevated p-5 sm:p-6">
-          <SearchForm />
+          <SearchForm autoFocus />
           <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <DataFreshness />
             <p className="text-xs text-gray-400">No data stored · No login required</p>
