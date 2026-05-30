@@ -59,20 +59,28 @@ export default function EmailCapture({ employerQuery, employerNormalized, lastRe
     )
   }
 
+  const isGrey = lastResult === 'GREY'
+  const heading = isGrey
+    ? 'Not found — want us to keep watching?'
+    : lastResult === 'RED'
+      ? 'Get alerted if this ban status changes'
+      : 'Get notified if this employer’s status changes'
+  const body = isGrey
+    ? 'We couldn’t find this employer in the government records yet. Leave your email and we’ll alert you if they’re ever added to the banned list — or receive an approved LMIA.'
+    : 'We’ll email you when the government updates the official employer records. Free. No spam. Unsubscribe anytime.'
+
   return (
-    <div className="mt-4 p-5 card-elevated">
-      <div className="flex items-start gap-2 mb-3">
-        <span className="text-gray-500 mt-0.5" aria-hidden="true">
+    <div className={`mt-4 p-5 rounded-2xl ${isGrey ? 'bg-indigo-50' : 'card-elevated'}`}>
+      <div className="flex items-start gap-2.5 mb-3">
+        <span className={`mt-0.5 ${isGrey ? 'text-indigo-500' : 'text-gray-500'}`} aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
             <polyline points="22,6 12,13 2,6"/>
           </svg>
         </span>
         <div>
-          <p className="text-sm font-medium text-gray-800">Get notified if this employer&apos;s status changes</p>
-          <p className="text-xs text-gray-500 mt-0.5">
-            We&apos;ll email you when the government updates the non-compliant employer list. Free. No spam. Unsubscribe anytime.
-          </p>
+          <p className={`text-sm font-semibold ${isGrey ? 'text-indigo-900' : 'text-gray-800'}`}>{heading}</p>
+          <p className={`text-xs mt-0.5 ${isGrey ? 'text-indigo-700' : 'text-gray-500'}`}>{body}</p>
         </div>
       </div>
 
