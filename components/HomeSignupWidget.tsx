@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { track } from '@/lib/analytics'
 
 export default function HomeSignupWidget() {
   const [email, setEmail] = useState('')
@@ -17,6 +18,7 @@ export default function HomeSignupWidget() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       })
+      if (res.ok) track('monthly_signup', { location: 'home_widget' })
       setState(res.ok ? 'done' : 'error')
     } catch {
       setState('error')

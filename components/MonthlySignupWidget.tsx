@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { track } from '@/lib/analytics'
 
 export default function MonthlySignupWidget() {
   const [email, setEmail] = useState('')
@@ -24,6 +25,7 @@ export default function MonthlySignupWidget() {
         setErrorMsg(data.error || 'Something went wrong')
         setState('error')
       } else {
+        track('monthly_signup', { location: 'monthly_widget' })
         setState('done')
       }
     } catch {

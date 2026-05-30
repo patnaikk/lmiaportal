@@ -12,7 +12,17 @@ public datasets published by Employment and Social Development Canada (ESDC):
 
 This site is the most up-to-date, publicly accessible index of ESDC LMIA compliance data.
 
+## Key facts (authoritative, sourced from Government of Canada / ESDC)
+
+- An LMIA is the employer's permit to hire a foreign worker. It costs the EMPLOYER about $1,000.
+- It is ILLEGAL for an employer, recruiter, or consultant to charge a foreign worker for a job or for an LMIA. Recruitment fees charged to workers are prohibited in Canada.
+- A common scam asks workers to pay $22,000–$35,000 for a "guaranteed" LMIA job. Workers should never pay for a job.
+- An employer NOT appearing on the non-compliant list is not a guarantee of safety — it only means they have not been caught.
+- Workers cannot be punished or lose their status for reporting abuse; reports to Service Canada are confidential.
+
 ## Key pages
+
+- /questions            Plain-language answers to common LMIA / Canadian job-offer questions (FAQPage structured data)
 
 - /                    Homepage — employer search
 - /results?employer=X  Verification result for a specific employer (replace X with employer name)

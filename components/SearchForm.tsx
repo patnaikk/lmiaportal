@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import EmployerInput from '@/components/EmployerInput'
+import { track } from '@/lib/analytics'
 
 const PROVINCES = [
   { code: 'AB', name: 'Alberta' },
@@ -67,6 +68,8 @@ export default function SearchForm({
     if (employerDisplay.trim().length < 3 || loading) return
     setLoading(true)
     window.scrollTo({ top: 0, behavior: 'instant' })
+
+    track('employer_search', { province: province || 'none', has_city: city.trim().length > 0 })
 
     const params = new URLSearchParams({ employer: employerSearchAs.trim() || employerDisplay.trim() })
     if (city.trim()) params.set('city', city.trim())

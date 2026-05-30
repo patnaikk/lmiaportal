@@ -18,6 +18,7 @@ const staticRoutes = [
   { path: '/guide', priority: 0.6, changeFreq: 'monthly' },
   { path: '/reference', priority: 0.6, changeFreq: 'monthly' },
   { path: '/help', priority: 0.6, changeFreq: 'monthly' },
+  { path: '/questions', priority: 0.8, changeFreq: 'monthly' },
   { path: '/spot-lmia-fraud', priority: 0.7, changeFreq: 'monthly' },
   { path: '/verify-lmia', priority: 0.7, changeFreq: 'monthly' },
   { path: '/recruiter-blacklist', priority: 0.7, changeFreq: 'weekly' },

@@ -1,9 +1,12 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
 interface NavigationProps {
+  // Optional override. When omitted (recommended), the active item is derived
+  // from the current URL so it's always correct without per-page wiring.
   currentPage?: 'home' | 'check' | 'bulk' | 'guide' | 'faq' | 'about' | 'updates' | 'reports' | 'reference'
 }
 
@@ -17,8 +20,13 @@ const NAV_LINKS = [
   { href: '/updates', label: "What's new", page: 'updates', desktop: false },
 ] as const
 
-export default function Navigation({ currentPage }: NavigationProps) {
+export default function Navigation(_props: NavigationProps) {
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
+
+  // URL is authoritative so the active item is always correct, regardless of any
+  // per-page prop. Matches the exact path and sub-routes (e.g. /reports/2026-05).
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`)
 
   return (
     <header className="bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm sticky top-0 z-40">
@@ -42,15 +50,16 @@ export default function Navigation({ currentPage }: NavigationProps) {
           >
             Verify offer
           </Link>
-          {NAV_LINKS.filter(({ desktop }) => desktop).map(({ href, label, page }) => {
+          {NAV_LINKS.filter(({ desktop }) => desktop).map(({ href, label }) => {
             const displayLabel = label === 'Bulk Check' ? 'Bulk' : label
+            const active = isActive(href)
             return (
               <Link
                 key={href}
                 href={href}
-                aria-current={currentPage === page ? 'page' : undefined}
+                aria-current={active ? 'page' : undefined}
                 className={`text-sm font-medium transition-colors relative whitespace-nowrap ${
-                  currentPage === page
+                  active
                     ? 'text-gray-900 after:absolute after:-bottom-[17px] after:left-0 after:right-0 after:h-[2px] after:bg-gray-900 after:rounded-full'
                     : 'text-gray-500 hover:text-gray-800'
                 }`}
@@ -96,19 +105,22 @@ export default function Navigation({ currentPage }: NavigationProps) {
         }`}
       >
         <nav className="max-w-2xl mx-auto px-4 py-3 flex flex-col gap-0.5">
-          {NAV_LINKS.map(({ href, label, page }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              aria-current={currentPage === page ? 'page' : undefined}
-              className={`py-2.5 text-[15px] font-medium transition-colors ${
-                currentPage === page ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
+          {NAV_LINKS.map(({ href, label }) => {
+            const active = isActive(href)
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                aria-current={active ? 'page' : undefined}
+                className={`py-2.5 text-[15px] font-medium transition-colors ${
+                  active ? 'text-gray-900' : 'text-gray-500 hover:text-gray-900'
+                }`}
+              >
+                {label}
+              </Link>
+            )
+          })}
         </nav>
       </div>
     </header>

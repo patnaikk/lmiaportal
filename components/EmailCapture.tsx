@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import type { RiskResult } from '@/lib/types'
+import { track } from '@/lib/analytics'
 
 interface Props {
   employerQuery: string
@@ -36,6 +37,7 @@ export default function EmailCapture({ employerQuery, employerNormalized, lastRe
       const data = await res.json()
 
       if (data.success) {
+        track('watch_employer_signup', { result: lastResult })
         setStatus('success')
       } else {
         setStatus('error')
