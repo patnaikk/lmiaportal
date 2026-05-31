@@ -114,6 +114,14 @@ export default async function ResultsPage({ searchParams }: PageProps) {
   ])
   const employerNormalized = normalizeEmployerName(employer)
 
+  // Use the matched government-record name (not the raw search term) anywhere we
+  // make a factual claim about a specific employer — prevents generating a
+  // ready-to-send message that says "<your keyword> is banned" (defamation risk).
+  const matchedEmployerName =
+    result.violatorMatches[0]?.business_operating_name ||
+    result.positiveMatches[0]?.employer_name ||
+    employer
+
   const riskBorderColor = {
     GREEN: 'border-l-green-600',
     YELLOW: 'border-l-yellow-500',
@@ -221,6 +229,14 @@ export default async function ResultsPage({ searchParams }: PageProps) {
           <RiskIndicator result={result} />
         </div>
 
+        {/* Data vintage — a visible "as of" date is the strongest defense against
+            stale-data / defamation claims. Shown for any result based on a record. */}
+        {result.risk !== 'GREY' && (
+          <div className="mt-3">
+            <DataFreshness variant="badge" />
+          </div>
+        )}
+
         {/* Next steps — immediately after verdict */}
         <NextSteps result={result} />
 
@@ -284,10 +300,19 @@ export default async function ResultsPage({ searchParams }: PageProps) {
           <MatchedData matches={result.positiveMatches} />
         )}
 
+        {/* Email capture — placed high so we capture intent before users scroll away.
+            "Keep watching" (GREY), "alert me if ban changes" (RED), "notify on status
+            change" (GREEN/YELLOW) are the primary conversion goals of this page. */}
+        <EmailCapture
+          employerQuery={employer}
+          employerNormalized={employerNormalized}
+          lastResult={result.risk}
+        />
+
         {/* Ready-to-send templates — all result types */}
         {result.risk === 'RED' && (
           <ReportTemplate
-            employer={employer}
+            employer={matchedEmployerName}
             mode="red"
             banUntil={
               result.ban_end_date
@@ -302,7 +327,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
           <ReportTemplate employer={employer} mode="grey" />
         )}
         {result.risk === 'GREEN' && (
-          <ReportTemplate employer={employer} mode="green" />
+          <ReportTemplate employer={matchedEmployerName} mode="green" />
         )}
 
         {/* CICC consultant verification — shown on all results */}
@@ -393,13 +418,6 @@ export default async function ResultsPage({ searchParams }: PageProps) {
 
 {/* Service Canada verification call */}
         <ServiceCanadaCallCard />
-
-        {/* Email notification capture */}
-        <EmailCapture
-          employerQuery={employer}
-          employerNormalized={employerNormalized}
-          lastResult={result.risk}
-        />
 
         {/* Download PDF */}
         <div className="mt-4 p-5 card-elevated">

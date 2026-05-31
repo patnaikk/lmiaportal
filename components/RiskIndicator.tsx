@@ -34,6 +34,9 @@ function VerdictLayout({
   verdict,
   verdictColor,
   employerName,
+  searchQuery,
+  nameLabel = 'Matched record',
+  officialStatus,
   description,
   children,
 }: {
@@ -43,9 +46,19 @@ function VerdictLayout({
   verdict: string
   verdictColor: string
   employerName: string
+  searchQuery?: string
+  nameLabel?: string
+  officialStatus?: string
   description: ReactNode
   children?: ReactNode
 }) {
+  // Show the "you searched" line only when the matched record name differs
+  // from what the user typed (e.g. searched "Indian" → matched "Indian Spice Ltd.").
+  const showSearchLine =
+    searchQuery &&
+    employerName &&
+    searchQuery.trim().toLowerCase() !== employerName.trim().toLowerCase()
+
   return (
     <>
       <div className={`w-16 h-16 rounded-full ${iconBg} flex items-center justify-center flex-shrink-0 shadow-md ${iconShadow} mb-5`} aria-hidden="true">
@@ -56,9 +69,25 @@ function VerdictLayout({
         {verdict}
       </h2>
 
-      <p className="text-base font-semibold text-gray-900 leading-snug break-words mb-2">
+      <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-1">
+        {nameLabel}
+      </p>
+      <p className="text-xl font-bold text-gray-900 leading-snug break-words mb-1.5">
         {employerName}
       </p>
+
+      {showSearchLine && (
+        <p className="text-xs text-gray-500 mb-2.5">
+          for your search &ldquo;<span className="font-medium text-gray-700">{searchQuery}</span>&rdquo;
+        </p>
+      )}
+
+      {officialStatus && (
+        <p className="text-xs text-gray-500 mb-3">
+          Official ESDC status:{' '}
+          <span className="font-semibold text-gray-700">&ldquo;{officialStatus}&rdquo;</span>
+        </p>
+      )}
 
       <p className="text-[15px] text-gray-500 leading-relaxed">
         {description}
@@ -71,6 +100,20 @@ function VerdictLayout({
 
 export default function RiskIndicator({ result }: Props) {
   const { risk, subtype, reason, ban_end_date, employerQuery } = result
+
+  // The name we show in the verdict card must be the matched GOVERNMENT RECORD
+  // name, not the raw search term. Searching "Indian" must not render as
+  // "Indian — Penalised"; it must render the actual matched business name.
+  const matchedName =
+    result.violatorMatches[0]?.business_operating_name ||
+    result.positiveMatches[0]?.employer_name ||
+    employerQuery
+
+  // The verbatim status string from the official ESDC record (e.g.
+  // "Ineligible - unpaid monetary penalty"). Quoted and attributed under the
+  // verdict so our plain-language label reads as a summary of a public record,
+  // not an allegation we are making.
+  const officialStatus = result.violatorMatches[0]?.status_raw?.trim() || undefined
 
   if (risk === 'GREEN') {
     return (
@@ -85,7 +128,8 @@ export default function RiskIndicator({ result }: Props) {
               <polyline points="20 6 9 17 4 12"/>
             </svg>
           }
-          employerName={employerQuery}
+          employerName={matchedName}
+          searchQuery={employerQuery}
           description="Appears in official Canadian government LMIA records and has not been flagged for violations."
         />
       </ResultCard>
@@ -119,16 +163,24 @@ export default function RiskIndicator({ result }: Props) {
               <line x1="12" y1="17" x2="12.01" y2="17"/>
             </svg>
           }
-          employerName={employerQuery}
+          employerName={matchedName}
+          searchQuery={employerQuery}
+          officialStatus={officialStatus}
           description={description}
-        />
+        >
+          <p className="text-xs text-gray-400 leading-relaxed mt-3">
+            Status shown reflects the official Government of Canada (ESDC) record as published; it is
+            reproduced as-is and may not reflect the employer&rsquo;s current status. Confirm directly
+            with the employer and Service Canada.
+          </p>
+        </VerdictLayout>
       </ResultCard>
     )
   }
 
   if (risk === 'RED') {
     const isBannedTemporary = subtype === 'BANNED_TEMPORARY'
-    const verdict = isBannedTemporary ? 'Banned' : 'Penalised'
+    const verdict = isBannedTemporary ? 'Banned from hiring' : 'Penalised'
 
     let description: ReactNode = ''
     if (isBannedTemporary && ban_end_date) {
@@ -156,9 +208,16 @@ export default function RiskIndicator({ result }: Props) {
               <line x1="9" y1="9" x2="15" y2="15"/>
             </svg>
           }
-          employerName={employerQuery}
+          employerName={matchedName}
+          searchQuery={employerQuery}
+          officialStatus={officialStatus}
           description={description}
         >
+          <p className="text-xs text-gray-400 leading-relaxed mt-3">
+            Status shown reflects the official Government of Canada (ESDC) non-compliant
+            employers record as published; it is reproduced as-is and may not reflect the
+            employer&rsquo;s current status. See details below.
+          </p>
           <RedCTA />
         </VerdictLayout>
       </ResultCard>
@@ -180,6 +239,7 @@ export default function RiskIndicator({ result }: Props) {
           </svg>
         }
         employerName={employerQuery}
+        nameLabel="You searched for"
         description="Not in the LMIA database. Many legitimate employers file under a different legal or numbered company name, or are too new to appear. This does not automatically mean the offer is fraudulent — follow the steps below to verify."
       />
     </ResultCard>

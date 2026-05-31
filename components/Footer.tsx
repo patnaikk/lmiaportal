@@ -29,6 +29,21 @@ export default function Footer() {
           the Government of Canada.
         </p>
 
+        {/* Open Government Licence — Canada attribution (required) */}
+        <p className="text-xs text-gray-400 leading-relaxed">
+          Contains information licensed under the{' '}
+          <a
+            href="https://open.canada.ca/en/open-government-licence-canada"
+            className="underline hover:text-gray-600"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open Government Licence – Canada<ExternalLinkIcon />
+          </a>
+          , sourced from Employment and Social Development Canada. lmiacheck.ca is not endorsed by or
+          affiliated with the Government of Canada.
+        </p>
+
         {/* Attribution + links */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-400">
           <span>
@@ -52,6 +67,8 @@ export default function Footer() {
             </a>
           </span>
           <Link href="/about" className="underline hover:text-gray-600">About</Link>
+          <Link href="/terms" className="underline hover:text-gray-600">Terms &amp; Disclaimer</Link>
+          <Link href="/privacy" className="underline hover:text-gray-600">Privacy</Link>
           <Link href="/updates" className="underline hover:text-gray-600">What&apos;s new</Link>
           <Link href="/owp-vw" className="underline hover:text-gray-600">Open Work Permit (OWP-VW)</Link>
           <Link href="/help/i-paid" className="underline hover:text-gray-600">I already paid</Link>

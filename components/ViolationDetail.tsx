@@ -124,6 +124,12 @@ export default function ViolationDetail({ violators }: Props) {
               <dd className="text-gray-700 mt-0.5">{v.province}</dd>
             </div>
           )}
+          {v.status_raw && (
+            <div>
+              <dt className="text-xs text-gray-400 uppercase tracking-wide">Status (official)</dt>
+              <dd className="text-gray-700 mt-0.5">{v.status_raw.trim()}</dd>
+            </div>
+          )}
           {decisionDate && (
             <div>
               <dt className="text-xs text-gray-400 uppercase tracking-wide">Decision date</dt>
