@@ -65,6 +65,78 @@ def normalize_name(name: str) -> str:
     return ' '.join(words).strip()
 
 
+# Valid Canadian province/territory 2-letter codes.
+PROVINCE_CODES = frozenset([
+    'AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT',
+])
+
+# Full names and common aliases (lowercased) -> canonical 2-letter code.
+# Used as a fallback when the address spells out the province instead of
+# using the postal abbreviation. Only Canadian names appear here, so US
+# addresses ("California", "New York", "Maine") correctly stay unmatched.
+PROVINCE_ALIASES = {
+    'alberta': 'AB',
+    'british columbia': 'BC', 'colombie-britannique': 'BC',
+    'manitoba': 'MB',
+    'new brunswick': 'NB', 'nouveau-brunswick': 'NB',
+    'newfoundland and labrador': 'NL', 'newfoundland': 'NL',
+    'terre-neuve-et-labrador': 'NL', 'terre-neuve': 'NL',
+    'nova scotia': 'NS', 'nouvelle-ecosse': 'NS', 'nouvelle-écosse': 'NS',
+    'northwest territories': 'NT', 'territoires du nord-ouest': 'NT',
+    'nunavut': 'NU',
+    'ontario': 'ON',
+    'prince edward island': 'PE', 'pei': 'PE',
+    'ile-du-prince-edouard': 'PE', 'île-du-prince-édouard': 'PE',
+    'quebec': 'QC', 'québec': 'QC',
+    'saskatchewan': 'SK',
+    'yukon': 'YT', 'yukon territory': 'YT',
+}
+
+
+def parse_province(address: str):
+    """
+    Extract the 2-letter Canadian province/territory code from an address.
+
+    The province code appears after the city and before the postal code,
+    typically as ", XX" on the line preceding the postal code, e.g.:
+      "7480 Broadway\nBurnaby, BC\nV5A 1S4"        -> "BC"
+      "2710 Thibeau Boulevard\nTrois-Rivieres, QC\nG8T 1G2" -> "QC"
+
+    Also handles spelled-out names ("British Columbia", "(Alberta)", "PEI").
+
+    Returns the uppercase code, or None if no valid province can be parsed.
+    """
+    if not isinstance(address, str) or not address.strip():
+        return None
+
+    # Strongest signal: a 2-letter code immediately before a postal code.
+    m = re.search(
+        r'\b([A-Za-z]{2})\b[\s,()]*[A-Za-z]\d[A-Za-z]\s?\d[A-Za-z]\d',
+        address,
+    )
+    if m and m.group(1).upper() in PROVINCE_CODES:
+        return m.group(1).upper()
+
+    # Fallback: a code preceded by a comma or paren (", BC" / "(QC)").
+    for m in re.finditer(r'[,(]\s*([A-Za-z]{2})\b', address):
+        if m.group(1).upper() in PROVINCE_CODES:
+            return m.group(1).upper()
+
+    # Fallback: spelled-out province name or alias anywhere in the address.
+    lowered = address.lower()
+    # Match longest aliases first so "newfoundland and labrador" beats nothing.
+    for alias in sorted(PROVINCE_ALIASES, key=len, reverse=True):
+        if re.search(r'\b' + re.escape(alias) + r'\b', lowered):
+            return PROVINCE_ALIASES[alias]
+
+    # Last resort: any standalone 2-letter token matching a province code.
+    for token in re.findall(r'\b([A-Za-z]{2})\b', address):
+        if token.upper() in PROVINCE_CODES:
+            return token.upper()
+
+    return None
+
+
 def parse_compliance_status(raw_status: str):
     """
     Parse the raw Status column from the government non-compliant list.
@@ -272,13 +344,14 @@ def ingest_violators(file_path: str):
             ban_duration = ban_match.group(1)
 
         legal_name = str(row[legal_name_col] if legal_name_col else '').strip()
+        address = str(row[address_col] if address_col else '').strip()
         records.append({
             'business_operating_name': op_name,
             'business_legal_name':     legal_name,
             'employer_normalized':     normalize_name(op_name),
             'legal_name_normalized':   normalize_name(legal_name),
-            'address':                 str(row[address_col] if address_col else '').strip(),
-            'province':                '',  # extracted from address if needed
+            'address':                 address,
+            'province':                parse_province(address),  # parsed from address
             'reasons':                 str(row[reasons_col] if reasons_col else '').strip(),
             'decision_date':           str(decision_date) if decision_date else None,
             'penalty_raw':             raw_penalty,
