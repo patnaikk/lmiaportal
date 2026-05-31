@@ -55,3 +55,7 @@ __pycache__/
 *.egg-info/
 .venv/
 venv/
+
+# Local-only dev pages (not for prod)
+app/demo/
+app/email-preview/
