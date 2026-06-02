@@ -20,7 +20,44 @@ Allow: /
 User-agent: GoogleOther
 Allow: /
 
+# Google Gemini / Vertex AI grounding
+User-agent: Google-Extended
+Allow: /
+
+# Apple Intelligence / Siri
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Common Crawl — feeds many open model training sets
+User-agent: CCBot
+Allow: /
+
+# Meta AI (Llama)
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+
+# DuckDuckGo / Bing-adjacent assistants
+User-agent: DuckAssistBot
+Allow: /
+
 User-agent: Amazonbot
 Allow: /
 
+# Mistral
+User-agent: MistralAI-User
+Allow: /
+
 Sitemap: https://lmiacheck.ca/sitemap.xml
+
+# Full plain-text site summary for LLMs
+# See: https://lmiacheck.ca/llms.txt and https://lmiacheck.ca/llms-full.txt

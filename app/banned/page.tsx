@@ -150,8 +150,41 @@ export default async function BannedPage({ searchParams }: PageProps) {
   const baseParams = { q, province, status: status === 'banned' ? undefined : status, page: page > 1 ? String(page) : undefined }
   const provinceLabel = province ? PROVINCES.find(p => p.code === province)?.name : null
 
+  // Dataset JSON-LD — this is a republished, searchable index of an official
+  // Government of Canada dataset. Marking it up as a Dataset makes it eligible
+  // for Google Dataset Search and gives AI engines an authoritative, citable
+  // structured record of what this page is.
+  const datasetSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'Canadian employers banned under the Temporary Foreign Worker Program',
+    description:
+      'Searchable index of every employer found non-compliant with Canada’s Temporary Foreign Worker Program (TFWP), including ban status, penalties, province, and violation reasons. Sourced from Employment and Social Development Canada (ESDC) and updated quarterly in sync with official releases.',
+    url: 'https://lmiacheck.ca/banned',
+    keywords: ['LMIA', 'banned employers', 'TFWP', 'ESDC', 'non-compliant employers', 'Canada', 'foreign workers'],
+    isAccessibleForFree: true,
+    creator: {
+      '@type': 'GovernmentOrganization',
+      name: 'Employment and Social Development Canada',
+      url: 'https://www.canada.ca/en/employment-social-development.html',
+    },
+    publisher: { '@type': 'Organization', name: 'LMIA Check', url: 'https://lmiacheck.ca' },
+    license: 'https://open.canada.ca/en/open-government-licence-canada',
+    spatialCoverage: { '@type': 'Country', name: 'Canada' },
+    isBasedOn: 'https://www.canada.ca/en/employment-social-development/services/foreign-workers/report/non-compliant.html',
+    distribution: {
+      '@type': 'DataDownload',
+      encodingFormat: 'text/html',
+      contentUrl: 'https://lmiacheck.ca/banned',
+    },
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(datasetSchema) }}
+      />
       <ScrollToTop query={`${q}|${province}|${status}|${page}`} />
       <Navigation />
 

@@ -73,8 +73,44 @@ export default async function ReportPage({ params }: Props) {
   const trendLabel = trend > 0 ? `+${trend} vs last month` : trend < 0 ? `${trend} vs last month` : 'same as last month'
   const trendColor = trend > 0 ? 'text-red-600' : trend < 0 ? 'text-green-600' : 'text-gray-500'
 
+  // Dataset JSON-LD with temporalCoverage + freshness signals. Reports are
+  // time-bound slices of the official ESDC enforcement dataset; dateModified
+  // tells search/AI engines this is current, which strongly affects whether
+  // they cite us over a stale third party.
+  const canonical = `https://lmiacheck.ca/reports/${params.month}`
+  const reportSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: `${report.label} ESDC Enforcement Report — Canada TFWP`,
+    description: `Monthly enforcement report for ${report.label}: new employer bans, province breakdown, top violation reasons, and expiring bans under Canada’s Temporary Foreign Worker Program. Sourced from Employment and Social Development Canada (ESDC).`,
+    url: canonical,
+    keywords: ['LMIA', 'TFWP', 'ESDC', 'employer bans', 'enforcement', 'Canada', report.label],
+    temporalCoverage: params.month,
+    datePublished: `${params.month}-01`,
+    dateModified: new Date().toISOString().slice(0, 10),
+    isAccessibleForFree: true,
+    creator: {
+      '@type': 'GovernmentOrganization',
+      name: 'Employment and Social Development Canada',
+      url: 'https://www.canada.ca/en/employment-social-development.html',
+    },
+    publisher: { '@type': 'Organization', name: 'LMIA Check', url: 'https://lmiacheck.ca' },
+    license: 'https://open.canada.ca/en/open-government-licence-canada',
+    spatialCoverage: { '@type': 'Country', name: 'Canada' },
+    isBasedOn: 'https://www.canada.ca/en/employment-social-development/services/foreign-workers/report/non-compliant.html',
+    distribution: {
+      '@type': 'DataDownload',
+      encodingFormat: 'text/html',
+      contentUrl: canonical,
+    },
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reportSchema) }}
+      />
       <Navigation />
 
       {/* Header */}

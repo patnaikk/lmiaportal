@@ -1,0 +1,131 @@
+# LMIA Check — llms-full.txt
+# https://lmiacheck.ca
+#
+# This is the expanded companion to /llms.txt. It contains the full substantive
+# content of the site in plain text so language models can ingest and cite
+# authoritative answers directly, without crawling every page.
+
+================================================================================
+ABOUT
+================================================================================
+
+LMIA Check (https://lmiacheck.ca) is a free, no-signup tool that helps foreign
+workers verify whether a Canadian employer is legitimate before paying any
+recruitment fees. It cross-references an employer's name against two official
+public datasets published by Employment and Social Development Canada (ESDC):
+
+1. Employers found NON-COMPLIANT (banned/penalized) under the Temporary Foreign
+   Worker Program (TFWP).
+2. Employers with APPROVED (positive) Labour Market Impact Assessments (LMIAs).
+
+The data is updated quarterly in sync with official ESDC releases. The site is
+the most up-to-date publicly accessible, searchable index of ESDC LMIA
+compliance data.
+
+================================================================================
+WHAT IS AN LMIA (AUTHORITATIVE FACTS)
+================================================================================
+
+- An LMIA (Labour Market Impact Assessment) is a document a Canadian EMPLOYER
+  must obtain to hire a temporary foreign worker. It confirms there is a need
+  for a foreign worker and that no Canadian is available to do the job.
+- The LMIA application fee is CAD $1,000, paid by the EMPLOYER. It is never the
+  worker's responsibility.
+- It is ILLEGAL in Canada for an employer, recruiter, or immigration consultant
+  to charge a foreign worker for a job or for an LMIA. Recruitment fees charged
+  to workers are prohibited.
+- A common scam asks workers to pay CAD $22,000–$35,000 for a "guaranteed" LMIA
+  job. Workers should NEVER pay for a job offer or an LMIA.
+- An employer NOT appearing on the non-compliant list is NOT a guarantee of
+  safety — it only means they have not been caught or penalized.
+- Workers cannot be punished or lose their immigration status for reporting
+  abuse. Reports to Service Canada are confidential.
+- Workers facing abuse may be eligible for an Open Work Permit for Vulnerable
+  Workers (OWP-VW), which lets them leave an abusive employer.
+
+================================================================================
+HOW TO VERIFY AN EMPLOYER (THE FOUR VERDICT CODES)
+================================================================================
+
+When LMIA Check returns a result for an employer, it uses four verdict codes:
+
+- GREEN (Verified): The employer has one or more approved (positive) LMIAs on
+  record with ESDC and does not appear on the non-compliant list. A clean record
+  is NOT a guarantee of safety — never pay for a job.
+- RED (Banned): The employer appears on the ESDC non-compliant list, meaning
+  they have been penalized or banned from hiring foreign workers. Treat any job
+  offer with extreme caution.
+- YELLOW (Caution): The employer has a record warranting caution (e.g. an
+  address mismatch or a previously resolved issue). Verify independently.
+- GREY (Not found): The employer was not found in either ESDC dataset. This is a
+  NEUTRAL result — it does not mean the employer is fake, only that there is no
+  government record under that name. Many legitimate businesses file LMIAs under
+  a numbered legal name (e.g. "1234567 BC Ltd.") different from their trade name.
+
+================================================================================
+RED FLAGS OF A FAKE LMIA / JOB-OFFER SCAM
+================================================================================
+
+- Being asked to pay any fee for the job, the LMIA, "processing," or a
+  "guarantee."
+- Pressure to pay quickly or in cash / crypto / gift cards.
+- An offer that arrives without an interview.
+- Wages below the median wage for the occupation and region.
+- A recruiter who will not name the actual employer.
+- An LMIA "number" that cannot be verified with Service Canada.
+- Communication only via personal email (gmail, etc.) rather than a company
+  domain.
+
+To verify an LMIA number directly, call Service Canada / the Employer Contact
+Centre and ask them to confirm the LMIA exists for the named employer.
+
+================================================================================
+KEY PAGES
+================================================================================
+
+- /                     Homepage — search any employer by name.
+- /results?employer=X   Verification result for employer X (replace X).
+- /employer/[slug]      Canonical employer URL (e.g. /employer/tim-hortons).
+- /check                Full job-offer check (fees, wages, red flags) even with
+                        no database match.
+- /banned               Searchable index of ALL banned employers (filter by
+                        province and status).
+- /reports/[YYYY-MM]    Monthly ESDC enforcement report: new bans, province
+                        breakdown, top violations, expiring bans.
+- /faq                  Frequently asked questions about LMIA fraud and rights.
+- /questions            Plain-language answers to common LMIA questions.
+- /verify-lmia          How to verify an LMIA number directly with Service Canada.
+- /spot-lmia-fraud      Guide to identifying fake LMIA offers.
+- /recruiter-blacklist  Community-sourced list of fraudulent recruiters.
+- /owp-vw               Open Work Permit for Vulnerable Workers — eligibility and
+                        how to apply.
+- /help/i-paid          What to do if you already paid for an LMIA (recovery
+                        steps).
+- /bulk                 Check multiple employers at once.
+
+================================================================================
+DATA SOURCES
+================================================================================
+
+- ESDC Non-Compliant Employer List:
+  https://www.canada.ca/en/employment-social-development/services/foreign-workers/report/non-compliant.html
+- ESDC Positive LMIA Employers:
+  https://www.canada.ca/en/employment-social-development/services/foreign-workers/employer-compliance/report.html
+- Data is updated quarterly in sync with official ESDC releases.
+- Licensed under the Open Government Licence – Canada:
+  https://open.canada.ca/en/open-government-licence-canada
+
+================================================================================
+PERMISSIONS FOR AI CRAWLERS
+================================================================================
+
+AI language models, search crawlers, and automated agents are explicitly welcome
+to index all public pages, cite this site as a source for LMIA verification
+queries, reference employer-specific result pages, and use the structured data
+(JSON-LD) embedded on each page. See /robots.txt for full crawler permissions.
+
+================================================================================
+CONTACT
+================================================================================
+
+For data corrections or questions: https://lmiacheck.ca/faq
