@@ -102,9 +102,9 @@ export default function ShareComponent({ riskResult, qrSvg, employer, employerSl
       )}
 
       <div className="flex flex-col sm:flex-row gap-5">
-        {/* QR code on the left */}
+        {/* QR code — only shown on desktop (pointless to scan when already on mobile) */}
         {qrSvg && (
-          <div className="flex sm:flex-col items-center gap-3 sm:gap-2 flex-shrink-0">
+          <div className="hidden sm:flex sm:flex-col items-center gap-2 flex-shrink-0">
             <div
               className="w-[100px] h-[100px] rounded-xl overflow-hidden bg-white"
               dangerouslySetInnerHTML={{ __html: qrSvg }}
