@@ -30,6 +30,7 @@ html {
 }
 
 body {
+  -webkit-tap-highlight-color: transparent;
   background-color: var(--color-bg);
   color: var(--color-text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;

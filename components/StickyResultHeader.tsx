@@ -34,7 +34,7 @@ export default function StickyResultHeader({ risk, verdict, employer }: Props) {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 z-20 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all duration-300 ${
+      className={`fixed top-14 left-0 right-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 transition-all duration-300 ${
         show ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
       }`}
       aria-hidden={!show}

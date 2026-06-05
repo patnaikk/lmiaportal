@@ -65,7 +65,7 @@ function VerdictLayout({
         {icon}
       </div>
 
-      <h2 className={`font-bold tracking-tight ${verdictColor} mb-3 leading-none animate-verdict-in`} style={{ fontSize: 'clamp(2.5rem, 8vw, 3.75rem)' }}>
+      <h2 className={`font-bold tracking-tight ${verdictColor} mb-3 leading-tight break-words animate-verdict-in`} style={{ fontSize: 'clamp(1.6rem, 8vw, 3.75rem)' }}>
         {verdict}
       </h2>
 

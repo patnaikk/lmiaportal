@@ -208,7 +208,7 @@ export default async function BannedPage({ searchParams }: PageProps) {
 
         {/* Filters card */}
         <form method="get" action="/banned" className="card-elevated p-5 mb-4">
-          <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] gap-3">
+          <div className="flex flex-col gap-3">
             <div className="relative">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" aria-hidden="true">
                 <circle cx="11" cy="11" r="8"/>
@@ -223,28 +223,30 @@ export default async function BannedPage({ searchParams }: PageProps) {
                 aria-label="Search employer name"
               />
             </div>
-            <select
-              name="province"
-              defaultValue={province}
-              className="px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-              aria-label="Filter by province"
-            >
-              <option value="">All provinces</option>
-              {PROVINCES.map((p) => (
-                <option key={p.code} value={p.code}>{p.name}</option>
-              ))}
-            </select>
-            <select
-              name="status"
-              defaultValue={status}
-              className="px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
-              aria-label="Filter by status"
-            >
-              <option value="banned">Currently banned</option>
-              <option value="eligible">Previously banned</option>
-              <option value="all">All</option>
-            </select>
-            <button type="submit" className="px-5 py-3 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors">
+            <div className="flex gap-3">
+              <select
+                name="province"
+                defaultValue={province}
+                className="flex-1 min-w-0 px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+                aria-label="Filter by province"
+              >
+                <option value="">All provinces</option>
+                {PROVINCES.map((p) => (
+                  <option key={p.code} value={p.code}>{p.name}</option>
+                ))}
+              </select>
+              <select
+                name="status"
+                defaultValue={status}
+                className="flex-1 min-w-0 px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+                aria-label="Filter by status"
+              >
+                <option value="banned">Currently banned</option>
+                <option value="eligible">Previously banned</option>
+                <option value="all">All</option>
+              </select>
+            </div>
+            <button type="submit" className="w-full sm:w-auto px-5 py-3 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors">
               Filter
             </button>
           </div>

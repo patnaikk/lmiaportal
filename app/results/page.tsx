@@ -122,13 +122,6 @@ export default async function ResultsPage({ searchParams }: PageProps) {
     result.positiveMatches[0]?.employer_name ||
     employer
 
-  const riskBorderColor = {
-    GREEN: 'border-l-green-600',
-    YELLOW: 'border-l-yellow-500',
-    RED: 'border-l-red-600',
-    GREY: 'border-l-gray-400',
-  }[result.risk]
-
   const verdictLabel = VERDICT_LABEL[result.risk]
   const resultSchema = {
     '@context': 'https://schema.org',
