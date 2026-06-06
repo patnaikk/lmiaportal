@@ -13,11 +13,21 @@ export const revalidate = 3600
 
 const PAGE_SIZE = 50
 
+const VIOLATION_FILTERS = [
+  { value: '', label: 'All violations' },
+  { value: 'fee', label: 'Fees charged to workers', keyword: 'fee' },
+  { value: 'abuse', label: 'Abuse or mistreatment', keyword: 'abuse' },
+  { value: 'wages', label: 'Wages / conditions not met', keyword: 'pay' },
+  { value: 'accommodation', label: 'Inadequate housing', keyword: 'accommodat' },
+  { value: 'false', label: 'False info or records', keyword: 'false' },
+] as const
+
 interface PageProps {
   searchParams: {
     q?: string
     province?: string
     status?: string
+    violation?: string
     page?: string
   }
 }
@@ -87,7 +97,7 @@ function statusPillColors(status: ComplianceStatus) {
   }
 }
 
-async function fetchBanned(opts: { q: string; province: string; status: string; page: number }) {
+async function fetchBanned(opts: { q: string; province: string; status: string; violation: string; page: number }) {
   const from = (opts.page - 1) * PAGE_SIZE
   const to = from + PAGE_SIZE - 1
 
@@ -118,6 +128,10 @@ async function fetchBanned(opts: { q: string; province: string; status: string; 
   } else if (opts.status === 'eligible') {
     query = query.eq('compliance_status', 'ELIGIBLE')
   }
+  if (opts.violation) {
+    const kw = VIOLATION_FILTERS.find((f) => f.value === opts.violation)
+    if (kw && kw.value) query = query.ilike('reasons', `%${kw.keyword}%`)
+  }
 
   try {
     const { data, count } = await query
@@ -142,12 +156,13 @@ export default async function BannedPage({ searchParams }: PageProps) {
   const q = (searchParams.q || '').trim()
   const province = searchParams.province || ''
   const status = searchParams.status || 'banned'
+  const violation = searchParams.violation || ''
   const page = Math.max(1, parseInt(searchParams.page || '1', 10) || 1)
 
-  const { rows, total } = await fetchBanned({ q, province, status, page })
+  const { rows, total } = await fetchBanned({ q, province, status, violation, page })
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
 
-  const baseParams = { q, province, status: status === 'banned' ? undefined : status, page: page > 1 ? String(page) : undefined }
+  const baseParams = { q, province, status: status === 'banned' ? undefined : status, violation: violation || undefined, page: page > 1 ? String(page) : undefined }
   const provinceLabel = province ? PROVINCES.find(p => p.code === province)?.name : null
 
   // Dataset JSON-LD — this is a republished, searchable index of an official
@@ -223,11 +238,11 @@ export default async function BannedPage({ searchParams }: PageProps) {
                 aria-label="Search employer name"
               />
             </div>
-            <div className="flex gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <select
                 name="province"
                 defaultValue={province}
-                className="flex-1 min-w-0 px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+                className="w-full px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                 aria-label="Filter by province"
               >
                 <option value="">All provinces</option>
@@ -236,14 +251,24 @@ export default async function BannedPage({ searchParams }: PageProps) {
                 ))}
               </select>
               <select
+                name="violation"
+                defaultValue={violation}
+                className="w-full px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+                aria-label="Filter by violation type"
+              >
+                {VIOLATION_FILTERS.map((f) => (
+                  <option key={f.value} value={f.value}>{f.label}</option>
+                ))}
+              </select>
+              <select
                 name="status"
                 defaultValue={status}
-                className="flex-1 min-w-0 px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
+                className="w-full px-3 py-3 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
                 aria-label="Filter by status"
               >
                 <option value="banned">Currently banned</option>
                 <option value="eligible">Previously banned</option>
-                <option value="all">All</option>
+                <option value="all">All records</option>
               </select>
             </div>
             <button type="submit" className="w-full sm:w-auto px-5 py-3 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-700 transition-colors">
@@ -259,7 +284,7 @@ export default async function BannedPage({ searchParams }: PageProps) {
             {provinceLabel && <> in <span className="font-medium text-gray-700">{provinceLabel}</span></>}
             {q && <> matching &ldquo;<span className="font-medium text-gray-700">{q}</span>&rdquo;</>}
           </p>
-          {(q || province || status !== 'banned') && (
+          {(q || province || violation || status !== 'banned') && (
             <Link href="/banned" className="text-xs text-blue-600 hover:text-blue-800 font-medium">
               Clear filters
             </Link>
