@@ -19,14 +19,14 @@ export default function ServiceCanadaCallCard() {
 
       <a
         href="tel:18003675693"
-        className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-700 text-white text-xs font-semibold rounded-xl hover:bg-blue-800 transition-colors"
+        className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-blue-700 text-white text-sm font-semibold rounded-xl hover:bg-blue-800 transition-colors"
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.64A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/>
         </svg>
-        1-800-367-5693 (Service Canada)
+        Call 1-800-367-5693
       </a>
-      <span className="ml-3 text-xs text-blue-600">Mon–Fri, 6:30 am – 8 pm ET</span>
+      <p className="text-xs text-blue-600 text-center mt-1.5">Mon–Fri, 6:30 am – 8 pm ET</p>
 
       <p className="text-[11px] text-blue-600 mt-2">
         Need the full verification script?{' '}

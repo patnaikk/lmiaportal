@@ -148,6 +148,25 @@ export default async function HomePage() {
         </div>
       </div>
 
+      {/* Email capture — above fold on mobile, right after stats */}
+      <div className="max-w-2xl mx-auto w-full px-4 mt-4">
+        <div className="p-5 bg-amber-50 rounded-2xl">
+          <div className="flex items-start gap-3 mb-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-amber-900">Get monthly enforcement alerts</p>
+              <p className="text-xs text-amber-700 mt-0.5">New ESDC bans, expiring penalties, and high-risk employers — straight to your inbox. Free.</p>
+            </div>
+          </div>
+          <HomeSignupWidget />
+        </div>
+      </div>
+
       {/* Full offer check */}
       <div className="max-w-2xl mx-auto w-full px-4 mt-4">
         <Link
@@ -233,7 +252,7 @@ export default async function HomePage() {
               <p className="text-2xl font-bold text-gray-900 tabular-nums leading-tight">
                 {reportPreview?.topProvince ?? '—'}
               </p>
-              <p className="text-[11px] text-gray-500 font-medium mt-0.5 uppercase tracking-wider">Top province</p>
+              <p className="text-[11px] text-gray-500 font-medium mt-0.5 uppercase tracking-wider">Province</p>
             </div>
             <div className="py-3.5 px-4 text-center">
               <p className="text-2xl font-bold text-gray-900 tabular-nums leading-tight">
@@ -268,10 +287,6 @@ export default async function HomePage() {
             </div>
           )}
 
-          {/* Signup widget */}
-          <div className="px-5 py-4">
-            <HomeSignupWidget />
-          </div>
         </div>
       </div>
 
@@ -300,7 +315,7 @@ export default async function HomePage() {
 
       {/* Share nudge — researchers are the best distribution channel */}
       <div className="max-w-2xl mx-auto w-full px-4 pb-2">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-4 bg-green-50 rounded-2xl">
+        <div className="flex flex-col gap-3 px-5 py-4 bg-green-50 rounded-2xl">
           <div className="flex items-start gap-3">
             <div className="w-9 h-9 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="#16A34A" aria-hidden="true">
@@ -317,7 +332,7 @@ export default async function HomePage() {
             href="https://wa.me/?text=Before%20paying%20anyone%20for%20a%20Canadian%20job%20offer%2C%20check%20the%20employer%20first%3A%20https%3A%2F%2Flmiacheck.ca%20%E2%80%94%20free%2C%20takes%2010%20seconds."
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-xl transition-colors"
+            className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-xl transition-colors"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="white" aria-hidden="true">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>

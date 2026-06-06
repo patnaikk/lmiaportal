@@ -32,7 +32,7 @@ const TEMPLATES: Template[] = [
   },
   {
     id: 'esdc',
-    label: 'Report to Service Canada',
+    label: 'Report fraud',
     description: 'Send to Service Canada (ESDC) when you suspect fraud or were targeted',
     build: (employer) =>
       `I would like to report a suspected fraudulent job offer from ${employer}.\n\nThis employer appears on the Government of Canada non-compliant employer list, yet I have been approached with what was presented as a valid LMIA offer.\n\nDetails:\n- Employer name: ${employer}\n- How I was contacted: [describe — e.g. WhatsApp, Facebook, email]\n- Date contacted: [date]\n- Amount asked for (if any): [amount or "none"]\n- Documents I was sent: [LMIA copy / offer letter / job description]\n\nPlease let me know what further information you require.`,
