@@ -18,7 +18,7 @@ async function fetchActivity(): Promise<Activity> {
       supabase
         .from('violators')
         .select('id', { count: 'exact', head: true })
-        .gte('decision_date', oneWeekAgo.slice(0, 10)) // decision_date is a date column
+        .gte('created_at', oneWeekAgo)
         .in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID']),
       // Worker checks this week (from search_logs)
       supabase
