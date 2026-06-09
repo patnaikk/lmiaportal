@@ -49,7 +49,7 @@ export default function SearchForm({
   const [inputKey, setInputKey] = useState(0)
   const [sampleValue, setSampleValue] = useState(initialEmployer)
 
-  const canSubmit = employerDisplay.trim().length >= 1 && !loading
+  const canSubmit = !loading
 
   function handleEmployerChange(display: string, searchAs: string) {
     setEmployerDisplay(display)
@@ -65,7 +65,7 @@ export default function SearchForm({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (employerDisplay.trim().length < 1 || loading) return
+    if (loading) return
     setLoading(true)
     window.scrollTo({ top: 0, behavior: 'instant' })
 
