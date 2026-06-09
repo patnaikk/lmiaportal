@@ -65,18 +65,13 @@ export default async function ActivityTicker() {
     <div className="max-w-2xl mx-auto w-full px-4 mt-4">
       <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2 text-xs">
         {/* New bans this week */}
-        {data.newBansThisWeek > 0 ? (
+        {data.newBansThisWeek > 0 && (
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-50/70 ring-1 ring-red-100 rounded-full">
             <PulseDot color="red" />
             <span className="text-red-800">
               <span className="font-semibold tabular-nums">{data.newBansThisWeek}</span>{' '}
               {data.newBansThisWeek === 1 ? 'new ban' : 'new bans'} this week
             </span>
-          </div>
-        ) : (
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 ring-1 ring-gray-100 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-gray-400 flex-shrink-0" aria-hidden="true" />
-            <span className="text-gray-700">No new bans this week</span>
           </div>
         )}
 
