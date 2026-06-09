@@ -69,68 +69,35 @@ export default function AboutPage() {
           <p className="text-gray-400 text-sm font-medium">March 2026 · Free, forever</p>
         </div>
 
-        {/* Intro */}
+        {/* Personal intro — human voice */}
         <section className="space-y-5 text-[15px] text-gray-700 leading-relaxed">
           <p>
-            Moving to Canada to work is a life-changing decision. Whether you are a nurse, a caregiver, a farm worker,
-            or a driver, you are putting your future into the hands of a Canadian employer.
+            I&apos;m Sandeep. I built this tool because I kept seeing the same story play out — workers
+            saving for years, paying $20,000 to $50,000 to a recruiter for a Canadian job offer,
+            and arriving to find nothing waiting for them. Or never arriving at all.
           </p>
           <p>
-            Because this is such a significant step, you deserve to know exactly who you are working with. The Canadian
-            government keeps detailed records of employers — who has been approved for a Labour Market Impact Assessment
-            (LMIA) and who has been flagged for failing to meet the rules of the Temporary Foreign Worker Program.
+            The information to catch these scams exists. The Canadian government publishes a list of
+            every employer banned from the Temporary Foreign Worker Program, and every employer who
+            has ever received an approved LMIA. It&apos;s public data. But it&apos;s buried in government
+            spreadsheets that are hard to find and harder to search.
           </p>
           <p>
-            The problem? That information is often buried in complex government databases and spreadsheets that are
-            hard to find and even harder to navigate.
+            So I built a search tool. It takes those spreadsheets, loads them into a proper database,
+            and lets anyone check an employer in seconds. No account. No fee. No catch.
           </p>
-
-          <div className="pt-2">
-            <h2 className="text-lg font-bold text-gray-900 mb-3">Bridging the Information Gap</h2>
-            <p className="mb-4">
-              LMIA Check was built to bring that data into the light. We believe that transparency shouldn&apos;t be a
-              luxury. Our goal is to help you understand exactly where a potential employer stands in the eyes of the
-              government before you commit to a job offer.
-            </p>
-            <ul className="space-y-2">
-              <li className="flex gap-2">
-                <span className="text-red-500 font-bold shrink-0">·</span>
-                <span><strong className="text-gray-900">Public Data, Simplified:</strong> We take official records
-                from Employment and Social Development Canada (ESDC) and make them searchable in seconds.</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-red-500 font-bold shrink-0">·</span>
-                <span><strong className="text-gray-900">Know the Status:</strong> Quickly see if an employer has a
-                history of compliance or if they&apos;ve been restricted from the program.</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-red-500 font-bold shrink-0">·</span>
-                <span><strong className="text-gray-900">Free for Everyone:</strong> No accounts, no fees, and no
-                barriers to the information you need.</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="pt-2">
-            <h2 className="text-lg font-bold text-gray-900 mb-3">Why Transparency Matters</h2>
-            <p className="mb-4">
-              When an employer applies for an LMIA, they are making a commitment to the Canadian government and to
-              you. By checking their public standing, you can move forward with the confidence that you are joining a
-              workplace that respects the standards set by the government.
-            </p>
-            <p>
-              Our tool is here to ensure that the &ldquo;promise of a better life&rdquo; is built on a foundation of
-              clear, accessible facts. It&apos;s about giving you the power to do your due diligence, simply and quickly.
-            </p>
-          </div>
+          <p>
+            I maintain it myself, pay for the hosting myself, and publish a monthly enforcement
+            update when the government releases new violation data. It will stay free.
+          </p>
 
           {/* Callout box */}
-          <div className="rounded-2xl px-5 py-4 bg-red-50 ring-1 ring-red-100 mt-2">
+          <div className="rounded-2xl px-5 py-4 bg-red-50 ring-1 ring-red-100">
             <p className="text-sm font-semibold text-red-800">
               🔒 If someone charges you to verify an employer — that itself is a red flag.
             </p>
             <p className="text-sm text-red-700 mt-1">
-              This tool is free, and it always will be.
+              Legitimate verification is free. Always.
             </p>
           </div>
         </section>
@@ -234,6 +201,42 @@ export default function AboutPage() {
             </a>
           </p>
         </div>
+
+        {/* Support section — Ko-fi */}
+        <section className="p-5 bg-amber-50 rounded-2xl">
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                <line x1="6" y1="1" x2="6" y2="4"/>
+                <line x1="10" y1="1" x2="10" y2="4"/>
+                <line x1="14" y1="1" x2="14" y2="4"/>
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-amber-900 mb-1">This tool has no ads and charges nobody.</p>
+              <p className="text-sm text-amber-800 leading-relaxed">
+                It costs money to run and I cover it personally. If it helped you or someone you know,
+                buying me a coffee goes a long way — but no pressure either way.
+              </p>
+              <a
+                href="https://ko-fi.com/lmiacheck"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold rounded-xl transition-colors"
+              >
+                ☕ Buy me a coffee
+              </a>
+              <p className="text-xs text-amber-700 mt-2">
+                Organisations using this tool regularly?{' '}
+                <a href="mailto:hello@lmiacheck.ca" className="underline hover:text-amber-900">
+                  Get in touch about sponsorship.
+                </a>
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* Back link */}
         <div className="pt-2 pb-4">

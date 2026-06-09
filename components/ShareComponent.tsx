@@ -43,8 +43,18 @@ export default function ShareComponent({ riskResult, qrSvg, employer, employerSl
     ? `${SITE_URL}/results?employer=${encodeURIComponent(employer)}`
     : SITE_URL
 
+  function withUtm(url: string, medium: string) {
+    const sep = url.includes('?') ? '&' : '?'
+    return `${url}${sep}utm_source=share&utm_medium=${medium}&utm_campaign=result_share`
+  }
+
+  const copyUrl = withUtm(resultUrl, 'copy')
+  const whatsappUrl = withUtm(resultUrl, 'whatsapp')
+  const facebookUrl = withUtm(resultUrl, 'facebook')
+  const emailUrl = withUtm(resultUrl, 'email')
+
   const verificationBlurb = employer
-    ? `${VERDICT_EMOJI[riskResult]} ${employer} — Status: ${VERDICT_WORD[riskResult]}\nVerified on lmiacheck.ca (official ESDC data): ${resultUrl}`
+    ? `${VERDICT_EMOJI[riskResult]} ${employer} — Status: ${VERDICT_WORD[riskResult]}\nVerified on lmiacheck.ca (official ESDC data): ${whatsappUrl}`
     : `Use this free tool to verify a Canadian employer before you pay any fees: ${SITE_URL}`
 
   async function copyToClipboard(text: string, setter: (v: boolean) => void) {
@@ -63,7 +73,7 @@ export default function ShareComponent({ riskResult, qrSvg, employer, employerSl
   }
 
   function handleFacebook() {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(resultUrl)}`
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(facebookUrl)}`
     window.open(url, '_blank', 'width=600,height=400,noopener,noreferrer')
   }
 
@@ -71,10 +81,8 @@ export default function ShareComponent({ riskResult, qrSvg, employer, employerSl
     ? encodeURIComponent(`LMIA check result: ${employer}`)
     : encodeURIComponent('Free tool to verify a Canadian job offer')
   const emailBody = employer
-    ? encodeURIComponent(`I checked ${employer} on lmiacheck.ca.\n\nStatus: ${VERDICT_WORD[riskResult]}\n\nSee the full result: ${resultUrl}\n\nThis is based on official ESDC data.`)
+    ? encodeURIComponent(`I checked ${employer} on lmiacheck.ca.\n\nStatus: ${VERDICT_WORD[riskResult]}\n\nSee the full result: ${emailUrl}\n\nThis is based on official ESDC data.`)
     : encodeURIComponent(`I found this free tool that helps verify whether a Canadian employer has a legitimate LMIA before paying any recruitment fees.\nCheck it here: ${SITE_URL}`)
-
-  const whatsappMsg = encodeURIComponent(verificationBlurb)
 
   const btnClass = 'flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors min-h-[44px]'
 
@@ -116,7 +124,7 @@ export default function ShareComponent({ riskResult, qrSvg, employer, employerSl
 
         {/* Share buttons on the right */}
         <div className="flex-1 grid grid-cols-2 gap-2">
-          <button onClick={() => copyToClipboard(resultUrl, setCopied)} className={btnClass} aria-label="Copy link to clipboard">
+          <button onClick={() => copyToClipboard(copyUrl, setCopied)} className={btnClass} aria-label="Copy link to clipboard">
             {copied ? (
               <>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
@@ -130,7 +138,7 @@ export default function ShareComponent({ riskResult, qrSvg, employer, employerSl
             )}
           </button>
 
-          <a href={`https://wa.me/?text=${whatsappMsg}`} target="_blank" rel="noopener noreferrer" className={btnClass} aria-label="Share on WhatsApp">
+          <a href={`https://wa.me/?text=${encodeURIComponent(verificationBlurb)}`} target="_blank" rel="noopener noreferrer" className={btnClass} aria-label="Share on WhatsApp">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
               <path d="M12 0C5.373 0 0 5.373 0 12c0 2.115.549 4.099 1.508 5.82L.057 23.569a.5.5 0 00.611.611l5.749-1.451A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.951 0-3.77-.524-5.33-1.432l-.383-.228-3.97 1.001 1.001-3.97-.228-.383A9.944 9.944 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>

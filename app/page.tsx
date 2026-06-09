@@ -329,7 +329,7 @@ export default async function HomePage() {
             </div>
           </div>
           <a
-            href="https://wa.me/?text=Before%20paying%20anyone%20for%20a%20Canadian%20job%20offer%2C%20check%20the%20employer%20first%3A%20https%3A%2F%2Flmiacheck.ca%20%E2%80%94%20free%2C%20takes%2010%20seconds."
+            href="https://wa.me/?text=Before%20paying%20anyone%20for%20a%20Canadian%20job%20offer%2C%20check%20the%20employer%20first%3A%20https%3A%2F%2Flmiacheck.ca%3Futm_source%3Dshare%26utm_medium%3Dwhatsapp%26utm_campaign%3Dhomepage_share%20%E2%80%94%20free%2C%20takes%2010%20seconds."
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-xl transition-colors"
