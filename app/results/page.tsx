@@ -230,6 +230,12 @@ export default async function ResultsPage({ searchParams }: PageProps) {
           </div>
         )}
 
+        {/* Violation details (if from violators list) — shown before next steps so
+            users understand WHY before being told what to do */}
+        {result.violatorMatches.length > 0 && (
+          <ViolationDetail violators={result.violatorMatches} />
+        )}
+
         {/* Next steps — immediately after verdict */}
         <NextSteps result={result} />
 
@@ -281,11 +287,6 @@ export default async function ResultsPage({ searchParams }: PageProps) {
               Search &ldquo;{employer}{province ? ` ${province}` : ''}&rdquo; on Google
             </a>
           </div>
-        )}
-
-        {/* Violation details (if from violators list) */}
-        {result.violatorMatches.length > 0 && (
-          <ViolationDetail violators={result.violatorMatches} />
         )}
 
         {/* Matched government data (if from positive LMIA list) */}
