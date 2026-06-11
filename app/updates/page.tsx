@@ -19,6 +19,12 @@ export const metadata: Metadata = {
 
 const updates: { date: string; items: React.ReactNode[] }[] = [
   {
+    date: 'June 11, 2026',
+    items: [
+      'Compliance: Updated all result descriptions and status labels to use official Government of Canada (ESDC) language. Result verdict "Banned" now reads "Non-Compliant"; status descriptions use "ineligible to hire" instead of "banned from hiring" and "outstanding monetary penalty" instead of "unpaid penalty". Language now mirrors government data exactly as published — we beautify and present, we don\'t characterize.',
+    ],
+  },
+  {
     date: 'May 26, 2026 · Pass 8',
     items: [
       <>
