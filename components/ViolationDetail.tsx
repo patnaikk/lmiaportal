@@ -42,17 +42,17 @@ export default function ViolationDetail({ violators }: Props) {
     <div className="mt-4 card-elevated overflow-hidden">
       {/* Prose summary */}
       <div className="p-6 sm:p-7">
-        <h2 className="text-lg font-bold text-gray-900 mb-3">Why this employer was banned</h2>
+        <h2 className="text-lg font-bold text-gray-900 mb-3">Why this employer was found non-compliant</h2>
 
         <p className="text-[15px] text-gray-700 leading-relaxed">
           {decisionDate ? <>On <span className="font-semibold text-gray-900">{decisionDate}</span>, the </> : 'The '}
           Government of Canada found <span className="font-semibold text-gray-900">{employerName}</span>{' '}
           non-compliant with the Temporary Foreign Worker Program.
           {isBanned && (
-            <> They are <span className="font-semibold text-red-600">banned from hiring</span> temporary foreign workers until <span className="font-semibold text-gray-900">{banUntil}</span>.</>
+            <> They are <span className="font-semibold text-red-600">ineligible to hire</span> temporary foreign workers until <span className="font-semibold text-gray-900">{banUntil}</span>.</>
           )}
           {hasUnpaidPenalty && (
-            <> They have an <span className="font-semibold text-red-600">unpaid monetary penalty</span> and cannot hire temporary foreign workers until it is paid.</>
+            <> They have an <span className="font-semibold text-red-600">outstanding monetary penalty</span> and are ineligible to hire temporary foreign workers until it is paid.</>
           )}
           {v.penalty_amount && (
             <> A fine of <span className="font-semibold text-gray-900">{v.penalty_amount}</span>{v.ban_duration ? <> and a <span className="font-semibold text-gray-900">{v.ban_duration}</span> hiring ban</> : ''} was issued.</>

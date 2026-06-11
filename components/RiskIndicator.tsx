@@ -146,7 +146,7 @@ export default function RiskIndicator({ result }: Props) {
       verdict = 'Wrong stream'
       description = 'All approved LMIAs for this employer are under the Permanent Resident stream — not for temporary foreign workers. An offer claiming to be a TFW LMIA may not be legitimate.'
     } else {
-      description = 'Previously penalised by the Canadian government for Temporary Foreign Worker violations but is currently eligible to hire. Proceed with caution and verify offer details independently.'
+      description = 'Previously found non-compliant with the Temporary Foreign Worker Program but is currently eligible to hire temporary foreign workers. Proceed with caution and verify offer details independently.'
     }
 
     return (
@@ -180,16 +180,16 @@ export default function RiskIndicator({ result }: Props) {
 
   if (risk === 'RED') {
     const isBannedTemporary = subtype === 'BANNED_TEMPORARY'
-    const verdict = isBannedTemporary ? 'Banned from hiring' : 'Penalised'
+    const verdict = isBannedTemporary ? 'Ineligible to Hire' : 'Non-Compliant'
 
     let description: ReactNode = ''
     if (isBannedTemporary && ban_end_date) {
       const formatted = new Date(ban_end_date).toLocaleDateString('en-CA', {
         year: 'numeric', month: 'long', day: 'numeric',
       })
-      description = <>Found non-compliant and <span className="font-semibold text-gray-700">banned from hiring</span> temporary foreign workers until <span className="font-semibold text-gray-700">{formatted}</span>. This ban is active.</>
+      description = <>Found non-compliant and <span className="font-semibold text-gray-700">ineligible to hire</span> temporary foreign workers until <span className="font-semibold text-gray-700">{formatted}</span>. This ineligibility is active.</>
     } else if (isBannedTemporary) {
-      description = 'Found non-compliant and banned from hiring temporary foreign workers. This ban is active.'
+      description = 'Found non-compliant and ineligible to hire temporary foreign workers. This ineligibility is active.'
     } else {
       description = 'Has an outstanding unpaid monetary penalty from the Canadian government and cannot hire temporary foreign workers until it is paid.'
     }

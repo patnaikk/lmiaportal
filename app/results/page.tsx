@@ -25,7 +25,7 @@ import type { Metadata } from 'next'
 const VERDICT_LABEL: Record<'GREEN' | 'YELLOW' | 'RED' | 'GREY', string> = {
   GREEN: 'Verified',
   YELLOW: 'Caution',
-  RED: 'Banned',
+  RED: 'Non-Compliant',
   GREY: 'Not found',
 }
 
@@ -150,7 +150,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
   // Per-employer Q&A schema — answers the exact natural-language question LLMs/search get asked,
   // so AI assistants can cite a direct, sourced answer for this specific employer.
   const verdictAnswer: Record<'GREEN' | 'YELLOW' | 'RED' | 'GREY', string> = {
-    RED: `${employer} appears on the Government of Canada (ESDC) list of employers found non-compliant with the Temporary Foreign Worker Program, meaning they have been penalized or banned from hiring foreign workers. Be very cautious of any job offer and verify the details before proceeding.`,
+    RED: `${employer} appears on the Government of Canada (ESDC) list of employers found non-compliant with the Temporary Foreign Worker Program. They are currently ineligible to hire temporary foreign workers. Be very cautious of any job offer and verify the details before proceeding.`,
     GREEN: `${employer} has one or more approved (positive) LMIAs on record with ESDC and does not appear on the non-compliant list, meaning the government has a record of them being approved to hire foreign workers. A clean record is not a guarantee of safety — never pay for a job, as charging a worker for an LMIA or job is illegal in Canada.`,
     YELLOW: `${employer} has a record that warrants caution (for example an address mismatch or a previously resolved issue). Review the details and verify independently before accepting any job offer.`,
     GREY: `${employer} was not found in the ESDC approved-LMIA or non-compliant records. This is a neutral result — it does not mean the employer is fake, only that there is no government record under that name. Never pay for a job and watch for other red flags.`,
@@ -161,7 +161,7 @@ export default async function ResultsPage({ searchParams }: PageProps) {
     mainEntity: [
       {
         '@type': 'Question',
-        name: `Is ${employer} approved or banned under Canada's Temporary Foreign Worker Program?`,
+        name: `Is ${employer} approved or found non-compliant under Canada's Temporary Foreign Worker Program?`,
         acceptedAnswer: { '@type': 'Answer', text: verdictAnswer[result.risk] },
       },
     ],

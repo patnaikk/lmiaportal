@@ -142,15 +142,14 @@ export default function AboutPage() {
               <p className="text-sm font-bold text-gray-900 mb-0.5">🟡 Verify Further</p>
               <p className="text-sm text-gray-600 leading-relaxed">
                 The employer exists but something doesn&apos;t fully match — the location may be different, all records
-                may be for Permanent Residents only, or the employer was previously penalised (but is now eligible).
+                may be for Permanent Residents only, or the employer was previously found non-compliant (but is now eligible).
                 Ask questions before proceeding.
               </p>
             </div>
             <div className="rounded-xl px-4 py-3 bg-white ring-1 ring-red-100 shadow-sm">
               <p className="text-sm font-bold text-gray-900 mb-0.5">🔴 High Risk</p>
               <p className="text-sm text-gray-600 leading-relaxed">
-                This employer is currently banned from hiring temporary foreign workers, or has an outstanding
-                unpaid penalty. Any job offer from this employer is illegitimate.
+                This employer has been found non-compliant and is currently ineligible to hire temporary foreign workers, or has an outstanding monetary penalty. Any job offer from this employer is illegitimate.
               </p>
             </div>
             <div className="rounded-xl px-4 py-3 bg-white ring-1 ring-gray-200 shadow-sm">
