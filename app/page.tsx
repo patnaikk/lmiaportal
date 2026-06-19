@@ -148,25 +148,6 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Email capture — above fold on mobile, right after stats */}
-      <div className="max-w-2xl mx-auto w-full px-4 mt-4">
-        <div className="p-5 bg-amber-50 rounded-2xl">
-          <div className="flex items-start gap-3 mb-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                <polyline points="22,6 12,13 2,6"/>
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-amber-900">Get monthly enforcement alerts</p>
-              <p className="text-xs text-amber-700 mt-0.5">New ESDC bans, expiring penalties, and high-risk employers — straight to your inbox. Free.</p>
-            </div>
-          </div>
-          <HomeSignupWidget />
-        </div>
-      </div>
-
       {/* Full offer check */}
       <div className="max-w-2xl mx-auto w-full px-4 mt-4">
         <Link
@@ -286,6 +267,12 @@ export default async function HomePage() {
               </ul>
             </div>
           )}
+
+          {/* Subscribe — after data preview so users see value before the ask */}
+          <div className="px-5 py-4 border-t border-gray-100">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Get this report in your inbox</p>
+            <HomeSignupWidget />
+          </div>
 
         </div>
       </div>
