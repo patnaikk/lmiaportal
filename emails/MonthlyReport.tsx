@@ -19,6 +19,11 @@ export interface BanHighlight {
   note?: string // e.g. "largest penalty"
 }
 
+export interface ProvinceCount {
+  province: string
+  count: number
+}
+
 export interface MonthlyReportProps {
   monthLabel?: string
   newBansCount?: number
@@ -36,6 +41,7 @@ export interface MonthlyReportProps {
   positiveQuarter?: string
   expiringNextMonthCount?: number
   nextMonthLabel?: string
+  provincialBreakdown?: ProvinceCount[]
 }
 
 const defaults: Required<Omit<MonthlyReportProps, 'highlights'>> & { highlights: BanHighlight[] } = {
@@ -60,6 +66,13 @@ const defaults: Required<Omit<MonthlyReportProps, 'highlights'>> & { highlights:
   positiveQuarter: 'Q3 2025',
   expiringNextMonthCount: 2,
   nextMonthLabel: 'June',
+  provincialBreakdown: [
+    { province: 'BC', count: 7 },
+    { province: 'ON', count: 5 },
+    { province: 'AB', count: 3 },
+    { province: 'MB', count: 2 },
+    { province: 'SK', count: 1 },
+  ],
 }
 
 function Eyebrow({ children, color = '#9ca3af' }: { children: React.ReactNode; color?: string }) {
@@ -72,7 +85,12 @@ function withUtm(url: string, content: string, campaign: string): string {
 }
 
 export default function MonthlyReport(props: MonthlyReportProps) {
-  const p = { ...defaults, ...props, highlights: props.highlights ?? defaults.highlights }
+  const p = {
+    ...defaults,
+    ...props,
+    highlights: props.highlights ?? defaults.highlights,
+    provincialBreakdown: props.provincialBreakdown ?? defaults.provincialBreakdown,
+  }
   const campaign = `monthly_${p.monthLabel.toLowerCase().replace(/\s+/g, '_')}` // e.g. monthly_may_2026
   const reportHref = withUtm(p.reportUrl, 'report', campaign)
   const siteHref = withUtm(p.siteUrl, 'cta', campaign)
@@ -233,6 +251,34 @@ export default function MonthlyReport(props: MonthlyReportProps) {
               <Link href={reportHref} style={inlineLink}>See who &rsaquo;</Link>
             </Text>
           </Section>
+
+          {/* Provincial breakdown */}
+          {p.provincialBreakdown.length > 0 && (
+            <Section style={outer}>
+              <table width="100%" cellPadding={0} cellSpacing={0} role="presentation" style={{ ...card, backgroundColor: '#f9fafb' }}>
+                <tr>
+                  <td style={cardPad}>
+                    <Eyebrow color="#6b7280">BANS BY PROVINCE · {p.monthLabel.toUpperCase()}</Eyebrow>
+                    <table width="100%" cellPadding={0} cellSpacing={0} role="presentation">
+                      {p.provincialBreakdown.map((row, i) => {
+                        const maxCount = Math.max(...p.provincialBreakdown.map(r => r.count))
+                        const barWidth = Math.round((row.count / maxCount) * 100)
+                        return (
+                          <tr key={i}>
+                            <td style={provLabel}>{row.province}</td>
+                            <td style={provBarCell}>
+                              <div style={{ ...provBar, width: `${barWidth}%` }} />
+                            </td>
+                            <td style={provCount}>{row.count}</td>
+                          </tr>
+                        )
+                      })}
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </Section>
+          )}
 
           {/* This month's pattern — interpretive layer (indigo card) */}
           <Section style={outer}>
@@ -407,6 +453,10 @@ const buttonPrimary: React.CSSProperties = {
 const buttonSecondary: React.CSSProperties = {
   backgroundColor: '#ffffff', border: '1.5px solid #d1d5db', borderRadius: '10px', color: '#1d4ed8', fontSize: '15px', fontWeight: 600, padding: '11px 22px', textDecoration: 'none', display: 'inline-block',
 }
+const provLabel: React.CSSProperties = { fontSize: '13px', fontWeight: 700, color: '#374151', width: '36px', paddingBottom: '8px', verticalAlign: 'middle' }
+const provBarCell: React.CSSProperties = { paddingBottom: '8px', verticalAlign: 'middle' }
+const provBar: React.CSSProperties = { height: '8px', backgroundColor: '#d1d5db', borderRadius: '4px', minWidth: '8px' }
+const provCount: React.CSSProperties = { fontSize: '13px', fontWeight: 600, color: '#6b7280', width: '24px', textAlign: 'right', paddingBottom: '8px', paddingLeft: '10px', verticalAlign: 'middle' }
 const footer: React.CSSProperties = { padding: '18px 32px 26px' }
 const footerText: React.CSSProperties = { fontSize: '12px', lineHeight: '18px', color: '#9ca3af', margin: '0 0 8px' }
 const footerLink: React.CSSProperties = { color: '#6b7280', textDecoration: 'underline' }

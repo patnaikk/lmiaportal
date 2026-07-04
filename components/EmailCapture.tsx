@@ -14,6 +14,7 @@ export default function EmailCapture({ employerQuery, employerNormalized, lastRe
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'done' | 'error' | 'dismissed'>('idle')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -49,12 +50,83 @@ export default function EmailCapture({ employerQuery, employerNormalized, lastRe
     }
   }
 
+  async function handleNewsletterOptIn() {
+    if (newsletterStatus === 'loading') return
+    setNewsletterStatus('loading')
+
+    try {
+      const res = await fetch('/api/monthly-subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+
+      if (res.ok) {
+        track('monthly_signup', { location: 'email_capture_upsell' })
+        setNewsletterStatus('done')
+      } else {
+        setNewsletterStatus('error')
+      }
+    } catch {
+      setNewsletterStatus('error')
+    }
+  }
+
   if (status === 'success') {
     return (
       <div className="mt-4 p-5 card-elevated">
         <p className="text-sm text-gray-700">
           <span className="text-green-600 font-semibold">✓ Got it.</span> We&apos;ll notify you if anything changes.
         </p>
+
+        {newsletterStatus === 'idle' && (
+          <div className="mt-3 pt-3 border-t border-gray-100 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <p className="text-xs text-gray-500 flex-1">
+              Also want the monthly enforcement digest — new bans, expiring bans, and provincial trends?
+            </p>
+            <div className="flex gap-2 flex-shrink-0">
+              <button
+                type="button"
+                onClick={handleNewsletterOptIn}
+                className="px-3 py-1.5 bg-gray-800 text-white text-xs font-semibold rounded-lg hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-1 whitespace-nowrap"
+              >
+                Yes, sign me up
+              </button>
+              <button
+                type="button"
+                onClick={() => setNewsletterStatus('dismissed')}
+                className="px-3 py-1.5 text-gray-500 text-xs font-medium rounded-lg hover:bg-gray-50 whitespace-nowrap"
+              >
+                No thanks
+              </button>
+            </div>
+          </div>
+        )}
+
+        {newsletterStatus === 'loading' && (
+          <div className="mt-3 pt-3 border-t border-gray-100">
+            <p className="text-xs text-gray-400">Saving…</p>
+          </div>
+        )}
+
+        {newsletterStatus === 'done' && (
+          <div className="mt-3 pt-3 border-t border-gray-100">
+            <p className="text-xs text-green-700 font-medium">✓ You&apos;re on the list — we&apos;ll email you each month.</p>
+          </div>
+        )}
+
+        {newsletterStatus === 'error' && (
+          <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-2">
+            <p className="text-xs text-red-600" role="alert">Something went wrong.</p>
+            <button
+              type="button"
+              onClick={handleNewsletterOptIn}
+              className="text-xs text-gray-600 underline hover:text-gray-800"
+            >
+              Try again
+            </button>
+          </div>
+        )}
       </div>
     )
   }
