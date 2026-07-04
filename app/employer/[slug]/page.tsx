@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation'
 import { fromSlug } from '@/lib/slug'
+import ResultsContent from '@/app/results/ResultsContent'
 import type { Metadata } from 'next'
 
 interface PageProps {
@@ -23,5 +23,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default function EmployerSlugPage({ params }: PageProps) {
   const employer = fromSlug(params.slug)
-  redirect(`/results?employer=${encodeURIComponent(employer)}&from=slug`)
+  const canonicalUrl = `https://lmiacheck.ca/employer/${params.slug}`
+  return <ResultsContent employer={employer} canonicalUrl={canonicalUrl} />
 }
