@@ -28,6 +28,7 @@ import logging
 import os
 import re
 import smtplib
+import subprocess
 import sys
 import time
 import unicodedata
@@ -66,6 +67,13 @@ load_dotenv(ROOT / ".env.local")
 IRCC_URL = (
     "https://www.canada.ca/en/immigration-refugees-citizenship"
     "/services/work-canada/employers-non-compliant.html"
+)
+
+# The page renders its table client-side from this static JSON feed — reading
+# it directly is far cheaper and more reliable than scraping rendered DOM text
+# for a "total records" string (the page never actually shows one).
+NON_COMPLIANT_JSON_URL = (
+    "https://www.canada.ca/content/dam/ircc/documents/json/non_compliant_new.json"
 )
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
@@ -221,51 +229,33 @@ def is_next_disabled(page: Page) -> bool:
     return False
 
 
-def extract_total_count(page: Page) -> Optional[int]:
+def fetch_live_count() -> Optional[int]:
     """
-    Try to read the total record count from the page without scraping all rows.
-    Checks several common patterns Canada.ca uses in paginated tables.
+    Read the true total record count straight from the JSON feed that backs
+    the page's table, instead of launching a browser and regex-scraping
+    rendered text (the page never actually displays a "total records" string,
+    which is why that approach always returned None).
+
+    Shells out to curl rather than using requests/urllib: canada.ca's bot
+    mitigation (Akamai) silently hangs plain Python HTTP clients — even with
+    a browser User-Agent — while curl's TLS/HTTP fingerprint passes through
+    fine. Playwright (used for the full scrape below) also passes since it's
+    a real browser engine.
     """
     try:
-        body_text = page.inner_text("body").lower()
-    except Exception:
-        return None
-
-    patterns = [
-        r"total\s+records?[:\s]+(\d[\d,]*)",
-        r"(\d[\d,]+)\s+total\s+records?",
-        r"showing\s+\d[\d,]*\s*[–\-]\s*\d[\d,]*\s+of\s+([\d,]+)",
-        r"(\d[\d,]+)\s+results?",
-        r"(\d[\d,]+)\s+employers?",
-        r"of\s+([\d,]+)\s+results?",
-    ]
-    for pattern in patterns:
-        m = re.search(pattern, body_text)
-        if m:
-            try:
-                count = int(m.group(1).replace(",", ""))
-                if count > 100:  # sanity check — real list is >1000
-                    return count
-            except ValueError:
-                continue
-
-    # Fallback: try to read pagination "Page X of Y" × items-per-page
-    try:
-        # Look for per-page selector value
-        per_page_el = page.query_selector("select[name*='length'], select[name*='per_page']")
-        per_page = int(per_page_el.input_value()) if per_page_el else None
-
-        # Look for last page number in pagination
-        page_nums = page.eval_on_selector_all(
-            ".pagination a, [class*='pagination'] a",
-            "els => els.map(e => e.innerText.trim()).filter(t => /^\\d+$/.test(t))",
+        result = subprocess.run(
+            [
+                "curl", "-sS", "--max-time", "20",
+                "-A", "Mozilla/5.0 (compatible; lmia-portal-sync/1.0)",
+                NON_COMPLIANT_JSON_URL,
+            ],
+            capture_output=True, text=True, timeout=25, check=True,
         )
-        if page_nums and per_page:
-            last_page = max(int(n) for n in page_nums if n.isdigit())
-            return last_page * per_page
-    except Exception:
-        pass
-
+        records = json.loads(result.stdout).get("list")
+        if isinstance(records, list) and len(records) > 100:  # sanity check
+            return len(records)
+    except (subprocess.SubprocessError, OSError, ValueError) as e:
+        log.warning(f"Could not fetch live count from JSON feed: {e}")
     return None
 
 
@@ -508,26 +498,9 @@ def run_sync():
 
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-    # ── Step 1: Quick count check (page 1 only) ───────────────
-    live_count: Optional[int] = None
-    try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(
-                user_agent=(
-                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/122.0.0.0 Safari/537.36"
-                )
-            )
-            page = context.new_page()
-            log.info("Fetching page 1 for count check...")
-            page.goto(IRCC_URL, wait_until="domcontentloaded", timeout=60_000)
-            wait_for_table(page)
-            live_count = extract_total_count(page)
-            browser.close()
-    except Exception as e:
-        log.warning(f"Count-check failed: {e} — proceeding with full scrape anyway.")
+    # ── Step 1: Quick count check via the JSON feed (no browser needed) ──
+    log.info("Fetching live record count from JSON feed...")
+    live_count = fetch_live_count()
 
     last_count = get_last_known_count(supabase)
     log.info(f"Live count: {live_count}   Last synced count: {last_count}")
@@ -576,10 +549,6 @@ def run_sync():
             page = context.new_page()
             page.goto(IRCC_URL, wait_until="domcontentloaded", timeout=60_000)
             wait_for_table(page)
-
-            # Refresh count from fully-loaded first page
-            if live_count is None:
-                live_count = extract_total_count(page)
 
             detected = page.eval_on_selector_all(
                 "table thead th",
