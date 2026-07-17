@@ -10,6 +10,11 @@ import PGWPAuditor from '@/components/PGWPAuditor'
 import { supabase } from '@/lib/supabase'
 import HomeSignupWidget from '@/components/HomeSignupWidget'
 import { getLatestReportPreview } from '@/lib/reports'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 export const revalidate = 3600 // refresh stats every hour
 

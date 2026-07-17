@@ -42,6 +42,7 @@ export async function generateMetadata({ searchParams }: PageProps): Promise<Met
     title,
     description:
       'Browse every employer banned by the Canadian government from hiring temporary foreign workers. Official ESDC data, updated weekly.',
+    alternates: { canonical: '/banned' },
   }
 }
 

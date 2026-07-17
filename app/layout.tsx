@@ -4,6 +4,7 @@ import './globals.css'
 import FraudWarningBanner from '@/components/FraudWarningBanner'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://lmiacheck.ca'),
   title: 'LMIA Check 2026 — Verify if a Canadian Job Offer is Real',
   description:
     'Free tool to verify a Canadian employer and detect LMIA fraud. Check if your job offer is legitimate against official government records. No fees, no signup.',

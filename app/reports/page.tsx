@@ -10,6 +10,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Monthly Enforcement Reports — LMIA Check',
   description: 'Month-by-month breakdown of ESDC employer bans, violation reasons, provincial hotspots, and upcoming expiries. Free, sourced from official Government of Canada data.',
+  alternates: { canonical: '/reports' },
 }
 
 export default async function ReportsIndexPage() {

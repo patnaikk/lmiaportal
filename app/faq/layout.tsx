@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'FAQ — LMIA Check',
   description: 'Answers to common questions about LMIA fraud, employer verification, your rights as a foreign worker, and how the LMIA Check tool works.',
+  alternates: { canonical: '/faq' },
   openGraph: {
     title: 'FAQ — LMIA Check',
     description: 'Answers to common questions about LMIA fraud, employer verification, and foreign worker rights in Canada.',

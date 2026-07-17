@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: 'Full Offer Check — LMIA Check',
   description:
     'Paste your Canadian job offer details and get a complete red-flag analysis — employer records, fee detection, wage benchmarks, duration consistency, and more. Free, no login.',
+  alternates: { canonical: '/check' },
 }
 
 export default function CheckPage() {
