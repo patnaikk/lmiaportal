@@ -10,7 +10,7 @@ export const maxDuration = 60
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lmiacheck.ca'
 const FROM = process.env.NEWSLETTER_FROM || process.env.SYNC_EMAIL_FROM || 'LMIA Check <reports@lmiacheck.ca>'
-const SUBJECT = 'May 2026: 18 Canadian employers banned for breaking foreign-worker rules'
+const SUBJECT = 'July 2026: Hotel banned for a year over abuse — and June got worse after we hit send'
 
 /**
  * Send the monthly newsletter. Protected by ADMIN_PASSWORD.
@@ -22,7 +22,7 @@ const SUBJECT = 'May 2026: 18 Canadian employers banned for breaking foreign-wor
  * SAFETY: the broadcast-to-all path is BLOCKED unless confirmRealSend === "SEND-TO-ALL".
  * This prevents an accidental send to real subscribers during testing.
  *
- * NOTE: report data is currently the May defaults baked into the template.
+ * NOTE: report data is currently the June defaults baked into the template.
  * Computing it live from Supabase each month is a future enhancement.
  */
 export async function POST(request: NextRequest) {

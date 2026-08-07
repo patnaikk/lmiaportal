@@ -17,6 +17,7 @@ export interface BanHighlight {
   name: string
   penalty: string // e.g. "$90,000"
   note?: string // e.g. "largest penalty"
+  url?: string // deep link to the employer's page on the site
 }
 
 export interface ProvinceCount {
@@ -42,37 +43,69 @@ export interface MonthlyReportProps {
   expiringNextMonthCount?: number
   nextMonthLabel?: string
   provincialBreakdown?: ProvinceCount[]
+  highlightsLabel?: string
+  highlightsNote?: string
+  previewText?: string
+  scamTitle?: string
+  scamParagraphs?: string[]
+  sinceLastIssueParagraphs?: string[]
+  headsUpText?: string
 }
 
 const defaults: Required<Omit<MonthlyReportProps, 'highlights'>> & { highlights: BanHighlight[] } = {
-  monthLabel: 'May 2026',
-  newBansCount: 18,
-  topProvince: 'BC',
-  expiringCount: 4,
+  monthLabel: 'July 2026',
+  newBansCount: 1,
+  topProvince: 'SK',
+  expiringCount: 0,
   highlights: [
-    { name: 'HBC Transportation Inc.', penalty: '$90,000', note: 'largest penalty' },
-    { name: 'BeeGrove Greenhouse', penalty: '$30,000' },
-    { name: 'Georgetown Tandoori', penalty: '$23,000' },
+    {
+      name: 'Royal Hotel',
+      penalty: '$40,000',
+      note: 'Weyburn, SK — banned until July 2027',
+      url: 'https://lmiacheck.ca/employer/royal-hotel',
+    },
+    {
+      name: 'The Party People Catering Co',
+      penalty: '$75,250',
+      note: 'Acheson, AB — fined, still eligible',
+      url: 'https://lmiacheck.ca/employer/the-party-people-catering-co',
+    },
+    {
+      name: 'Rock Solid Cleaning',
+      penalty: '$750',
+      note: 'Victoria, BC — fined, still eligible',
+      url: 'https://lmiacheck.ca/employer/rock-solid-cleaning',
+    },
   ],
-  reportUrl: 'https://lmiacheck.ca/reports/2026-05',
+  highlightsLabel: 'JULY DECISIONS · 1 NEW BAN · 2 FINES',
+  highlightsNote:
+    'One employer was banned from hiring foreign workers this month; two more were fined but remain eligible. ESDC only imposes a hiring ban for the most serious or repeated violations.',
+  reportUrl: 'https://lmiacheck.ca/reports/2026-07',
   siteUrl: 'https://lmiacheck.ca',
   unsubscribeUrl: 'https://lmiacheck.ca/unsubscribe',
   helpOrgName: 'Migrant Workers Alliance for Change',
   helpOrgUrl: 'https://migrantworkersalliance.org',
   logoUrl: 'https://lmiacheck.ca/email/canada-flag.png',
   patternText:
-    'Half of May’s bans were for the same thing: pay or working conditions that didn’t match what the employer promised. Several others were caught not actually operating the business they hired for — a hallmark of fake-LMIA schemes. The lesson: get everything in writing, and be suspicious if an “employer” has no real operation.',
+    'Two of July’s three enforcement decisions — the Royal Hotel in Saskatchewan and The Party People Catering in Alberta, $115,250 in penalties between them — were for the same violation: failing to keep the workplace free of abuse. Under the rules, “abuse” is broader than most workers realize: it includes psychological abuse, financial abuse (like withholding pay), and reprisal — punishing you for speaking up. If any of that is happening to you, it is the employer breaking the law, not you. You can report it confidentially, and you may qualify for an open work permit that lets you leave that employer without losing status.',
+  previewText:
+    'A hotel banned for abuse, a $75K fine — and June’s story grew after we hit send.',
+  scamTitle: 'The fake job offer with a real company’s name',
+  scamParagraphs: [
+    'A scam we keep hearing about: you receive an official-looking job offer letter — company logo, signature, sometimes even a real LMIA number — from a company that actually exists. The letter is fake. Scammers copy the names of legitimate Canadian employers because they know workers will search the company and find a real business.',
+    'Two checks that defeat it: a real employer never charges you a fee for the job, the LMIA, or “processing.” And if you got an offer you didn’t apply for, contact the company through the phone number or careers page on its own official website — never through the contacts in the letter — and ask if the offer is real.',
+  ],
+  sinceLastIssueParagraphs: [
+    'Last month we reported that June had 7 employers fined a combined $276,750 and zero new bans. After we hit send, the government record grew: 4 more June decisions were published, bringing June to 11 employers and $487,750 in penalties — and one of them, SK91 Transport Inc., received an $80,000 penalty and a hiring ban until June 2027.',
+    'That’s the nature of this list: decisions can appear weeks after they’re made. It’s why we suggest checking an employer one more time right before you accept an offer, even if you checked last month.',
+  ],
+  headsUpText:
+    'Heads up for August: no hiring bans expire next month — the next wave is mid-September, when 2 employers become eligible to hire again. We’ll name them in the September issue before it happens.',
   positiveCount: '11,000',
   positiveQuarter: 'Q3 2025',
-  expiringNextMonthCount: 2,
-  nextMonthLabel: 'June',
-  provincialBreakdown: [
-    { province: 'BC', count: 7 },
-    { province: 'ON', count: 5 },
-    { province: 'AB', count: 3 },
-    { province: 'MB', count: 2 },
-    { province: 'SK', count: 1 },
-  ],
+  expiringNextMonthCount: 0,
+  nextMonthLabel: 'August',
+  provincialBreakdown: [],
 }
 
 function Eyebrow({ children, color = '#9ca3af' }: { children: React.ReactNode; color?: string }) {
@@ -98,7 +131,7 @@ export default function MonthlyReport(props: MonthlyReportProps) {
   return (
     <Html lang="en">
       <Head />
-      <Preview>Official government data — plus the paid-job scam to watch for.</Preview>
+      <Preview>{p.previewText}</Preview>
       <Body style={body}>
         <Container style={container}>
           {/* Brand header — white, airy, hairline divider */}
@@ -118,7 +151,7 @@ export default function MonthlyReport(props: MonthlyReportProps) {
                   </table>
                 </td>
                 <td style={{ textAlign: 'right', verticalAlign: 'middle' }}>
-                  <Link href={`${p.siteUrl}/help`} style={headerLink}>
+                  <Link href={`${p.siteUrl}/help/i-paid`} style={headerLink}>
                     Need help?
                   </Link>
                 </td>
@@ -134,7 +167,7 @@ export default function MonthlyReport(props: MonthlyReportProps) {
             <Text style={lead}>
               You signed up to see which Canadian employers have been caught breaking foreign-worker
               rules — pulled directly from the official Government of Canada (ESDC) record, so you have
-              the facts before you pay anyone or sign anything.
+              the facts before you accept a job offer.
             </Text>
           </Section>
 
@@ -160,19 +193,15 @@ export default function MonthlyReport(props: MonthlyReportProps) {
               <tr>
                 <td style={cardPad}>
                   <Eyebrow color="#b45309">WARNING · SCAM OF THE MONTH</Eyebrow>
-                  <Heading style={h2}>You should never pay for a job</Heading>
-                  <Text style={cardText}>
-                    The most common scam: someone asks a worker for <strong>$22,000–$35,000</strong>{' '}
-                    for an &ldquo;LMIA&rdquo; or a guaranteed job. The truth — an LMIA (the
-                    employer&rsquo;s permit to hire you) costs the <em>employer</em> about $1,000, and
-                    it is illegal for anyone to charge <em>you</em> for a job.
-                  </Text>
-                  <Text style={{ ...cardText, marginBottom: 0 }}>
-                    These offers often come from someone who seems trustworthy — a recruiter, a friend,
-                    someone from your own community — and the fee is often hidden as a
-                    &ldquo;training fee,&rdquo; &ldquo;deposit,&rdquo; or &ldquo;processing cost.&rdquo;
-                    If you&rsquo;re asked to pay for a job, stop and get advice.
-                  </Text>
+                  <Heading style={h2}>{p.scamTitle}</Heading>
+                  {p.scamParagraphs.map((para, i) => (
+                    <Text
+                      key={i}
+                      style={{ ...cardText, marginBottom: i === p.scamParagraphs.length - 1 ? 0 : 12 }}
+                    >
+                      {para}
+                    </Text>
+                  ))}
                 </td>
               </tr>
             </table>
@@ -221,7 +250,12 @@ export default function MonthlyReport(props: MonthlyReportProps) {
               {/* Newly banned list */}
               <tr>
                 <td style={{ padding: '16px 22px 20px' }}>
-                  <Text style={listEyebrow}>NEWLY BANNED · MOST SERIOUS</Text>
+                  <Text style={listEyebrow}>{p.highlightsLabel}</Text>
+                  {p.highlightsNote && (
+                    <Text style={{ ...cardText, fontSize: '13px', color: '#6b7280', margin: '0 0 12px' }}>
+                      {p.highlightsNote}
+                    </Text>
+                  )}
                   {p.highlights.map((b, i) => (
                     <table key={i} width="100%" cellPadding={0} cellSpacing={0} role="presentation">
                       <tr>
@@ -229,7 +263,13 @@ export default function MonthlyReport(props: MonthlyReportProps) {
                           <div style={redDot} />
                         </td>
                         <td style={bannedName}>
-                          {b.name}
+                          {b.url ? (
+                            <Link href={withUtm(b.url, 'employer', campaign)} style={{ color: '#1f2937', textDecoration: 'underline' }}>
+                              {b.name}
+                            </Link>
+                          ) : (
+                            b.name
+                          )}
                           {b.note ? <span style={rowNote}> · {b.note}</span> : null}
                         </td>
                         <td style={bannedPenalty}>{b.penalty}</td>
@@ -243,15 +283,39 @@ export default function MonthlyReport(props: MonthlyReportProps) {
               </tr>
             </table>
 
-            <Text style={{ ...cardText, marginTop: '16px', marginBottom: '4px' }}>
-              <strong>Heads up for {p.nextMonthLabel}:</strong> {p.expiringNextMonthCount} employer
-              {p.expiringNextMonthCount === 1 ? '’s' : 's’'} bans end in {p.nextMonthLabel},
-              so they&rsquo;ll be allowed to hire again. A past ban means be <em>extra</em> careful —
-              never reassured.{' '}
-              <Link href={reportHref} style={inlineLink}>See who &rsaquo;</Link>
-            </Text>
+            {p.headsUpText ? (
+              <Text style={{ ...cardText, marginTop: '16px', marginBottom: '4px' }}>{p.headsUpText}</Text>
+            ) : (
+              <Text style={{ ...cardText, marginTop: '16px', marginBottom: '4px' }}>
+                <strong>Heads up for {p.nextMonthLabel}:</strong> {p.expiringNextMonthCount} employer
+                {p.expiringNextMonthCount === 1 ? '’s' : 's’'} bans end in {p.nextMonthLabel},
+                so they&rsquo;ll be allowed to hire again. A past ban means be <em>extra</em> careful —
+                never reassured.{' '}
+                <Link href={reportHref} style={inlineLink}>See who &rsaquo;</Link>
+              </Text>
+            )}
           </Section>
 
+          {/* Since our last issue — follow-up on last month's story */}
+          {p.sinceLastIssueParagraphs.length > 0 && (
+            <Section style={outer}>
+              <table width="100%" cellPadding={0} cellSpacing={0} role="presentation" style={{ ...card, backgroundColor: '#f9fafb' }}>
+                <tr>
+                  <td style={cardPad}>
+                    <Eyebrow color="#6b7280">SINCE OUR LAST ISSUE</Eyebrow>
+                    {p.sinceLastIssueParagraphs.map((para, i) => (
+                      <Text
+                        key={i}
+                        style={{ ...cardText, marginBottom: i === p.sinceLastIssueParagraphs.length - 1 ? 0 : 12 }}
+                      >
+                        {para}
+                      </Text>
+                    ))}
+                  </td>
+                </tr>
+              </table>
+            </Section>
+          )}
           {/* Provincial breakdown */}
           {p.provincialBreakdown.length > 0 && (
             <Section style={outer}>
