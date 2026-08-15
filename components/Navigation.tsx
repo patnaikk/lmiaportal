@@ -7,11 +7,12 @@ import { useState } from 'react'
 interface NavigationProps {
   // Optional override. When omitted (recommended), the active item is derived
   // from the current URL so it's always correct without per-page wiring.
-  currentPage?: 'home' | 'check' | 'bulk' | 'guide' | 'faq' | 'about' | 'updates' | 'reports' | 'reference'
+  currentPage?: 'home' | 'check' | 'bulk' | 'guide' | 'faq' | 'about' | 'updates' | 'reports' | 'reference' | 'rule-changes'
 }
 
 const NAV_LINKS = [
   { href: '/bulk', label: 'Bulk Check', page: 'bulk', desktop: true },
+  { href: '/rule-changes', label: 'Rule changes', page: 'rule-changes', desktop: true },
   { href: '/guide', label: 'Guide', page: 'guide', desktop: true },
   { href: '/faq', label: 'FAQ', page: 'faq', desktop: true },
   { href: '/reports', label: 'Reports', page: 'reports', desktop: true },

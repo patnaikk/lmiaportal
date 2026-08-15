@@ -11,6 +11,7 @@ import { supabase } from '@/lib/supabase'
 import HomeSignupWidget from '@/components/HomeSignupWidget'
 import { getLatestReportPreview } from '@/lib/reports'
 import type { Metadata } from 'next'
+import { latestPolicyChange, formatPolicyDate } from '@/lib/policy-changes'
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
@@ -46,6 +47,9 @@ function formatCount(n: number): string {
 
 export default async function HomePage() {
   const [stats, reportPreview] = await Promise.all([fetchStats(), getLatestReportPreview()])
+  const latestChange = latestPolicyChange()
+  const latestChangeDate = formatPolicyDate(latestChange.date)
+  const latestChangeTitle = latestChange.title
 
   const howToSchema = {
     '@context': 'https://schema.org',
@@ -280,6 +284,33 @@ export default async function HomePage() {
           </div>
 
         </div>
+      </div>
+
+      {/* Government rule changes — the rules move, and offers are judged against them */}
+      <div className="max-w-2xl mx-auto w-full px-4 pb-6">
+        <Link
+          href="/rule-changes"
+          className="group block p-5 sm:p-6 bg-amber-50 rounded-2xl hover:bg-amber-100/70 transition-colors"
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B45309" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/>
+              </svg>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] font-bold uppercase tracking-wider text-amber-700 mb-1">
+                Updated {latestChangeDate}
+              </p>
+              <p className="text-base font-bold text-amber-950 leading-snug text-balance">
+                {latestChangeTitle}
+              </p>
+              <p className="text-sm text-amber-800 mt-1 leading-snug">
+                The LMIA rules changed several times this year. See every change and what it means for your offer &rarr;
+              </p>
+            </div>
+          </div>
+        </Link>
       </div>
 
       {/* Browse all employers — replaces recently-banned list */}

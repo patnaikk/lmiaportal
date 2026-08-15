@@ -14,6 +14,7 @@ const staticRoutes = [
   { path: '/bulk', priority: 0.7, changeFreq: 'monthly' },
   { path: '/banned', priority: 0.8, changeFreq: 'weekly' },
   { path: '/reports', priority: 0.7, changeFreq: 'monthly' },
+  { path: '/rule-changes', priority: 0.8, changeFreq: 'weekly' },
   { path: '/updates', priority: 0.7, changeFreq: 'weekly' },
   { path: '/guide', priority: 0.6, changeFreq: 'monthly' },
   { path: '/reference', priority: 0.6, changeFreq: 'monthly' },
