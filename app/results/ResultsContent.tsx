@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import QRCode from 'qrcode'
 import { toSlug } from '@/lib/slug'
-import { verifyEmployer } from '@/lib/verify'
+import { verifyEmployer, type SearchOrigin } from '@/lib/verify'
 import { normalizeEmployerName } from '@/lib/normalize'
 import RiskIndicator from '@/components/RiskIndicator'
 import ViolationDetail from '@/components/ViolationDetail'
@@ -48,13 +48,15 @@ interface ResultsContentProps {
   employer: string
   city?: string
   province?: string
+  /** Where this render came from — keeps crawler hits on /employer/[slug] out of the search metrics. */
+  origin?: SearchOrigin
   /** Canonical URL for this result, used in structured data. Defaults to the /results query URL. */
   canonicalUrl?: string
 }
 
-export default async function ResultsContent({ employer, city, province, canonicalUrl }: ResultsContentProps) {
+export default async function ResultsContent({ employer, city, province, canonicalUrl, origin = 'search' }: ResultsContentProps) {
   const [result, qrSvg] = await Promise.all([
-    verifyEmployer(employer, city, province),
+    verifyEmployer(employer, city, province, origin),
     generateQR(employer, city, province),
   ])
   const employerNormalized = normalizeEmployerName(employer)

@@ -19,10 +19,26 @@ const PROVINCE_CODE_TO_NAME: Record<string, string> = {
   YT: 'Yukon',
 }
 
+/**
+ * Where a verification came from. Logged to search_logs.origin so that real
+ * user searches can be separated from page renders and background jobs —
+ * /employer/[slug] renders call verifyEmployer() too, and crawler traffic on
+ * those pages otherwise drowns out genuine searches in the log.
+ */
+export type SearchOrigin =
+  | 'search'
+  | 'employer_page'
+  | 'check'
+  | 'api'
+  | 'bulk'
+  | 'download'
+  | 'cron'
+
 export async function verifyEmployer(
   employerName: string,
   city?: string,
-  province?: string
+  province?: string,
+  origin: SearchOrigin = 'search'
 ): Promise<VerifyResult> {
   const normalized = normalizeEmployerName(employerName)
 
@@ -103,7 +119,7 @@ export async function verifyEmployer(
 
     if (v.compliance_status === 'ELIGIBLE') {
       // Served penalty — now allowed to hire. Flag YELLOW with history shown.
-      await logSearch(employerName, city, province, 'YELLOW')
+      await logSearch(employerName, city, province, 'YELLOW', undefined, origin)
       return {
         risk: 'YELLOW',
         reason: 'prior_violation_now_eligible',
@@ -115,7 +131,7 @@ export async function verifyEmployer(
     }
 
     if (v.compliance_status === 'INELIGIBLE_UNTIL') {
-      await logSearch(employerName, city, province, 'RED')
+      await logSearch(employerName, city, province, 'RED', undefined, origin)
       return {
         risk: 'RED',
         subtype: 'BANNED_TEMPORARY',
@@ -128,7 +144,7 @@ export async function verifyEmployer(
     }
 
     // INELIGIBLE_UNPAID or INELIGIBLE (plain) — treat as RED, no end date
-    await logSearch(employerName, city, province, 'RED')
+    await logSearch(employerName, city, province, 'RED', undefined, origin)
     return {
       risk: 'RED',
       subtype: 'BANNED_UNPAID_PENALTY',
@@ -191,7 +207,7 @@ export async function verifyEmployer(
   }
 
   if (positiveMatches.length === 0) {
-    await logSearch(employerName, city, province, 'GREY')
+    await logSearch(employerName, city, province, 'GREY', undefined, origin)
     return {
       risk: 'GREY',
       positiveMatches: [],
@@ -226,7 +242,7 @@ export async function verifyEmployer(
 
     if (detailMatch.length === 0) {
       // Employer found in positive list but location doesn't match — possible impersonation
-      await logSearch(employerName, city, province, 'YELLOW')
+      await logSearch(employerName, city, province, 'YELLOW', undefined, origin)
       return {
         risk: 'YELLOW',
         reason: 'address_mismatch',
@@ -247,7 +263,7 @@ export async function verifyEmployer(
       (m) => !m.program_stream?.toLowerCase().includes('permanent resident only')
     )
     if (prOnlyDetail.length > 0 && nonPrDetail.length === 0) {
-      await logSearch(employerName, city, province, 'YELLOW')
+      await logSearch(employerName, city, province, 'YELLOW', undefined, origin)
       return {
         risk: 'YELLOW',
         reason: 'pr_only_stream',
@@ -258,7 +274,7 @@ export async function verifyEmployer(
       }
     }
 
-    await logSearch(employerName, city, province, 'GREEN')
+    await logSearch(employerName, city, province, 'GREEN', undefined, origin)
     return {
       risk: 'GREEN',
       positiveMatches: nonPrDetail.length > 0 ? nonPrDetail : detailMatch,
@@ -277,7 +293,7 @@ export async function verifyEmployer(
   )
 
   if (prOnlyMatches.length > 0 && nonPrMatches.length === 0) {
-    await logSearch(employerName, city, province, 'YELLOW')
+    await logSearch(employerName, city, province, 'YELLOW', undefined, origin)
     return {
       risk: 'YELLOW',
       reason: 'pr_only_stream',
@@ -289,7 +305,7 @@ export async function verifyEmployer(
   }
 
   const finalMatches = nonPrMatches.length > 0 ? nonPrMatches : positiveMatches
-  await logSearch(employerName, city, province, 'GREEN')
+  await logSearch(employerName, city, province, 'GREEN', undefined, origin)
   return {
     risk: 'GREEN',
     positiveMatches: finalMatches,
@@ -304,16 +320,24 @@ async function logSearch(
   city?: string,
   province?: string,
   riskResult?: string,
-  matchScore?: number
+  matchScore?: number,
+  origin: SearchOrigin = 'search'
 ) {
+  const row = {
+    employer_query: employerQuery,
+    city_query: city || null,
+    province_query: province || null,
+    risk_result: riskResult,
+    match_score: matchScore || null,
+  }
   try {
-    await supabaseAdmin.from('search_logs').insert({
-      employer_query: employerQuery,
-      city_query: city || null,
-      province_query: province || null,
-      risk_result: riskResult,
-      match_score: matchScore || null,
-    })
+    const { error } = await supabaseAdmin.from('search_logs').insert({ ...row, origin })
+    // The origin column ships in 20260815_add_origin_to_search_logs.sql. If that
+    // migration hasn't been applied yet, PostgREST rejects the unknown column —
+    // fall back to the old shape so logging degrades instead of going dark.
+    if (error?.code === 'PGRST204' || error?.message?.includes('origin')) {
+      await supabaseAdmin.from('search_logs').insert(row)
+    }
   } catch {
     // Non-critical — don't fail the request if logging fails
   }

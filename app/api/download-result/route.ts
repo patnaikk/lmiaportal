@@ -26,7 +26,7 @@ export async function GET(request: NextRequest): Promise<Response> {
       return NextResponse.json({ error: 'Employer name required' }, { status: 400 })
     }
 
-    const result = await verifyEmployer(employer, city, province)
+    const result = await verifyEmployer(employer, city, province, 'download')
     const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' })
 
     const PW = doc.internal.pageSize.getWidth()

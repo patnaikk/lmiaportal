@@ -129,7 +129,7 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
   const pageUrl = `${SITE_URL}/check/results?${pageParams}`
 
   const [employerResult, qrSvg] = await Promise.all([
-    verifyEmployer(employer, undefined, province),
+    verifyEmployer(employer, undefined, province, 'check'),
     generateQR(pageUrl),
   ])
 

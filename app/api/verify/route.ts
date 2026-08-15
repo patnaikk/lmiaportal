@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const result = await verifyEmployer(employer.trim(), city, province)
+    const result = await verifyEmployer(employer.trim(), city, province, 'api')
     return NextResponse.json(result)
   } catch (err) {
     console.error('Verify error:', err)

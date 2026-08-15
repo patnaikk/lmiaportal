@@ -24,5 +24,5 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default function EmployerSlugPage({ params }: PageProps) {
   const employer = fromSlug(params.slug)
   const canonicalUrl = `https://lmiacheck.ca/employer/${params.slug}`
-  return <ResultsContent employer={employer} canonicalUrl={canonicalUrl} />
+  return <ResultsContent employer={employer} canonicalUrl={canonicalUrl} origin="employer_page" />
 }

@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
         const batch = capped.slice(i, i + BATCH_SIZE)
 
         const batchResults = await Promise.all(
-          batch.map((e) => verifyEmployer(e.name, e.city, e.province))
+          batch.map((e) => verifyEmployer(e.name, e.city, e.province, 'bulk'))
         )
 
         for (let j = 0; j < batch.length; j++) {
