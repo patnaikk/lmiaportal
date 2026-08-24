@@ -392,7 +392,7 @@ export default async function ResultsContent({ employer, city, province, canonic
         <div className="mt-8">
           <h2 className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest mb-3">Search another employer</h2>
           <div className="card-elevated p-5">
-            <SearchForm />
+            <SearchForm source={origin === 'employer_page' ? 'employer_page' : 'results'} />
             <div className="mt-4 pt-4 border-t border-gray-100">
               <DataFreshness />
             </div>

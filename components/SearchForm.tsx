@@ -26,7 +26,14 @@ const SAMPLES = [
   { label: 'Loblaws', value: 'Loblaws' },
 ]
 
+/**
+ * Where this form is rendered. Sent with `employer_search` so GA can separate
+ * first-time searches from re-searches on a result or employer page.
+ */
+export type SearchFormSource = 'home' | 'results' | 'employer_page'
+
 interface SearchFormProps {
+  source: SearchFormSource
   initialEmployer?: string
   initialCity?: string
   initialProvince?: string
@@ -34,6 +41,7 @@ interface SearchFormProps {
 }
 
 export default function SearchForm({
+  source,
   initialEmployer = '',
   initialCity = '',
   initialProvince = '',
@@ -69,7 +77,7 @@ export default function SearchForm({
     setLoading(true)
     window.scrollTo({ top: 0, behavior: 'instant' })
 
-    track('employer_search', { province: province || 'none', has_city: city.trim().length > 0 })
+    track('employer_search', { source, province: province || 'none', has_city: city.trim().length > 0 })
 
     const params = new URLSearchParams({ employer: employerSearchAs.trim() || employerDisplay.trim() })
     if (city.trim()) params.set('city', city.trim())

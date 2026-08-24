@@ -122,7 +122,7 @@ export default async function HomePage() {
       {/* Search card — moved up so the primary action is immediate */}
       <main className="max-w-2xl mx-auto w-full px-4 pt-2 pb-5">
         <div className="card-elevated p-5 sm:p-6">
-          <SearchForm autoFocus />
+          <SearchForm source="home" autoFocus />
           <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-2">
             <DataFreshness />
             <p className="text-xs text-gray-400">No data stored · No login required</p>
