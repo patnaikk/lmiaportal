@@ -3,14 +3,14 @@ import { render } from '@react-email/render'
 import { Resend } from 'resend'
 import { supabaseAdmin } from '@/lib/supabase'
 import { unsubscribeUrl } from '@/lib/unsubscribe'
-import MonthlyReport from '@/emails/MonthlyReport'
+import MonthlyReport, { SUBJECT } from '@/emails/MonthlyReport'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lmiacheck.ca'
 const FROM = process.env.NEWSLETTER_FROM || process.env.SYNC_EMAIL_FROM || 'LMIA Check <reports@lmiacheck.ca>'
-const SUBJECT = 'July 2026: Hotel banned for a year over abuse — and June got worse after we hit send'
+
 
 /**
  * Send the monthly newsletter. Protected by ADMIN_PASSWORD.

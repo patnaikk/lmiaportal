@@ -42,11 +42,16 @@ export async function verifyEmployer(
 ): Promise<VerifyResult> {
   const normalized = normalizeEmployerName(employerName)
 
+  // Matches ESDC has since pulled from its published list. Collected below and
+  // returned for transparency, but never allowed to influence `risk`.
+  let retractedMatches: ViolatorRecord[] = []
+
   if (!normalized || normalized.length < 2) {
     return {
       risk: 'GREY',
       positiveMatches: [],
       violatorMatches: [],
+      retractedMatches,
       source: 'not_found',
       employerQuery: employerName,
     }
@@ -104,6 +109,16 @@ export async function verifyEmployer(
     }
   }
 
+  // ESDC retracts records as well as adding them — a decision can be published
+  // and pulled days later. Once a record is gone from the government feed we
+  // must stop treating it as an accusation, so split those rows off here: they
+  // are reported to the user as history, but the verdict is computed as though
+  // only the still-published records exist.
+  if (violatorMatches.length > 0) {
+    retractedMatches = violatorMatches.filter((v) => v.removed_from_source)
+    violatorMatches = violatorMatches.filter((v) => !v.removed_from_source)
+  }
+
   if (violatorMatches.length > 0) {
     // Evaluate worst compliance status across all matches (not just first).
     // Priority: INELIGIBLE/INELIGIBLE_UNPAID > INELIGIBLE_UNTIL > ELIGIBLE
@@ -125,6 +140,7 @@ export async function verifyEmployer(
         reason: 'prior_violation_now_eligible',
         positiveMatches: [],
         violatorMatches,
+        retractedMatches,
         source: 'violators',
         employerQuery: employerName,
       }
@@ -138,6 +154,7 @@ export async function verifyEmployer(
         ban_end_date: v.ineligible_until_date,
         positiveMatches: [],
         violatorMatches,
+        retractedMatches,
         source: 'violators',
         employerQuery: employerName,
       }
@@ -150,6 +167,7 @@ export async function verifyEmployer(
       subtype: 'BANNED_UNPAID_PENALTY',
       positiveMatches: [],
       violatorMatches,
+      retractedMatches,
       source: 'violators',
       employerQuery: employerName,
     }
@@ -212,6 +230,7 @@ export async function verifyEmployer(
       risk: 'GREY',
       positiveMatches: [],
       violatorMatches: [],
+      retractedMatches,
       source: 'not_found',
       employerQuery: employerName,
     }
@@ -248,6 +267,7 @@ export async function verifyEmployer(
         reason: 'address_mismatch',
         positiveMatches,
         violatorMatches: [],
+        retractedMatches,
         source: 'positive_lmia',
         employerQuery: employerName,
       }
@@ -269,6 +289,7 @@ export async function verifyEmployer(
         reason: 'pr_only_stream',
         positiveMatches: prOnlyDetail,
         violatorMatches: [],
+        retractedMatches,
         source: 'positive_lmia',
         employerQuery: employerName,
       }
@@ -279,6 +300,7 @@ export async function verifyEmployer(
       risk: 'GREEN',
       positiveMatches: nonPrDetail.length > 0 ? nonPrDetail : detailMatch,
       violatorMatches: [],
+      retractedMatches,
       source: 'positive_lmia',
       employerQuery: employerName,
     }
@@ -299,6 +321,7 @@ export async function verifyEmployer(
       reason: 'pr_only_stream',
       positiveMatches: prOnlyMatches,
       violatorMatches: [],
+      retractedMatches,
       source: 'positive_lmia',
       employerQuery: employerName,
     }
@@ -310,6 +333,7 @@ export async function verifyEmployer(
     risk: 'GREEN',
     positiveMatches: finalMatches,
     violatorMatches: [],
+    retractedMatches,
     source: 'positive_lmia',
     employerQuery: employerName,
   }

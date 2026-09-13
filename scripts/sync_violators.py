@@ -23,6 +23,8 @@ Requirements:
   playwright install chromium
 """
 
+import hashlib
+import html
 import json
 import logging
 import os
@@ -72,8 +74,19 @@ IRCC_URL = (
 # The page renders its table client-side from this static JSON feed — reading
 # it directly is far cheaper and more reliable than scraping rendered DOM text
 # for a "total records" string (the page never actually shows one).
+#
+# NOTE (2026-09-13): this MUST stay in sync with the filename the page actually
+# loads. ESDC moved the table from `non_compliant_new.json` to
+# `non_compliant.json` around 2026-07-15 and left the old file frozen in place
+# rather than deleting it — so the old URL kept returning HTTP 200 and a
+# plausible-looking 1355 records while the real list grew to 1401. Every change
+# check between 2026-07-15 and 2026-09-07 compared against that fossil, which
+# is why 47 decisions (all of August) went unseen for weeks, and why two
+# employers published after the freeze looked like they had been "retracted".
+# `verify_feed_url()` below re-derives this from the page on every run so a
+# future rename surfaces as a loud warning instead of silent staleness.
 NON_COMPLIANT_JSON_URL = (
-    "https://www.canada.ca/content/dam/ircc/documents/json/non_compliant_new.json"
+    "https://www.canada.ca/content/dam/ircc/documents/json/non_compliant.json"
 )
 
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
@@ -229,18 +242,70 @@ def is_next_disabled(page: Page) -> bool:
     return False
 
 
-def fetch_live_count() -> Optional[int]:
+def verify_feed_url() -> Optional[str]:
     """
-    Read the true total record count straight from the JSON feed that backs
-    the page's table, instead of launching a browser and regex-scraping
-    rendered text (the page never actually displays a "total records" string,
-    which is why that approach always returned None).
+    Re-derive the table's JSON URL from the page itself and compare it to
+    NON_COMPLIANT_JSON_URL.
+
+    Guards against the failure that hid all of August 2026: ESDC renamed the
+    feed and left the old file served, frozen, at its original URL. A stale
+    feed does not 404 and does not look broken — it just quietly stops
+    changing, and a change-detection sync built on it stops detecting.
+
+    Returns the URL found on the page, or None if it could not be read.
+    """
+    try:
+        result = subprocess.run(
+            [
+                "curl", "-sS", "--max-time", "20",
+                "-A", "Mozilla/5.0 (compatible; lmia-portal-sync/1.0)",
+                IRCC_URL,
+            ],
+            capture_output=True, text=True, timeout=25, check=True,
+        )
+    except (subprocess.SubprocessError, OSError) as e:
+        log.warning(f"Could not fetch page to verify feed URL: {e}")
+        return None
+
+    found = re.findall(
+        r"[\w./-]*non_compliant[\w-]*\.json", result.stdout
+    )
+    if not found:
+        log.warning(
+            "Could not find a non_compliant*.json reference on the page — "
+            "the table may no longer be JSON-driven. Verify manually: "
+            f"{IRCC_URL}"
+        )
+        return None
+
+    page_url = "https://www.canada.ca" + found[0] if found[0].startswith("/") else found[0]
+    if page_url.rsplit("/", 1)[-1] != NON_COMPLIANT_JSON_URL.rsplit("/", 1)[-1]:
+        log.error(
+            "FEED URL CHANGED — the page now loads %s but this script polls %s. "
+            "Change detection is comparing against a stale file; update "
+            "NON_COMPLIANT_JSON_URL before trusting any 'unchanged' result.",
+            page_url, NON_COMPLIANT_JSON_URL,
+        )
+    return page_url
+
+
+
+def fetch_feed_state() -> tuple[Optional[int], Optional[str], Optional[list[dict]]]:
+    """
+    Read the JSON feed that backs the page's table and return
+    (record_count, content_fingerprint, raw_records).
 
     Shells out to curl rather than using requests/urllib: canada.ca's bot
     mitigation (Akamai) silently hangs plain Python HTTP clients — even with
     a browser User-Agent — while curl's TLS/HTTP fingerprint passes through
     fine. Playwright (used for the full scrape below) also passes since it's
     a real browser engine.
+
+    The fingerprint exists because a record COUNT cannot detect an
+    add+remove. In August 2026 ESDC published 2 decisions and withdrew 2
+    others; the count returned to its previous value and the sync skipped for
+    a month while two retracted employers stayed live on the site. Hashing the
+    row contents makes any substantive change visible.
     """
     try:
         result = subprocess.run(
@@ -253,10 +318,42 @@ def fetch_live_count() -> Optional[int]:
         )
         records = json.loads(result.stdout).get("list")
         if isinstance(records, list) and len(records) > 100:  # sanity check
-            return len(records)
+            return len(records), fingerprint_records(records), records
     except (subprocess.SubprocessError, OSError, ValueError) as e:
-        log.warning(f"Could not fetch live count from JSON feed: {e}")
-    return None
+        log.warning(f"Could not fetch feed state from JSON feed: {e}")
+    return None, None, None
+
+
+def fingerprint_records(records: list[dict]) -> str:
+    """
+    Stable SHA-256 over the fields that carry meaning for us: who, when, how
+    much, and what status. Sorted so feed reordering alone doesn't force a
+    pointless scrape, while any add, removal or edit does.
+    """
+    rows = sorted(
+        "\x1f".join((
+            (r.get("bn_operating") or "").strip(),
+            (r.get("date") or "").strip(),
+            (r.get("penalty_en") or "").strip(),
+            (r.get("status_en") or "").strip(),
+        ))
+        for r in records
+    )
+    return hashlib.sha256("\x1e".join(rows).encode("utf-8")).hexdigest()
+
+
+def canonical_name(name: Optional[str]) -> str:
+    """
+    Reduce an employer name to a form comparable between the JSON feed and the
+    scraped table. They are not the same text: the feed carries HTML source
+    (``A&amp;W``, ``Résidence Le\xa0Coulongeois``) while the table gives us the
+    rendered result (``A&W``, with a normal space). Comparing them raw marks
+    ~5% of the database as withdrawn — every name containing an ampersand.
+    """
+    n = html.unescape(name or "")
+    n = unicodedata.normalize("NFKC", n)      # NBSP → space, ligatures, etc.
+    n = n.replace("\u2019", "'").replace("\u2018", "'")
+    return re.sub(r"\s+", " ", n).strip().casefold()
 
 
 # ── DB helpers ────────────────────────────────────────────────
@@ -279,10 +376,130 @@ def get_last_known_count(supabase) -> Optional[int]:
     return None
 
 
+def get_last_fingerprint(supabase) -> Optional[str]:
+    """Most recent feed fingerprint we recorded, or None (incl. pre-migration)."""
+    try:
+        result = (
+            supabase.table("sync_logs")
+            .select("feed_fingerprint")
+            .eq("source", "ircc_non_compliant")
+            .in_("status", ["success", "skipped"])
+            .not_.is_("feed_fingerprint", "null")
+            .order("synced_at", desc=True)
+            .limit(1)
+            .execute()
+        )
+        if result.data:
+            return result.data[0]["feed_fingerprint"]
+    except Exception as e:
+        log.warning(f"Could not read last fingerprint from DB: {e}")
+    return None
+
+
+def reconcile_removals(supabase, feed_records: list[dict]) -> tuple[int, int]:
+    """
+    ESDC withdraws records as well as adding them — a decision can be published
+    and pulled days later. Our upsert never deletes, so without this pass a
+    retracted employer stays on the site accused of a penalty the government no
+    longer publishes.
+
+    Flags rows whose employer no longer appears in the feed with
+    removed_from_source, and clears the flag for any that reappear. We flag
+    rather than delete: people arrive from older links and newsletters and need
+    the page to explain what changed.
+
+    Matching is on employer NAME only, not name+date, and that is deliberate.
+    The failure modes are not symmetric: wrongly flagging a row silently
+    retracts a real ban and under-warns a worker, while missing one leaves a
+    stale record we would catch by other means. So we only clear an accusation
+    when the employer has left the government list altogether — a blanked or
+    re-dated row (ESDC does that too: see Armour Trucking, whose date, penalty
+    and status were emptied in place) keeps its warning.
+
+    Returns (newly_flagged, unflagged).
+    """
+    if not feed_records:
+        log.warning("No feed records available — skipping reconciliation.")
+        return 0, 0
+
+    live_names = {canonical_name(r.get("bn_operating")) for r in feed_records}
+    live_names.discard("")
+    today = datetime.now(timezone.utc).date().isoformat()
+
+    # PostgREST caps a response at 1000 rows. Paginate — reading a truncated
+    # table would make every unread row look absent from the feed.
+    rows: list[dict] = []
+    PAGE = 1000
+    try:
+        offset = 0
+        while True:
+            batch = (
+                supabase.table("violators")
+                .select("id, business_operating_name, removed_from_source")
+                .order("id")
+                .range(offset, offset + PAGE - 1)
+                .execute()
+            ).data or []
+            rows.extend(batch)
+            if len(batch) < PAGE:
+                break
+            offset += PAGE
+    except Exception as e:
+        log.warning(f"Could not read violators for reconciliation: {e}")
+        return 0, 0
+
+    to_flag, to_clear = [], []
+    for r in rows:
+        present = canonical_name(r.get("business_operating_name")) in live_names
+        if not present and not r.get("removed_from_source"):
+            to_flag.append(r["id"])
+        elif present and r.get("removed_from_source"):
+            to_clear.append(r["id"])
+
+    # A wholesale mismatch means the scrape or the name normalisation is broken,
+    # not that ESDC emptied its list. Bail out rather than flag the database.
+    if rows and len(to_flag) > len(rows) * 0.05:
+        log.error(
+            f"Reconciliation aborted: {len(to_flag)}/{len(rows)} rows look absent from the "
+            "feed (>5%). Refusing to mass-flag — check the scrape and canonical_name()."
+        )
+        return 0, 0
+
+    by_id = {r["id"]: r for r in rows}
+
+    def _update(ids: list[int], value: Optional[str]):
+        for i in range(0, len(ids), 100):
+            supabase.table("violators").update(
+                {"removed_from_source": value}
+            ).in_("id", ids[i : i + 100]).execute()
+
+    try:
+        if to_flag:
+            _update(to_flag, today)
+            names = [by_id[i]["business_operating_name"] for i in to_flag[:10]]
+            log.warning(
+                f"{len(to_flag)} record(s) withdrawn by ESDC — flagged: {', '.join(names)}"
+            )
+        if to_clear:
+            _update(to_clear, None)
+            log.info(f"{len(to_clear)} previously-withdrawn record(s) reappeared — flag cleared.")
+    except Exception as e:
+        if "PGRST204" in str(e) or "Could not find the" in str(e):
+            log.warning(
+                "Column 'removed_from_source' not in DB yet — skipping reconciliation.\n"
+                "  ACTION NEEDED: Run supabase/migrations/20260905_add_removed_from_source.sql."
+            )
+        else:
+            log.warning(f"Could not update removal flags: {e}")
+        return 0, 0
+
+    return len(to_flag), len(to_clear)
+
+
 def write_sync_log(supabase, *, status: str, total_scraped: Optional[int],
                    records_added: int, records_updated: int,
                    last_known_count: Optional[int], message: str,
-                   duration_secs: float):
+                   duration_secs: float, feed_fingerprint: Optional[str] = None):
     try:
         supabase.table("sync_logs").insert({
             "source":           "ircc_non_compliant",
@@ -293,8 +510,27 @@ def write_sync_log(supabase, *, status: str, total_scraped: Optional[int],
             "last_known_count": last_known_count,
             "message":          message,
             "duration_secs":    round(duration_secs, 1),
+            "feed_fingerprint": feed_fingerprint,
         }).execute()
     except Exception as e:
+        # feed_fingerprint ships in 20260905_add_removed_from_source.sql. Until
+        # that migration lands, retry without it so logging degrades instead of
+        # going dark.
+        if "PGRST204" in str(e) or "Could not find the" in str(e):
+            try:
+                supabase.table("sync_logs").insert({
+                    "source":           "ircc_non_compliant",
+                    "status":           status,
+                    "total_scraped":    total_scraped,
+                    "records_added":    records_added,
+                    "records_updated":  records_updated,
+                    "last_known_count": last_known_count,
+                    "message":          message,
+                    "duration_secs":    round(duration_secs, 1),
+                }).execute()
+                return
+            except Exception as e2:
+                e = e2
         log.warning(f"Could not write sync_log: {e}")
 
 
@@ -498,21 +734,34 @@ def run_sync():
 
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-    # ── Step 1: Quick count check via the JSON feed (no browser needed) ──
-    log.info("Fetching live record count from JSON feed...")
-    live_count = fetch_live_count()
+    # ── Step 1: Read the JSON feed (no browser needed) ──
+    # Confirm we are still polling the file the page actually uses. A renamed
+    # feed is the one failure mode this whole step cannot otherwise see: the
+    # old URL keeps returning 200 with stale data, so "unchanged" stays true
+    # forever. Logged, not fatal — a scrape on a stale pointer is still safer
+    # than no scrape at all.
+    verify_feed_url()
+
+    log.info("Fetching feed state from JSON feed...")
+    live_count, live_fingerprint, feed_records = fetch_feed_state()
 
     last_count = get_last_known_count(supabase)
+    last_fingerprint = get_last_fingerprint(supabase)
     log.info(f"Live count: {live_count}   Last synced count: {last_count}")
 
-    # ── Step 2: Skip if count unchanged ──────────────────────
+    # ── Step 2: Skip only if the feed's CONTENTS are unchanged ──
+    # Deliberately not a count comparison: a count cannot see an equal-sized
+    # add+remove. (The August 2026 incident that prompted this turned out to be
+    # a stale feed URL rather than a retraction — see verify_feed_url() — but
+    # the reasoning holds regardless.) Until we have a fingerprint to compare
+    # against we always scrape.
     if (
-        live_count is not None
-        and last_count is not None
-        and live_count == last_count
+        live_fingerprint is not None
+        and last_fingerprint is not None
+        and live_fingerprint == last_fingerprint
     ):
         duration = time.monotonic() - started
-        msg = f"Count unchanged ({live_count} records) — skipping sync."
+        msg = f"Feed unchanged ({live_count} records, fingerprint {live_fingerprint[:12]}) — skipping sync."
         log.info(msg)
         write_sync_log(
             supabase,
@@ -523,6 +772,7 @@ def run_sync():
             last_known_count=live_count,
             message=msg,
             duration_secs=duration,
+            feed_fingerprint=live_fingerprint,
         )
         send_email(
             "[LMIA Sync] Skipped — no new records",
@@ -532,7 +782,7 @@ def run_sync():
         return
 
     # ── Step 3: Full scrape ───────────────────────────────────
-    log.info("Count changed or unknown — starting full scrape...")
+    log.info("Feed changed or fingerprint unknown — starting full scrape...")
     try:
         all_rows: list[list[str]] = []
         headers: list[str] = EXPECTED_COLUMNS[:]
@@ -620,6 +870,13 @@ def run_sync():
         inserted, updated = upsert_records(supabase, records)
         log.info(f"Done: {inserted} new, {updated} updated.")
 
+        # The upsert only ever adds and edits. Records ESDC has WITHDRAWN have
+        # to be flagged separately or they linger on the site as live
+        # accusations — see reconcile_removals().
+        withdrawn, restored = reconcile_removals(
+            supabase, feed_records if feed_records is not None else []
+        )
+
     except Exception as e:
         duration = time.monotonic() - started
         msg = f"DB upsert failed: {e}"
@@ -641,10 +898,12 @@ def run_sync():
     duration = time.monotonic() - started
     summary = (
         f"Sync complete at {now_utc}\n"
-        f"  Scraped:  {total_scraped} records\n"
-        f"  New:      {inserted}\n"
-        f"  Updated:  {updated}\n"
-        f"  Duration: {duration:.1f}s"
+        f"  Scraped:   {total_scraped} records\n"
+        f"  New:       {inserted}\n"
+        f"  Updated:   {updated}\n"
+        f"  Withdrawn: {withdrawn}\n"
+        f"  Restored:  {restored}\n"
+        f"  Duration:  {duration:.1f}s"
     )
     log.info(summary)
 
@@ -657,10 +916,11 @@ def run_sync():
         last_known_count=live_count,
         message=summary,
         duration_secs=duration,
+        feed_fingerprint=live_fingerprint,
     )
 
     send_email(
-        f"[LMIA Sync] {inserted} new, {updated} updated — {now_utc}",
+        f"[LMIA Sync] {inserted} new, {updated} updated, {withdrawn} withdrawn — {now_utc}",
         summary,
     )
     log.info("=" * 60)

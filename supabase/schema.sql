@@ -53,7 +53,11 @@ CREATE TABLE IF NOT EXISTS violators (
   status_raw              VARCHAR(255),
   compliance_status       VARCHAR(30),  -- ELIGIBLE | INELIGIBLE_UNTIL | INELIGIBLE_UNPAID | INELIGIBLE
   ineligible_until_date   DATE,
-  ingested_at             TIMESTAMP DEFAULT NOW()
+  ingested_at             TIMESTAMP DEFAULT NOW(),
+  -- Date we first saw this record vanish from the ESDC feed. NULL = still
+  -- published. ESDC retracts records, not just backfills them; a non-NULL
+  -- row must never drive a RED/YELLOW verdict.
+  removed_from_source     DATE
 );
 
 CREATE INDEX IF NOT EXISTS idx_violators_trgm

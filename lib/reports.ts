@@ -93,6 +93,10 @@ export function monthLabel(yearMonth: string): string {
   return new Date(y, m - 1, 1).toLocaleDateString('en-CA', { month: 'long', year: 'numeric' })
 }
 
+// Every figure below describes what ESDC *currently* publishes: each violators
+// query filters out rows the government has withdrawn from its feed. Counting a
+// retracted penalty would overstate enforcement and keep an employer in a report
+// they are no longer on. See supabase/migrations/20260905_add_removed_from_source.sql.
 const INELIGIBLE_STATUSES = ['INELIGIBLE', 'INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID']
 
 export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyReport> {
@@ -103,9 +107,9 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
   const { start: nextStart, end: nextEnd } = monthRange(next)
 
   // 1. New bans this month
-  const { data: newBansRaw } = await supabase
-    .from('violators')
+  const { data: newBansRaw } = await supabase.from('violators')
     .select('business_operating_name, province, decision_date, penalty_amount, ineligible_until_date, compliance_status, reasons')
+    .is('removed_from_source', null)
     .gte('decision_date', start)
     .lte('decision_date', end)
     .in('compliance_status', INELIGIBLE_STATUSES)
@@ -122,9 +126,9 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
   }))
 
   // 2. Province breakdown
-  const { data: allViolators } = await supabase
-    .from('violators')
+  const { data: allViolators } = await supabase.from('violators')
     .select('province, compliance_status, decision_date')
+    .is('removed_from_source', null)
     .in('compliance_status', INELIGIBLE_STATUSES)
 
   const provinceMap: Record<string, { total: number; newThisMonth: number; currentlyBanned: number }> = {}
@@ -140,9 +144,9 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
     .sort((a, b) => b.total - a.total)
 
   // 3. Top violation reasons (all time, weighted by frequency)
-  const { data: reasonsRaw } = await supabase
-    .from('violators')
+  const { data: reasonsRaw } = await supabase.from('violators')
     .select('reasons')
+    .is('removed_from_source', null)
     .in('compliance_status', INELIGIBLE_STATUSES)
     .not('reasons', 'is', null)
 
@@ -158,9 +162,9 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
     .slice(0, 8)
 
   // 4a. Bans expiring THIS month
-  const { data: expiringThisRaw } = await supabase
-    .from('violators')
+  const { data: expiringThisRaw } = await supabase.from('violators')
     .select('business_operating_name, province, ineligible_until_date, penalty_amount')
+    .is('removed_from_source', null)
     .eq('compliance_status', 'INELIGIBLE_UNTIL')
     .gte('ineligible_until_date', start)
     .lte('ineligible_until_date', end)
@@ -174,9 +178,9 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
   }))
 
   // 4b. Bans expiring next month
-  const { data: expiringRaw } = await supabase
-    .from('violators')
+  const { data: expiringRaw } = await supabase.from('violators')
     .select('business_operating_name, province, ineligible_until_date, penalty_amount')
+    .is('removed_from_source', null)
     .eq('compliance_status', 'INELIGIBLE_UNTIL')
     .gte('ineligible_until_date', nextStart)
     .lte('ineligible_until_date', nextEnd)
@@ -198,18 +202,18 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
     { count: expiringThisCount },
     { count: expiringNextCount },
   ] = await Promise.all([
-    supabase.from('violators').select('*', { count: 'exact', head: true }).in('compliance_status', INELIGIBLE_STATUSES),
-    supabase.from('violators').select('*', { count: 'exact', head: true }).in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL']),
-    supabase.from('violators').select('*', { count: 'exact', head: true }).in('compliance_status', INELIGIBLE_STATUSES).gte('decision_date', start).lte('decision_date', end),
-    supabase.from('violators').select('*', { count: 'exact', head: true }).in('compliance_status', INELIGIBLE_STATUSES).gte('decision_date', prevStart).lte('decision_date', prevEnd),
-    supabase.from('violators').select('*', { count: 'exact', head: true }).eq('compliance_status', 'INELIGIBLE_UNTIL').gte('ineligible_until_date', start).lte('ineligible_until_date', end),
-    supabase.from('violators').select('*', { count: 'exact', head: true }).eq('compliance_status', 'INELIGIBLE_UNTIL').gte('ineligible_until_date', nextStart).lte('ineligible_until_date', nextEnd),
+    supabase.from('violators').select('*', { count: 'exact', head: true }).is('removed_from_source', null).in('compliance_status', INELIGIBLE_STATUSES),
+    supabase.from('violators').select('*', { count: 'exact', head: true }).is('removed_from_source', null).in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL']),
+    supabase.from('violators').select('*', { count: 'exact', head: true }).is('removed_from_source', null).in('compliance_status', INELIGIBLE_STATUSES).gte('decision_date', start).lte('decision_date', end),
+    supabase.from('violators').select('*', { count: 'exact', head: true }).is('removed_from_source', null).in('compliance_status', INELIGIBLE_STATUSES).gte('decision_date', prevStart).lte('decision_date', prevEnd),
+    supabase.from('violators').select('*', { count: 'exact', head: true }).is('removed_from_source', null).eq('compliance_status', 'INELIGIBLE_UNTIL').gte('ineligible_until_date', start).lte('ineligible_until_date', end),
+    supabase.from('violators').select('*', { count: 'exact', head: true }).is('removed_from_source', null).eq('compliance_status', 'INELIGIBLE_UNTIL').gte('ineligible_until_date', nextStart).lte('ineligible_until_date', nextEnd),
   ])
 
   // Total penalties (sum of penalty_amount where parseable)
-  const { data: penaltyRows } = await supabase
-    .from('violators')
+  const { data: penaltyRows } = await supabase.from('violators')
     .select('penalty_amount')
+    .is('removed_from_source', null)
     .in('compliance_status', INELIGIBLE_STATUSES)
     .not('penalty_amount', 'is', null)
 
@@ -252,9 +256,9 @@ export interface LatestReportPreview {
 export async function getLatestReportPreview(): Promise<LatestReportPreview | null> {
   try {
     // Find the most recent month with bans
-    const { data: dateRows } = await supabase
-      .from('violators')
+    const { data: dateRows } = await supabase.from('violators')
       .select('decision_date')
+      .is('removed_from_source', null)
       .in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID'])
       .not('decision_date', 'is', null)
       .order('decision_date', { ascending: false })
@@ -279,9 +283,9 @@ export async function getLatestReportPreview(): Promise<LatestReportPreview | nu
     })()
 
     // New bans this month + preview names + province
-    const { data: newBans } = await supabase
-      .from('violators')
+    const { data: newBans } = await supabase.from('violators')
       .select('business_operating_name, province, address')
+      .is('removed_from_source', null)
       .in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID'])
       .gte('decision_date', start)
       .lte('decision_date', end)
@@ -297,9 +301,9 @@ export async function getLatestReportPreview(): Promise<LatestReportPreview | nu
     const topProvince = Object.entries(provCount).sort((a, b) => b[1] - a[1])[0]?.[0] ?? null
 
     // Expiring this month
-    const { count: expiringCount } = await supabase
-      .from('violators')
+    const { count: expiringCount } = await supabase.from('violators')
       .select('*', { count: 'exact', head: true })
+      .is('removed_from_source', null)
       .eq('compliance_status', 'INELIGIBLE_UNTIL')
       .gte('ineligible_until_date', start)
       .lte('ineligible_until_date', end)
@@ -319,9 +323,9 @@ export async function getLatestReportPreview(): Promise<LatestReportPreview | nu
 
 // Returns list of months that have at least one new ban, for index page
 export async function getReportMonths(): Promise<{ month: string; label: string; count: number }[]> {
-  const { data } = await supabase
-    .from('violators')
+  const { data } = await supabase.from('violators')
     .select('decision_date')
+    .is('removed_from_source', null)
     .in('compliance_status', ['INELIGIBLE', 'INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID'])
     .not('decision_date', 'is', null)
     .order('decision_date', { ascending: false })

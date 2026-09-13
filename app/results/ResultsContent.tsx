@@ -5,6 +5,7 @@ import { verifyEmployer, type SearchOrigin } from '@/lib/verify'
 import { normalizeEmployerName } from '@/lib/normalize'
 import RiskIndicator from '@/components/RiskIndicator'
 import ViolationDetail from '@/components/ViolationDetail'
+import RetractionNotice from '@/components/RetractionNotice'
 import MatchedData from '@/components/MatchedData'
 import NextSteps from '@/components/NextSteps'
 import EmailCapture from '@/components/EmailCapture'
@@ -182,6 +183,12 @@ export default async function ResultsContent({ employer, city, province, canonic
             users understand WHY before being told what to do */}
         {result.violatorMatches.length > 0 && (
           <ViolationDetail violators={result.violatorMatches} />
+        )}
+
+        {/* Records ESDC has since withdrawn. Kept visible so a penalty that
+            disappears between visits reads as a correction, not a glitch. */}
+        {result.retractedMatches?.length > 0 && (
+          <RetractionNotice retracted={result.retractedMatches} />
         )}
 
         {/* Next steps — immediately after verdict */}

@@ -38,6 +38,8 @@ export interface ViolatorRecord {
   compliance_status: ComplianceStatus
   ineligible_until_date: string | null
   ingested_at: string
+  /** Date we first saw ESDC drop this record from the feed. Null = still published. */
+  removed_from_source?: string | null
 }
 
 export interface VerifyResult {
@@ -47,6 +49,12 @@ export interface VerifyResult {
   ban_end_date?: string | null
   positiveMatches: PositiveLmia[]
   violatorMatches: ViolatorRecord[]
+  /**
+   * Matches ESDC has since RETRACTED from its published list. These are shown
+   * for transparency but deliberately excluded from `risk` — we must not keep
+   * accusing an employer the government no longer lists.
+   */
+  retractedMatches: ViolatorRecord[]
   source: 'positive_lmia' | 'violators' | 'not_found'
   employerQuery: string
 }

@@ -13,6 +13,13 @@ import {
 } from '@react-email/components'
 import * as React from 'react'
 
+/**
+ * Subject line for the current issue. Lives here, beside the copy it belongs
+ * to, because it was previously duplicated in the send route and the preview
+ * page and silently drifted out of sync between them.
+ */
+export const SUBJECT = 'August 2026: 29 employers fined $627,750 \u2014 and no new bans'
+
 export interface BanHighlight {
   name: string
   penalty: string // e.g. "$90,000"
@@ -23,6 +30,11 @@ export interface BanHighlight {
 export interface ProvinceCount {
   province: string
   count: number
+}
+
+export interface ReportStat {
+  value: string
+  label: string
 }
 
 export interface MonthlyReportProps {
@@ -43,6 +55,12 @@ export interface MonthlyReportProps {
   expiringNextMonthCount?: number
   nextMonthLabel?: string
   provincialBreakdown?: ProvinceCount[]
+  /**
+   * Eyebrow above the province table. Defaults to bans; override when the
+   * month's breakdown counts something else (August 2026 had no bans at all,
+   * so its table counts fined employers).
+   */
+  provincialBreakdownLabel?: string
   highlightsLabel?: string
   highlightsNote?: string
   previewText?: string
@@ -50,62 +68,118 @@ export interface MonthlyReportProps {
   scamParagraphs?: string[]
   sinceLastIssueParagraphs?: string[]
   headsUpText?: string
+  /**
+   * Employers named under the "heads up" line — normally the bans ending soon.
+   * Same row treatment as `highlights` but with a neutral dot: these are not
+   * new enforcement, they are employers becoming free to hire again.
+   */
+  headsUpHighlights?: BanHighlight[]
+  /**
+   * The three figures in the report card's stat row. Defaults to
+   * bans / top province / expiring, which is the right summary in a month
+   * whose story is bans. It is not always. August 2026 had 29 fines totalling
+   * $627,750 and zero bans: the default row would have read "0 — 0" and made
+   * the heaviest fine month since March look like nothing happened. Override
+   * it so the row leads with whatever the month actually did.
+   */
+  stats?: ReportStat[]
 }
 
-const defaults: Required<Omit<MonthlyReportProps, 'highlights'>> & { highlights: BanHighlight[] } = {
-  monthLabel: 'July 2026',
-  newBansCount: 1,
-  topProvince: 'SK',
+const defaults: Required<Omit<MonthlyReportProps, 'highlights' | 'headsUpHighlights' | 'stats'>> & {
+  highlights: BanHighlight[]
+  headsUpHighlights: BanHighlight[]
+  stats: ReportStat[]
+} = {
+  monthLabel: 'August 2026',
+  newBansCount: 0,
+  topProvince: 'AB',
   expiringCount: 0,
+  stats: [
+    { value: '29', label: 'Employers fined' },
+    { value: '$627,750', label: 'In penalties' },
+    { value: '0', label: 'New bans' },
+  ],
   highlights: [
     {
-      name: 'Royal Hotel',
-      penalty: '$40,000',
-      note: 'Weyburn, SK — banned until July 2027',
-      url: 'https://lmiacheck.ca/employer/royal-hotel',
+      name: 'Smart Greenhouse Ltd.',
+      penalty: '$180,000',
+      note: 'Edmonton, AB \u2014 business was not actually operating',
+      url: 'https://lmiacheck.ca/employer/smart-greenhouse-ltd',
     },
     {
-      name: 'The Party People Catering Co',
-      penalty: '$75,250',
-      note: 'Acheson, AB — fined, still eligible',
-      url: 'https://lmiacheck.ca/employer/the-party-people-catering-co',
+      name: 'Royal Greenhouse Ltd.',
+      penalty: '$100,000',
+      note: 'Beaumont, AB \u2014 business was not actually operating',
+      url: 'https://lmiacheck.ca/employer/royal-greenhouse-ltd',
     },
     {
-      name: 'Rock Solid Cleaning',
-      penalty: '$750',
-      note: 'Victoria, BC — fined, still eligible',
-      url: 'https://lmiacheck.ca/employer/rock-solid-cleaning',
+      name: 'Baseline Trucking Ltd.',
+      penalty: '$63,000',
+      note: 'Sherwood Park, AB \u2014 pay or conditions did not match the offer',
+      url: 'https://lmiacheck.ca/employer/baseline-trucking-ltd',
+    },
+    {
+      name: 'BCM Farms Ltd.',
+      penalty: '$60,000',
+      note: 'Surrey, BC \u2014 business was not actually operating',
+      url: 'https://lmiacheck.ca/employer/bcm-farms-ltd',
+    },
+    {
+      name: 'Earan Janitorial Services Ltd.',
+      penalty: '$46,000',
+      note: 'Surrey, BC \u2014 business was not actually operating',
+      url: 'https://lmiacheck.ca/employer/earan-janitorial-services-ltd',
     },
   ],
-  highlightsLabel: 'JULY DECISIONS · 1 NEW BAN · 2 FINES',
+  highlightsLabel: 'AUGUST DECISIONS \u00b7 29 FINED \u00b7 NO NEW BANS',
   highlightsNote:
-    'One employer was banned from hiring foreign workers this month; two more were fined but remain eligible. ESDC only imposes a hiring ban for the most serious or repeated violations.',
-  reportUrl: 'https://lmiacheck.ca/reports/2026-07',
+    'August brought more enforcement decisions than any month since March: 29 employers, penalised $627,750 between them. Not one was banned from hiring foreign workers. That combination is normal and worth understanding \u2014 ESDC reserves a hiring ban for the most serious or repeated violations, so an employer can be fined heavily and still be free to recruit you tomorrow. The five largest are below; the full list of 29 is on the site.',
+  reportUrl: 'https://lmiacheck.ca/reports/2026-08',
   siteUrl: 'https://lmiacheck.ca',
   unsubscribeUrl: 'https://lmiacheck.ca/unsubscribe',
   helpOrgName: 'Migrant Workers Alliance for Change',
   helpOrgUrl: 'https://migrantworkersalliance.org',
   logoUrl: 'https://lmiacheck.ca/email/canada-flag.png',
   patternText:
-    'Two of July’s three enforcement decisions — the Royal Hotel in Saskatchewan and The Party People Catering in Alberta, $115,250 in penalties between them — were for the same violation: failing to keep the workplace free of abuse. Under the rules, “abuse” is broader than most workers realize: it includes psychological abuse, financial abuse (like withholding pay), and reprisal — punishing you for speaking up. If any of that is happening to you, it is the employer breaking the law, not you. You can report it confidentially, and you may qualify for an open work permit that lets you leave that employer without losing status.',
+    'Seven of August\u2019s 29 employers \u2014 including the two largest fines of the month, $180,000 and $100,000 \u2014 were penalised under the same rule: they were not actually operating the business the foreign worker had been hired for. Together those seven account for $407,000 of the month\u2019s total. In plain terms, this is the closest thing in the enforcement record to the job not being real. It is the same harm as a recruitment scam, except the employer here was a registered company with a genuine LMIA. The other striking number is 20: that is how many of the 29 were penalised for not handing inspectors the documents they asked for. An employer who cannot produce payroll records when the government asks is unlikely to produce them for you either. Before you pay anyone or board a flight, ask for the job offer and the LMIA number in writing, and check that the company is genuinely operating at the address on the offer \u2014 a phone number that works, a real premises, staff who have heard of it.',
   previewText:
-    'A hotel banned for abuse, a $75K fine — and June’s story grew after we hit send.',
-  scamTitle: 'The fake job offer with a real company’s name',
+    '29 employers fined $627,750 \u2014 and two banned employers can hire again this week.',
+  scamTitle: 'The \u201cconsultant\u201d who isn\u2019t allowed to charge you',
   scamParagraphs: [
-    'A scam we keep hearing about: you receive an official-looking job offer letter — company logo, signature, sometimes even a real LMIA number — from a company that actually exists. The letter is fake. Scammers copy the names of legitimate Canadian employers because they know workers will search the company and find a real business.',
-    'Two checks that defeat it: a real employer never charges you a fee for the job, the LMIA, or “processing.” And if you got an offer you didn’t apply for, contact the company through the phone number or careers page on its own official website — never through the contacts in the letter — and ask if the offer is real.',
+    'Only three kinds of people may legally charge you for immigration advice in Canada: a consultant licensed by the College of Immigration and Citizenship Consultants, a lawyer (or, in Ontario, a licensed paralegal) in good standing with a provincial or territorial law society, or a Quebec notary. Anyone else who takes your money for it \u2014 an agent, a \u201cvisa consultancy\u201d, a friend of a friend with an office and a printer \u2014 is acting illegally, whatever the business card says.',
+    'The check takes two minutes: ask for the person\u2019s full legal name and licence number, then look them up yourself in the College\u2019s public register or the law society\u2019s directory. Two more signs worth knowing: no authorized representative can guarantee you an LMIA or a visa, and none of them need to be paid in cryptocurrency, gift cards, or a transfer to someone\u2019s personal account.',
   ],
   sinceLastIssueParagraphs: [
-    'Last month we reported that June had 7 employers fined a combined $276,750 and zero new bans. After we hit send, the government record grew: 4 more June decisions were published, bringing June to 11 employers and $487,750 in penalties — and one of them, SK91 Transport Inc., received an $80,000 penalty and a hiring ban until June 2027.',
-    'That’s the nature of this list: decisions can appear weeks after they’re made. It’s why we suggest checking an employer one more time right before you accept an offer, even if you checked last month.',
+    'Last month we told you July had three decisions and one hiring ban. The real figure is sixteen decisions and twelve employers now ineligible to hire \u2014 $502,760 in penalties. Nothing was withdrawn and no employer we named has been cleared \u2014 the rest of July simply had not reached us when we went to press. It has now, and we would rather show you a number that moved than quietly leave the old one standing.',
+    'Ten of those twelve are ineligible for a specific reason worth knowing: they have not paid their fine. That status lasts until they pay, with no fixed end date, and it is the most common form of ineligibility by far. The practical lesson is the one we keep coming back to, and July is the sharpest example of it yet: an employer who looked clean when you checked in August may not look clean today. Check again in the week you actually sign, not once at the start of your search.',
   ],
   headsUpText:
-    'Heads up for August: no hiring bans expire next month — the next wave is mid-September, when 2 employers become eligible to hire again. We’ll name them in the September issue before it happens.',
-  positiveCount: '11,000',
+    'Two hiring bans end this month, and both employers become free to recruit foreign workers again. We promised in July to name them before it happened. A finished ban is not a clean record \u2014 it means the penalty has been served. In October two more end: Polar Bear Ice Services in Surrey, BC on the 25th and R\u00e9sidence Le Coulongeois in Qu\u00e9bec City on the 31st.',
+  headsUpHighlights: [
+    {
+      name: 'Kowalski Accounting & Bookkeeping Inc.',
+      penalty: '$43,000',
+      note: 'White Rock, BC \u2014 free to hire again from 13 September',
+      url: 'https://lmiacheck.ca/employer/kowalski-accounting-bookkeeping-inc',
+    },
+    {
+      name: 'Rock Rover Transport',
+      penalty: '$155,000',
+      note: 'Calgary, AB \u2014 free to hire again from 17 September',
+      url: 'https://lmiacheck.ca/employer/rock-rover-transport',
+    },
+  ],
+  positiveCount: '10,000',
   positiveQuarter: 'Q3 2025',
-  expiringNextMonthCount: 0,
-  nextMonthLabel: 'August',
-  provincialBreakdown: [],
+  expiringNextMonthCount: 2,
+  nextMonthLabel: 'October',
+  provincialBreakdownLabel: 'EMPLOYERS FINED BY PROVINCE',
+  provincialBreakdown: [
+    { province: 'BC', count: 10 },
+    { province: 'AB', count: 8 },
+    { province: 'ON', count: 6 },
+    { province: 'QC', count: 2 },
+  ],
 }
 
 function Eyebrow({ children, color = '#9ca3af' }: { children: React.ReactNode; color?: string }) {
@@ -122,6 +196,8 @@ export default function MonthlyReport(props: MonthlyReportProps) {
     ...defaults,
     ...props,
     highlights: props.highlights ?? defaults.highlights,
+    headsUpHighlights: props.headsUpHighlights ?? defaults.headsUpHighlights,
+    stats: props.stats ?? defaults.stats,
     provincialBreakdown: props.provincialBreakdown ?? defaults.provincialBreakdown,
   }
   const campaign = `monthly_${p.monthLabel.toLowerCase().replace(/\s+/g, '_')}` // e.g. monthly_may_2026
@@ -231,18 +307,15 @@ export default function MonthlyReport(props: MonthlyReportProps) {
                 <td style={{ padding: 0 }}>
                   <table width="100%" cellPadding={0} cellSpacing={0} role="presentation">
                     <tr>
-                      <td style={statCell}>
-                        <Text style={statNum}>{p.newBansCount}</Text>
-                        <Text style={statLabel}>New bans</Text>
-                      </td>
-                      <td style={{ ...statCell, borderLeft: '1px solid #f1f1f1' }}>
-                        <Text style={statNum}>{p.topProvince}</Text>
-                        <Text style={statLabel}>Top province</Text>
-                      </td>
-                      <td style={{ ...statCell, borderLeft: '1px solid #f1f1f1' }}>
-                        <Text style={statNum}>{p.expiringCount}</Text>
-                        <Text style={statLabel}>Expiring</Text>
-                      </td>
+                      {p.stats.map((s, i) => (
+                        <td
+                          key={i}
+                          style={i === 0 ? statCell : { ...statCell, borderLeft: '1px solid #f1f1f1' }}
+                        >
+                          <Text style={statNum}>{s.value}</Text>
+                          <Text style={statLabel}>{s.label}</Text>
+                        </td>
+                      ))}
                     </tr>
                   </table>
                 </td>
@@ -284,7 +357,31 @@ export default function MonthlyReport(props: MonthlyReportProps) {
             </table>
 
             {p.headsUpText ? (
-              <Text style={{ ...cardText, marginTop: '16px', marginBottom: '4px' }}>{p.headsUpText}</Text>
+              <>
+                <Text style={{ ...cardText, marginTop: '16px', marginBottom: '4px' }}>{p.headsUpText}</Text>
+                {p.headsUpHighlights.length > 0 && (
+                  <table width="100%" cellPadding={0} cellSpacing={0} role="presentation" style={{ marginTop: '10px' }}>
+                    {p.headsUpHighlights.map((b, i) => (
+                      <tr key={i}>
+                        <td style={{ width: '16px', verticalAlign: 'top' }}>
+                          <div style={amberDot} />
+                        </td>
+                        <td style={bannedName}>
+                          {b.url ? (
+                            <Link href={withUtm(b.url, 'expiring', campaign)} style={{ color: '#1f2937', textDecoration: 'underline' }}>
+                              {b.name}
+                            </Link>
+                          ) : (
+                            b.name
+                          )}
+                          {b.note ? <span style={rowNote}> · {b.note}</span> : null}
+                        </td>
+                        <td style={bannedPenalty}>{b.penalty}</td>
+                      </tr>
+                    ))}
+                  </table>
+                )}
+              </>
             ) : (
               <Text style={{ ...cardText, marginTop: '16px', marginBottom: '4px' }}>
                 <strong>Heads up for {p.nextMonthLabel}:</strong> {p.expiringNextMonthCount} employer
@@ -322,7 +419,7 @@ export default function MonthlyReport(props: MonthlyReportProps) {
               <table width="100%" cellPadding={0} cellSpacing={0} role="presentation" style={{ ...card, backgroundColor: '#f9fafb' }}>
                 <tr>
                   <td style={cardPad}>
-                    <Eyebrow color="#6b7280">BANS BY PROVINCE · {p.monthLabel.toUpperCase()}</Eyebrow>
+                    <Eyebrow color="#6b7280">{p.provincialBreakdownLabel} · {p.monthLabel.toUpperCase()}</Eyebrow>
                     <table width="100%" cellPadding={0} cellSpacing={0} role="presentation">
                       {p.provincialBreakdown.map((row, i) => {
                         const maxCount = Math.max(...p.provincialBreakdown.map(r => r.count))
@@ -507,6 +604,7 @@ const statCell: React.CSSProperties = { width: '33.33%', textAlign: 'center', pa
 const statNum: React.CSSProperties = { fontSize: '24px', fontWeight: 700, color: '#111827', margin: 0, fontVariantNumeric: 'tabular-nums', lineHeight: '28px' }
 const statLabel: React.CSSProperties = { fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#9ca3af', margin: '2px 0 0' }
 const listEyebrow: React.CSSProperties = { fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#9ca3af', margin: '0 0 10px' }
+const amberDot: React.CSSProperties = { width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#fbbf24', marginTop: '9px' }
 const redDot: React.CSSProperties = { width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#f87171', marginTop: '9px' }
 const bannedName: React.CSSProperties = { fontSize: '15px', fontWeight: 600, color: '#1f2937', padding: '5px 0', verticalAlign: 'top' }
 const bannedPenalty: React.CSSProperties = { fontSize: '15px', fontWeight: 700, color: '#111827', textAlign: 'right', whiteSpace: 'nowrap', padding: '5px 0', verticalAlign: 'top' }
