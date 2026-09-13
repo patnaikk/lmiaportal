@@ -16,11 +16,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonical = `https://lmiacheck.ca/reports/${params.month}`
   return {
     title: `${label} ESDC Enforcement Report — LMIA Check`,
-    description: `New employer bans, province breakdown, top violation reasons, and expiring bans for ${label}. Official Government of Canada data.`,
+    description: `New employer bans, fines issued without a ban, province breakdown, top violation reasons, and expiring bans for ${label}. Official Government of Canada data.`,
     alternates: { canonical },
     openGraph: {
       title: `${label} ESDC Enforcement Report`,
-      description: `New employer bans, province breakdown, and top TFWP violation reasons for ${label}. Official Government of Canada data.`,
+      description: `New employer bans, fines, and top TFWP violation reasons for ${label}. Official Government of Canada data.`,
       url: canonical,
       siteName: 'LMIA Check',
       type: 'article',
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: 'summary_large_image',
       title: `${label} ESDC Enforcement Report`,
-      description: `New employer bans and TFWP violation data for ${label}.`,
+      description: `New employer bans, fines, and TFWP violation data for ${label}.`,
     },
   }
 }
@@ -82,9 +82,9 @@ export default async function ReportPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     name: `${report.label} ESDC Enforcement Report — Canada TFWP`,
-    description: `Monthly enforcement report for ${report.label}: new employer bans, province breakdown, top violation reasons, and expiring bans under Canada’s Temporary Foreign Worker Program. Sourced from Employment and Social Development Canada (ESDC).`,
+    description: `Monthly enforcement report for ${report.label}: new employer bans, fines issued without a hiring ban, province breakdown, top violation reasons, and expiring bans under Canada’s Temporary Foreign Worker Program. Sourced from Employment and Social Development Canada (ESDC).`,
     url: canonical,
-    keywords: ['LMIA', 'TFWP', 'ESDC', 'employer bans', 'enforcement', 'Canada', report.label],
+    keywords: ['LMIA', 'TFWP', 'ESDC', 'employer bans', 'employer fines', 'enforcement', 'Canada', report.label],
     temporalCoverage: params.month,
     datePublished: `${params.month}-01`,
     dateModified: new Date().toISOString().slice(0, 10),
@@ -136,6 +136,8 @@ export default async function ReportPage({ params }: Props) {
           <div className="grid grid-cols-2 gap-2">
             {[
               { label: 'New bans this month', value: report.snapshot.newThisMonth, sub: trendLabel, subColor: trendColor },
+              { label: 'Employers fined this month', value: report.snapshot.finedThisMonth, sub: 'fined, no hiring ban', subColor: report.snapshot.finedThisMonth > 0 ? 'text-amber-500' : 'text-gray-400' },
+              { label: 'Penalties this month', value: report.snapshot.penaltiesThisMonth > 0 ? formatMoney(report.snapshot.penaltiesThisMonth) : '—', sub: 'bans and fines', subColor: 'text-gray-400' },
               { label: 'Currently banned', value: report.snapshot.currentlyBanned.toLocaleString(), sub: 'active bans', subColor: 'text-gray-400' },
               { label: 'Total on record', value: report.snapshot.totalBanned.toLocaleString(), sub: 'all time', subColor: 'text-gray-400' },
               { label: 'Bans expired this month', value: report.snapshot.expiringThisMonth, sub: 'now eligible again', subColor: report.snapshot.expiringThisMonth > 0 ? 'text-amber-500' : 'text-gray-400' },
@@ -157,15 +159,32 @@ export default async function ReportPage({ params }: Props) {
             sub={report.newBans.length === 0 ? 'No new bans recorded this month' : `${report.newBans.length} employer${report.newBans.length === 1 ? '' : 's'} added to the non-compliant list`}
           />
           {report.newBans.length === 0 ? (
-            <div className="bg-green-50 rounded-2xl p-5 flex items-start gap-3">
-              <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-green-100 flex items-center justify-center mt-0.5">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            report.finesThisMonth.length > 0 ? (
+              /* Zero bans is NOT zero enforcement. Saying "no new employers"
+                 here while 29 sit in the section below was the bug this page
+                 shipped for August 2026. */
+              <div className="bg-amber-50 rounded-2xl p-5 flex items-start gap-3">
+                <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-amber-100 flex items-center justify-center">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-amber-900">No hiring bans — but {report.snapshot.finedThisMonth} employer{report.snapshot.finedThisMonth === 1 ? ' was' : 's were'} fined</p>
+                  <p className="text-xs text-amber-700 mt-0.5 leading-relaxed">
+                    ESDC issued {formatMoney(report.snapshot.penaltiesThisMonth)} in penalties in {report.label} without banning anyone. A ban is reserved for the most serious or repeated violations, so an employer can be fined heavily and still hire foreign workers. They are listed below.
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-semibold text-green-900">No new bans this month</p>
-                <p className="text-xs text-green-700 mt-0.5">ESDC added no new employers to the non-compliant list in {report.label}.</p>
+            ) : (
+              <div className="bg-green-50 rounded-2xl p-5 flex items-start gap-3">
+                <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-green-100 flex items-center justify-center">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-green-900">No enforcement decisions this month</p>
+                  <p className="text-xs text-green-700 mt-0.5">ESDC published no bans and no fines for {report.label}. Decisions often appear weeks later, so this can change.</p>
+                </div>
               </div>
-            </div>
+            )
           ) : (
             <div className="card-elevated divide-y divide-gray-50">
               {report.newBans.map((ban, i) => (
@@ -211,6 +230,55 @@ export default async function ReportPage({ params }: Props) {
             </div>
           )}
         </div>
+
+        {/* ── Fined, no hiring ban ── */}
+        {report.finesThisMonth.length > 0 && (
+          <div>
+            <SectionHeader
+              title={`Fined — no hiring ban — ${report.label}`}
+              sub={`${report.finesThisMonth.length} employer${report.finesThisMonth.length === 1 ? '' : 's'} penalised but still eligible to hire`}
+            />
+            <div className="card-elevated divide-y divide-gray-50">
+              {report.finesThisMonth.map((fine, i) => (
+                <div key={i} className="px-5 py-4 first:rounded-t-2xl last:rounded-b-2xl">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <Link
+                        href={`/results?employer=${encodeURIComponent(fine.name)}${fine.province ? `&province=${fine.province}` : ''}`}
+                        className="text-sm font-semibold text-gray-900 hover:text-amber-700 transition-colors leading-snug"
+                      >
+                        {fine.name}
+                      </Link>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        {PROVINCE_NAMES[fine.province] ?? fine.province}
+                        {fine.decisionDate ? ` · ${formatDate(fine.decisionDate)}` : ''}
+                      </p>
+                    </div>
+                    <span className="flex-shrink-0 text-sm font-bold text-gray-900 tabular-nums mt-0.5">
+                      {fine.penalty ?? '—'}
+                    </span>
+                  </div>
+                  {fine.reasons.length > 0 && (
+                    <ul className="mt-2 space-y-0.5">
+                      {fine.reasons.slice(0, 3).map((r, j) => (
+                        <li key={j} className="text-[11px] text-gray-500 flex gap-1.5 items-start">
+                          <span className="text-gray-300 mt-px">›</span>
+                          <span>{r}</span>
+                        </li>
+                      ))}
+                      {fine.reasons.length > 3 && (
+                        <li className="text-[11px] text-gray-400">+{fine.reasons.length - 3} more violations</li>
+                      )}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p className="text-[11px] text-gray-400 mt-2 px-1 leading-relaxed">
+              A fine without a ban means ESDC penalised the employer but did not stop them hiring foreign workers. Treat it as a reason to ask more questions, not as a verdict.
+            </p>
+          </div>
+        )}
 
         {/* ── Province breakdown ── */}
         <div>

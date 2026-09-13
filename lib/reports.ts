@@ -21,11 +21,28 @@ export interface MonthlyReport {
   month: string           // e.g. "2026-05"
   label: string           // e.g. "May 2026"
   newBans: NewBan[]
+  /**
+   * Employers penalised this month WITHOUT a hiring ban (compliance_status
+   * ELIGIBLE). ESDC reserves a ban for the most serious or repeated
+   * violations, so in most months these are the majority of enforcement —
+   * August 2026 was 29 fines totalling $627,750 and not one ban. Reporting
+   * only bans made that month render as "no new employers", which was false.
+   */
+  finesThisMonth: Fine[]
   provinceBreakdown: ProvinceStat[]
   topViolations: ViolationStat[]
   expiringThisMonth: ExpiringBan[]
   expiringNextMonth: ExpiringBan[]
   snapshot: Snapshot
+}
+
+export interface Fine {
+  name: string
+  province: string
+  decisionDate: string
+  penalty: string | null
+  penaltyAmount: number
+  reasons: string[]
 }
 
 export interface NewBan {
@@ -66,6 +83,10 @@ export interface Snapshot {
   expiringThisMonth: number
   expiringNextMonth: number
   totalPenalties: number
+  /** Employers fined this month without a hiring ban. */
+  finedThisMonth: number
+  /** Sum of every penalty dated this month, banned and fined alike. */
+  penaltiesThisMonth: number
 }
 
 function monthRange(yearMonth: string): { start: string; end: string } {
@@ -99,6 +120,36 @@ export function monthLabel(yearMonth: string): string {
 // they are no longer on. See supabase/migrations/20260905_add_removed_from_source.sql.
 const INELIGIBLE_STATUSES = ['INELIGIBLE', 'INELIGIBLE_UNTIL', 'INELIGIBLE_UNPAID']
 
+// penalty_amount is free text off the government feed: "$40,000", and for banned
+// employers "$40,000 and a 2-year ban". Anchor on the leading currency figure so
+// the trailing ban text can never be concatenated into the number.
+/**
+ * Read every matching row, not just the first page.
+ *
+ * PostgREST caps a response at 1000 rows and reports no error when it
+ * truncates — an aggregate built on the capped page just comes back quietly
+ * wrong. `violators` is already past 1400 rows, so any query here that is not
+ * narrowed to a single month has to page.
+ */
+async function fetchAllRows<T>(
+  build: (from: number, to: number) => PromiseLike<{ data: T[] | null }>,
+): Promise<T[]> {
+  const PAGE = 1000
+  const out: T[] = []
+  for (let offset = 0; ; offset += PAGE) {
+    const { data } = await build(offset, offset + PAGE - 1)
+    if (data?.length) out.push(...data)
+    if (!data || data.length < PAGE) return out
+  }
+}
+
+function parseMoney(raw: string | null | undefined): number {
+  const m = /^\s*\$?([0-9,]+(?:\.[0-9]+)?)/.exec(raw ?? '')
+  if (!m) return 0
+  const n = parseFloat(m[1].replace(/,/g, ''))
+  return isNaN(n) ? 0 : n
+}
+
 export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyReport> {
   const { start, end } = monthRange(yearMonth)
   const prev = prevMonth(yearMonth)
@@ -125,15 +176,43 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
     reasons: expandViolationReasons(r.reasons ?? '').map((c) => VIOLATION_CODES[c] ?? `Code ${c}`),
   }))
 
-  // 2. Province breakdown
-  const { data: allViolators } = await supabase.from('violators')
-    .select('province, compliance_status, decision_date')
+  // 1b. Fined this month, but NOT banned.
+  const { data: finesRaw } = await supabase.from('violators')
+    .select('business_operating_name, province, address, decision_date, penalty_amount, reasons')
     .is('removed_from_source', null)
-    .in('compliance_status', INELIGIBLE_STATUSES)
+    .gte('decision_date', start)
+    .lte('decision_date', end)
+    .eq('compliance_status', 'ELIGIBLE')
+    .order('decision_date', { ascending: false })
+
+  const finesThisMonth: Fine[] = (finesRaw ?? [])
+    .map((r) => ({
+      name: r.business_operating_name ?? 'Unknown',
+      province: r.province || extractProvinceFromAddress(r.address) || '',
+      decisionDate: r.decision_date ?? '',
+      penalty: r.penalty_amount ?? null,
+      penaltyAmount: parseMoney(r.penalty_amount),
+      reasons: expandViolationReasons(r.reasons ?? '').map((c) => VIOLATION_CODES[c] ?? `Code ${c}`),
+    }))
+    // Heaviest first: the $180,000 matters more to a reader than the $500.
+    .sort((a, b) => b.penaltyAmount - a.penaltyAmount)
+
+  // 2. Province breakdown
+  // `province` is unpopulated on essentially every row (1 of 1402 as of
+  // 2026-09), so without the address fallback this table renders one blank
+  // bucket holding everything. Resolve it the same way the preview does.
+  const allViolators = await fetchAllRows<{ province: string | null; address: string | null; compliance_status: string; decision_date: string }>(
+    (from, to) => supabase.from('violators')
+      .select('province, address, compliance_status, decision_date')
+      .is('removed_from_source', null)
+      .in('compliance_status', INELIGIBLE_STATUSES)
+      .order('id', { ascending: true })
+      .range(from, to),
+  )
 
   const provinceMap: Record<string, { total: number; newThisMonth: number; currentlyBanned: number }> = {}
-  for (const row of allViolators ?? []) {
-    const prov = row.province ?? 'Unknown'
+  for (const row of allViolators) {
+    const prov = row.province || extractProvinceFromAddress(row.address) || 'Unknown'
     if (!provinceMap[prov]) provinceMap[prov] = { total: 0, newThisMonth: 0, currentlyBanned: 0 }
     provinceMap[prov].total++
     if (row.decision_date >= start && row.decision_date <= end) provinceMap[prov].newThisMonth++
@@ -144,14 +223,18 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
     .sort((a, b) => b.total - a.total)
 
   // 3. Top violation reasons (all time, weighted by frequency)
-  const { data: reasonsRaw } = await supabase.from('violators')
-    .select('reasons')
-    .is('removed_from_source', null)
-    .in('compliance_status', INELIGIBLE_STATUSES)
-    .not('reasons', 'is', null)
+  const reasonsRaw = await fetchAllRows<{ reasons: string | null }>(
+    (from, to) => supabase.from('violators')
+      .select('reasons')
+      .is('removed_from_source', null)
+      .in('compliance_status', INELIGIBLE_STATUSES)
+      .not('reasons', 'is', null)
+      .order('id', { ascending: true })
+      .range(from, to),
+  )
 
   const codeCount: Record<number, number> = {}
-  for (const row of reasonsRaw ?? []) {
+  for (const row of reasonsRaw) {
     for (const code of expandViolationReasons(row.reasons ?? '')) {
       codeCount[code] = (codeCount[code] ?? 0) + 1
     }
@@ -210,23 +293,38 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
     supabase.from('violators').select('*', { count: 'exact', head: true }).is('removed_from_source', null).eq('compliance_status', 'INELIGIBLE_UNTIL').gte('ineligible_until_date', nextStart).lte('ineligible_until_date', nextEnd),
   ])
 
-  // Total penalties (sum of penalty_amount where parseable)
-  const { data: penaltyRows } = await supabase.from('violators')
-    .select('penalty_amount')
-    .is('removed_from_source', null)
-    .in('compliance_status', INELIGIBLE_STATUSES)
-    .not('penalty_amount', 'is', null)
+  // Total penalties, all time. Deliberately NOT restricted to banned employers:
+  // the tile says "total fines issued", and most fines never carry a ban, so the
+  // old ineligible-only filter understated the real figure by ~$4.6M.
+  //
+  // Paginated on purpose. PostgREST caps a response at 1000 rows, and dropping
+  // the ineligible-only filter pushed this query past that: the unpaginated
+  // version silently summed the first 1000 of ~1400 rows and reported $13.1M
+  // against a true $27.6M. A truncated SUM looks like a plausible number, which
+  // is exactly what makes it dangerous.
+  const penaltyRows = await fetchAllRows<{ penalty_amount: string | null; decision_date: string | null }>(
+    (from, to) => supabase.from('violators')
+      .select('penalty_amount, decision_date')
+      .is('removed_from_source', null)
+      .not('penalty_amount', 'is', null)
+      .order('id', { ascending: true })
+      .range(from, to),
+  )
 
   let totalPenalties = 0
-  for (const row of penaltyRows ?? []) {
-    const n = parseFloat((row.penalty_amount ?? '').replace(/[$,]/g, ''))
-    if (!isNaN(n)) totalPenalties += n
+  let penaltiesThisMonth = 0
+  for (const row of penaltyRows) {
+    const n = parseMoney(row.penalty_amount)
+    totalPenalties += n
+    const d = row.decision_date ?? ''
+    if (d >= start && d <= end) penaltiesThisMonth += n
   }
 
   return {
     month: yearMonth,
     label: monthLabel(yearMonth),
     newBans,
+    finesThisMonth,
     provinceBreakdown,
     topViolations,
     expiringThisMonth,
@@ -239,6 +337,8 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
       expiringThisMonth: expiringThisCount ?? 0,
       expiringNextMonth: expiringNextCount ?? 0,
       totalPenalties,
+      finedThisMonth: finesThisMonth.length,
+      penaltiesThisMonth,
     },
   }
 }
