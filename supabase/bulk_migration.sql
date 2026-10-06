@@ -1,7 +1,7 @@
 -- Bulk search runs: one row per batch submitted (free or future Pro)
 CREATE TABLE IF NOT EXISTS bulk_search_runs (
   id              uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
-  email           text        NOT NULL,
+  email           text,                 -- optional: only required to download CSV
   user_id         uuid        REFERENCES auth.users(id) ON DELETE SET NULL, -- null until Phase 2 auth
   tier            text        NOT NULL DEFAULT 'free',  -- 'free' | 'pro'
   employer_count  int,

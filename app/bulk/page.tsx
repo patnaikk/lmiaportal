@@ -12,6 +12,7 @@ interface ResultRow {
   employer: string
   risk: RiskLevel
   summary: string
+  matchedName?: string | null
   violatorName?: string
   reasons?: string
 }
@@ -140,7 +141,7 @@ export default function BulkPage() {
       })
 
       if (res.status === 429) {
-        setError('You have reached the 3 bulk checks per day limit. Enter your email above to unlock Pro access and run unlimited checks.')
+        setError('You have reached the limit of 3 bulk checks per day. Please try again tomorrow.')
         setRunning(false)
         return
       }
@@ -190,9 +191,9 @@ export default function BulkPage() {
       setError('Please enter your email address to download results.')
       return
     }
-    const header = 'Employer,Status,Summary,Violator Name,Reasons\n'
+    const header = 'Employer,Status,Summary,Matched Record,Reasons\n'
     const rows = results.map((r) =>
-      [r.employer, r.risk, r.summary, r.violatorName ?? '', r.reasons ?? '']
+      [r.employer, r.risk, r.summary, r.matchedName ?? '', r.reasons ?? '']
         .map((v) => `"${String(v).replace(/"/g, '""')}"`)
         .join(',')
     )
@@ -346,7 +347,7 @@ export default function BulkPage() {
         {/* Step 2 — Email + firm + run */}
         <div className="card-elevated p-5">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Step 2 — Get your results</p>
-          <p className="text-xs text-gray-500 mb-4">We'll email you the report as a PDF for your client file. Your firm details help us improve the service.</p>
+          <p className="text-xs text-gray-500 mb-4">Results appear on screen. Your email is needed to download them as a CSV. Your firm details help us improve the service.</p>
 
           <div className="space-y-2 mb-3">
             <input
@@ -487,6 +488,12 @@ export default function BulkPage() {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-gray-900 truncate">{row.employer}</p>
                       <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{row.summary}</p>
+                      {row.matchedName && (
+                        <p className="text-xs text-gray-700 mt-0.5 leading-relaxed">
+                          Matched record: <span className="font-semibold">{row.matchedName}</span>
+                          <span className="text-gray-400"> — confirm this is the same employer</span>
+                        </p>
+                      )}
                       {row.reasons && (
                         <p className="text-xs text-red-600 mt-0.5 leading-relaxed">{row.reasons}</p>
                       )}

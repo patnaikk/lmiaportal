@@ -62,12 +62,15 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // Insert run record upfront — captures email for the list (if provided)
-  const { data: runRow } = await supabaseAdmin
+  // Insert run record upfront — captures email for the list (if provided).
+  // The row also drives the daily rate limit above, so a failed insert means
+  // an uncounted run: log it rather than continuing silently.
+  const { data: runRow, error: runErr } = await supabaseAdmin
     .from('bulk_search_runs')
-    .insert({ email: email || null, employer_count: capped.length, ip_address: ip, tier: 'free' })
+    .insert({ email: email?.trim() || null, employer_count: capped.length, ip_address: ip, tier: 'free' })
     .select('id')
     .single()
+  if (runErr) console.error('bulk-verify: run insert failed', runErr)
 
   const runId: string | null = runRow?.id ?? null
 
@@ -76,7 +79,7 @@ export async function POST(request: NextRequest) {
 
   const stream = new ReadableStream({
     async start(controller) {
-      const allResults: Array<{ employer_name: string; risk: string; summary: string; position: number }> = []
+      const allResults: Array<{ employer_name: string; matched_name: string | null; risk: string; summary: string; position: number }> = []
 
       for (let i = 0; i < capped.length; i += BATCH_SIZE) {
         const batch = capped.slice(i, i + BATCH_SIZE)
@@ -89,17 +92,26 @@ export async function POST(request: NextRequest) {
           const idx = i + j
           const result = batchResults[j]
           const summary = getRiskSummary(result.risk, result.reason)
+          // The record the verdict was based on. Fuzzy matching can land on a
+          // different company, so the user must see the name to judge it.
+          const matchedName =
+            result.source === 'violators'
+              ? result.violatorMatches[0]?.business_operating_name ?? null
+              : result.source === 'positive_lmia'
+                ? result.positiveMatches[0]?.employer_name ?? null
+                : null
 
           const row = {
             index: idx,
             employer: batch[j].name,
             risk: result.risk,
             summary,
+            matchedName,
             violatorName: result.violatorMatches?.[0]?.business_operating_name,
             reasons: result.violatorMatches?.[0]?.reasons,
           }
 
-          allResults.push({ employer_name: batch[j].name, risk: result.risk, summary, position: idx })
+          allResults.push({ employer_name: batch[j].name, matched_name: matchedName, risk: result.risk, summary, position: idx })
           controller.enqueue(encoder.encode(JSON.stringify(row) + '\n'))
         }
       }
@@ -108,7 +120,13 @@ export async function POST(request: NextRequest) {
       if (runId) {
         await Promise.all([
           supabaseAdmin.from('bulk_search_results').insert(
-            allResults.map((r) => ({ ...r, run_id: runId }))
+            allResults.map((r) => ({
+              run_id: runId,
+              employer_name: r.employer_name,
+              risk: r.risk,
+              summary: r.summary,
+              position: r.position,
+            }))
           ),
           supabaseAdmin
             .from('bulk_search_runs')
