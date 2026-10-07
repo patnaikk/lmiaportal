@@ -1,5 +1,6 @@
 import { supabase, supabaseAdmin } from './supabase'
 import { normalizeEmployerName } from './normalize'
+import { isStrongNameMatch } from './match-strength'
 import type { VerifyResult, PositiveLmia, ViolatorRecord } from './types'
 
 // DB stores full province names; the UI sends 2-letter codes.
@@ -119,6 +120,17 @@ export async function verifyEmployer(
     violatorMatches = violatorMatches.filter((v) => !v.removed_from_source)
   }
 
+  // The searches above are deliberately loose, so they also return unrelated
+  // companies that merely share a word. Only a strong name match may produce a
+  // RED; weak ones are held back and, if nothing better turns up, reported as
+  // a "possible match" rather than accusing an employer the user never named.
+  const isStrongViolator = (v: ViolatorRecord) =>
+    isStrongNameMatch(normalized, v.employer_normalized, v.business_operating_name) ||
+    isStrongNameMatch(normalized, v.legal_name_normalized, v.business_legal_name)
+  const weakViolatorMatches = violatorMatches.filter((v) => !isStrongViolator(v))
+  violatorMatches = violatorMatches.filter(isStrongViolator)
+  retractedMatches = retractedMatches.filter(isStrongViolator)
+
   if (violatorMatches.length > 0) {
     // Evaluate worst compliance status across all matches (not just first).
     // Priority: INELIGIBLE/INELIGIBLE_UNPAID > INELIGIBLE_UNTIL > ELIGIBLE
@@ -221,6 +233,29 @@ export async function verifyEmployer(
         positiveMatches = ilikeData as PositiveLmia[]
         break
       }
+    }
+  }
+
+  // Same rule for approvals: a weak match must not produce a GREEN.
+  const weakPositiveMatches = positiveMatches.filter(
+    (m) => !isStrongNameMatch(normalized, m.employer_normalized, m.employer_name)
+  )
+  positiveMatches = positiveMatches.filter((m) =>
+    isStrongNameMatch(normalized, m.employer_normalized, m.employer_name)
+  )
+
+  if (positiveMatches.length === 0 && (weakViolatorMatches.length > 0 || weakPositiveMatches.length > 0)) {
+    // A non-compliant record is the one the user most needs to see, so it
+    // leads when both kinds of weak match exist.
+    await logSearch(employerName, city, province, 'YELLOW', undefined, origin)
+    return {
+      risk: 'YELLOW',
+      reason: 'possible_match',
+      positiveMatches: weakViolatorMatches.length > 0 ? [] : weakPositiveMatches,
+      violatorMatches: weakViolatorMatches,
+      retractedMatches,
+      source: weakViolatorMatches.length > 0 ? 'violators' : 'positive_lmia',
+      employerQuery: employerName,
     }
   }
 

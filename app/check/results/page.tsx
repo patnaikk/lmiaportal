@@ -170,6 +170,16 @@ export default async function CheckResultsPage({ searchParams }: PageProps) {
     })
   }
 
+  // Check 2c — Only a loose name match; may be a different employer
+  if (employerResult.risk === 'YELLOW' && employerResult.reason === 'possible_match') {
+    flags.push({
+      severity: 'yellow',
+      title: 'No exact match — closest record may be a different employer',
+      detail: `We could not find this exact employer. The closest government record is ${employerResult.violatorMatches[0]?.business_operating_name || employerResult.positiveMatches[0]?.employer_name || 'a similarly named company'}, which may not be the company on your offer.`,
+      action: 'Search again using the exact legal name from your offer letter or contract.',
+    })
+  }
+
   // Check 3 — Employer not found in positive LMIA list
   if (employerResult.risk === 'GREY') {
     flags.push({

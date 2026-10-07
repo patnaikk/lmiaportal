@@ -44,6 +44,12 @@ export default function NextSteps({ result }: Props) {
       { icon: '2', text: 'Ask them to confirm their LMIA number and address match what is on your offer' },
       { icon: '3', text: 'Confirm all offer details before proceeding with your application' },
     ]
+  } else if (risk === 'YELLOW' && reason === 'possible_match') {
+    steps = [
+      { icon: '1', text: 'Compare the matched record name with the employer name on your offer — they may be different companies' },
+      { icon: '2', text: 'Search again using the exact legal name from your offer letter or contract, without addresses or extra words' },
+      { icon: '3', text: 'If you cannot find an exact match, contact the employer using independently verified contact information' },
+    ]
   } else if (risk === 'YELLOW' && reason === 'prior_violation_now_eligible') {
     steps = [
       { icon: '1', text: 'This employer has a history of non-compliance with the Temporary Foreign Worker Program' },

@@ -1,6 +1,11 @@
 export type RiskResult = 'GREEN' | 'YELLOW' | 'RED' | 'GREY'
 export type RedSubtype = 'BANNED_TEMPORARY' | 'BANNED_UNPAID_PENALTY'
-export type YellowReason = 'address_mismatch' | 'prior_violation_now_eligible' | 'pr_only_stream'
+export type YellowReason =
+  | 'address_mismatch'
+  | 'prior_violation_now_eligible'
+  | 'pr_only_stream'
+  /** Only a loose name match was found — may be a different employer. */
+  | 'possible_match'
 export type ComplianceStatus = 'ELIGIBLE' | 'INELIGIBLE_UNTIL' | 'INELIGIBLE_UNPAID' | 'INELIGIBLE'
 
 export interface PositiveLmia {

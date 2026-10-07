@@ -16,6 +16,7 @@ function getRiskSummary(risk: string, reason?: string): string {
   if (risk === 'RED') return 'Banned / non-compliant employer'
   if (risk === 'YELLOW' && reason === 'prior_violation_now_eligible') return 'Past violation — now eligible'
   if (risk === 'YELLOW' && reason === 'pr_only_stream') return 'LMIA is PR-only stream'
+  if (risk === 'YELLOW' && reason === 'possible_match') return 'Possible match only — may be a different employer'
   if (risk === 'YELLOW' && reason === 'address_mismatch') return 'Employer found but location mismatch'
   if (risk === 'YELLOW') return 'Caution — review recommended'
   if (risk === 'GREEN') return 'Found in positive LMIA records'

@@ -142,6 +142,9 @@ export default function RiskIndicator({ result }: Props) {
 
     if (reason === 'address_mismatch') {
       description = 'Found in government records, but the LMIA on file is for a different location than the one you specified. Confirm directly with the employer before proceeding.'
+    } else if (reason === 'possible_match') {
+      verdict = 'Possible match'
+      description = 'We found no exact match for your search. The closest government record has a different name and may be a different employer. Check that this is the company on your offer before relying on it — if not, search again using the exact legal name.'
     } else if (reason === 'pr_only_stream') {
       verdict = 'Wrong stream'
       description = 'All approved LMIAs for this employer are under the Permanent Resident stream — not for temporary foreign workers. An offer claiming to be a TFW LMIA may not be legitimate.'
