@@ -1,12 +1,18 @@
 import { supabaseAdmin } from '@/lib/supabase'
-import { verifyUnsubscribeToken } from '@/lib/unsubscribe'
+import { verifyUnsubscribeToken, verifyAlertUnsubscribeToken, verifyAllAlertsUnsubscribeToken } from '@/lib/unsubscribe'
 import Link from 'next/link'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Unsubscribe — LMIA Check',
+  robots: { index: false, follow: false },
+}
 
 export const dynamic = 'force-dynamic'
 
-type Search = { e?: string; t?: string }
+type Search = { e?: string; t?: string; k?: string; id?: string }
 
-async function processUnsubscribe(email?: string, token?: string): Promise<'ok' | 'invalid' | 'error'> {
+async function processMonthlyUnsubscribe(email?: string, token?: string): Promise<'ok' | 'invalid' | 'error'> {
   if (!email || !token || !verifyUnsubscribeToken(email, token)) return 'invalid'
   const { error } = await supabaseAdmin
     .from('monthly_subscribers')
@@ -16,11 +22,45 @@ async function processUnsubscribe(email?: string, token?: string): Promise<'ok' 
   return error ? 'error' : 'ok'
 }
 
+async function processAlertUnsubscribe(idParam?: string, token?: string): Promise<'ok' | 'invalid' | 'error'> {
+  const id = Number(idParam)
+  if (!idParam || !Number.isInteger(id) || !token || !verifyAlertUnsubscribeToken(id, token)) return 'invalid'
+  const { error } = await supabaseAdmin
+    .from('search_subscriptions')
+    .update({ unsubscribed_at: new Date().toISOString() })
+    .eq('id', id)
+    .is('unsubscribed_at', null)
+  return error ? 'error' : 'ok'
+}
+
+async function processAllAlertsUnsubscribe(email?: string, token?: string): Promise<'ok' | 'invalid' | 'error'> {
+  if (!email || !token || !verifyAllAlertsUnsubscribeToken(email, token)) return 'invalid'
+  const { error } = await supabaseAdmin
+    .from('search_subscriptions')
+    .update({ unsubscribed_at: new Date().toISOString() })
+    .eq('email', email.toLowerCase().trim())
+    .is('unsubscribed_at', null)
+  return error ? 'error' : 'ok'
+}
+
 export default async function UnsubscribePage({ searchParams }: { searchParams: Search }) {
-  const result = await processUnsubscribe(searchParams.e, searchParams.t)
+  const isAlert = searchParams.k === 'alert'
+  const isAllAlerts = searchParams.k === 'alerts'
+  const result = isAlert
+    ? await processAlertUnsubscribe(searchParams.id, searchParams.t)
+    : isAllAlerts
+      ? await processAllAlertsUnsubscribe(searchParams.e, searchParams.t)
+      : await processMonthlyUnsubscribe(searchParams.e, searchParams.t)
 
   const messages = {
-    ok: { title: 'You’re unsubscribed', body: 'You won’t receive the monthly enforcement report anymore. You can re-subscribe anytime at lmiacheck.ca.' },
+    ok: {
+      title: 'You’re unsubscribed',
+      body: isAlert
+        ? 'You won’t receive status-change alerts for that employer anymore. You can re-subscribe anytime by searching for the employer on lmiacheck.ca.'
+        : isAllAlerts
+          ? 'You won’t receive any more employer status-change alerts. You can watch an employer again anytime by searching for it on lmiacheck.ca.'
+          : 'You won’t receive the monthly enforcement report anymore. You can re-subscribe anytime at lmiacheck.ca.',
+    },
     invalid: { title: 'Link not valid', body: 'This unsubscribe link is invalid or incomplete. If you keep getting emails, reply to one and we’ll remove you.' },
     error: { title: 'Something went wrong', body: 'We couldn’t process that just now. Please try again, or reply to any email to be removed.' },
   }[result]
