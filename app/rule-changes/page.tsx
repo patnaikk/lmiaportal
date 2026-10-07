@@ -5,22 +5,23 @@ import Footer from '@/components/Footer'
 import {
   POLICY_CHANGES,
   WAGE_THRESHOLDS_2026_07_17,
-  RESTRICTED_CMAS_TO_2026_10_09,
+  RESTRICTED_CMAS_TO_2026_10_08,
   RESTRICTED_CMAS_VALID_UNTIL,
+  RESTRICTED_CMAS_NEXT_UPDATE,
   formatPolicyDate,
   type PolicyImpact,
 } from '@/lib/policy-changes'
 
-const LAST_VERIFIED = '2026-08-15'
+const LAST_VERIFIED = '2026-10-06'
 
 export const metadata: Metadata = {
   title: 'LMIA Rule Changes 2026 — What Changed and What It Means',
   description:
-    'Every change to Canada\'s Temporary Foreign Worker Program in 2026 — wage thresholds, restricted cities, penalties and processing times — explained for foreign workers.',
+    'Every change to Canada\'s Temporary Foreign Worker Program in 2026 — the new employer rules for staffing agencies, wage thresholds, restricted cities, penalties and processing times — explained for foreign workers.',
   openGraph: {
     title: 'LMIA Rule Changes 2026 — LMIA Check',
     description:
-      'Wage thresholds, the 26 cities closed to low-wage LMIAs, doubled penalties and rising processing times. Plain-language explanations with official sources.',
+      'New employer rules for staffing agencies, wage thresholds, the 26 cities closed to low-wage LMIAs, doubled penalties and rising processing times. Plain-language explanations with official sources.',
     url: 'https://lmiacheck.ca/rule-changes',
     siteName: 'LMIA Check',
     type: 'website',
@@ -162,8 +163,8 @@ export default function RuleChangesPage() {
             Cities closed to low-wage LMIAs right now
           </h2>
           <p className="text-sm text-gray-600 leading-relaxed mb-4">
-            ESDC will not process a low-wage LMIA application in these {RESTRICTED_CMAS_TO_2026_10_09.length} areas
-            until {formatPolicyDate(RESTRICTED_CMAS_VALID_UNTIL)}. If you are being offered a low-wage job in one of
+            ESDC will not process a low-wage LMIA application in these {RESTRICTED_CMAS_TO_2026_10_08.length} areas
+            through {formatPolicyDate(RESTRICTED_CMAS_VALID_UNTIL)}. If you are being offered a low-wage job in one of
             them, an LMIA cannot be issued for it.
           </p>
           <div className="p-5 bg-red-50 rounded-2xl">
@@ -176,11 +177,11 @@ export default function RuleChangesPage() {
               </div>
               <p className="text-sm text-red-900 leading-relaxed">
                 This list changes every three months. It is accurate as of {formatPolicyDate(LAST_VERIFIED)} and the
-                government reviews it again on {formatPolicyDate(RESTRICTED_CMAS_VALID_UNTIL)}.
+                government publishes the next list on {formatPolicyDate(RESTRICTED_CMAS_NEXT_UPDATE)}.
               </p>
             </div>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 list-none p-0">
-              {RESTRICTED_CMAS_TO_2026_10_09.map((cma) => (
+              {RESTRICTED_CMAS_TO_2026_10_08.map((cma) => (
                 <li key={cma} className="text-sm text-red-800">{cma}</li>
               ))}
             </ul>

@@ -3,7 +3,7 @@
 // Distinct from app/updates (the product changelog). This tracks what ESDC/IRCC
 // changed, for workers who need to know how the rules moved — not what we shipped.
 //
-// Each entry is dated and carries an official source. Verified 2026-08-15.
+// Each entry is dated and carries an official source. Verified 2026-10-06.
 
 export type PolicyImpact = 'critical' | 'important' | 'context'
 
@@ -42,10 +42,11 @@ export const WAGE_THRESHOLDS_2026_07_17: { province: string; current: number; pr
 
 /**
  * Census metropolitan areas where ESDC will NOT process low-wage LMIA
- * applications, 2026-07-10 through 2026-10-09 (unemployment >= 6%).
- * Refreshed quarterly — MUST be re-verified on 2026-10-10 or removed.
+ * applications, 2026-07-10 through 2026-10-08 (unemployment >= 6%).
+ * Refreshed quarterly — ESDC publishes the next list on 2026-10-09; it MUST be
+ * re-verified then or removed.
  */
-export const RESTRICTED_CMAS_TO_2026_10_09 = [
+export const RESTRICTED_CMAS_TO_2026_10_08 = [
   "St. John's, NL", 'Moncton, NB', 'Montréal, QC', 'Ottawa-Gatineau, ON/QC',
   'Belleville–Quinte West, ON', 'Peterborough, ON', 'Oshawa, ON', 'Toronto, ON',
   'Hamilton, ON', 'Kitchener-Cambridge-Waterloo, ON', 'Brantford, ON', 'Guelph, ON',
@@ -55,9 +56,24 @@ export const RESTRICTED_CMAS_TO_2026_10_09 = [
   'Vancouver, BC', 'Nanaimo, BC',
 ] as const
 
-export const RESTRICTED_CMAS_VALID_UNTIL = '2026-10-09'
+/** Last day the list above applies (per ESDC's refusal-to-process page). */
+export const RESTRICTED_CMAS_VALID_UNTIL = '2026-10-08'
+/** Day ESDC publishes the next quarterly list. */
+export const RESTRICTED_CMAS_NEXT_UPDATE = '2026-10-09'
 
 export const POLICY_CHANGES: PolicyChange[] = [
+  {
+    date: '2026-09-18',
+    title: 'Staffing agencies can no longer be the employer on an LMIA',
+    meaning:
+      'Service Canada added an "Employers" section to its LMIA requirements. The employer must be the business that hires you, sets your working conditions and pays you directly — judged by who decides where, when and how you work, who can dismiss you, and who benefits from your work. Staffing or employment agencies that recruit workers for other businesses are not employers under the program, and employers cannot classify temporary foreign workers as independent contractors, before or after hiring.',
+    fraudAngle:
+      'Look at who is named as the employer. If it is a staffing, recruitment or placement agency, and you would actually work at a different company, that is not a valid LMIA arrangement. The same goes for an offer that calls you an "independent contractor". Either one is a reason to stop before you pay anyone.',
+    impact: 'critical',
+    sourceLabel: 'ESDC — program requirements for low-wage positions',
+    sourceUrl:
+      'https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html',
+  },
   {
     date: '2026-08-07',
     title: 'LMIA processing times rose again across almost every stream',
@@ -82,7 +98,7 @@ export const POLICY_CHANGES: PolicyChange[] = [
   },
   {
     date: '2026-07-10',
-    title: '26 cities are closed to low-wage LMIA applications until October 9',
+    title: '26 cities are closed to low-wage LMIA applications through October 8',
     meaning:
       'ESDC will not process low-wage LMIA applications in census metropolitan areas where unemployment is 6% or higher. That currently includes Toronto, Vancouver, Calgary, Edmonton and Montréal. Saskatoon, Red Deer, Kamloops and Chilliwack were newly added. Halifax, Winnipeg, Regina, Saint John, Fredericton, Kingston, St. Catharines-Niagara and Drummondville reopened.',
     fraudAngle:
