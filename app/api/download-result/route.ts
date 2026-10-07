@@ -99,7 +99,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     // ─────────────────────────────────────────────────────────────────
 
     const LABELS: Record<string, string> = {
-      GREEN:  'VERIFIED',
+      GREEN:  'APPROVED LMIAs ON RECORD',
       YELLOW: 'VERIFY FURTHER',
       RED:    'HIGH RISK — BANNED',
       GREY:   'NOT FOUND',
@@ -115,7 +115,7 @@ export async function GET(request: NextRequest): Promise<Response> {
 
     // Status summary
     const STATUS: Record<string, string> = {
-      GREEN:  'This employer is verified in official Canadian government LMIA records.',
+      GREEN:  'This employer has approved LMIAs in official government records. That confirms the employer is real, not that your offer is: check the job and city match.',
       YELLOW: 'This employer requires further verification before proceeding.',
       RED:    'This employer is banned from hiring temporary foreign workers.',
       GREY:   'This employer does not appear in official government records.',

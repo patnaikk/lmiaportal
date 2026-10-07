@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
+import { quarterEndMonth } from '@/lib/quarters'
 
 interface Props {
   variant?: 'inline' | 'badge'
@@ -31,6 +32,24 @@ async function getLastSyncDate(): Promise<string | null> {
   }
 }
 
+// The two datasets age very differently: the non-compliant list is synced
+// daily, while ESDC publishes approvals quarterly with a lag of a few months.
+// One "Updated <date>" next to the search box implied the approvals were as
+// fresh as the banned list, so each source now shows its own date.
+async function getLatestApprovalQuarter(): Promise<string | null> {
+  try {
+    const { data } = await supabase
+      .from('positive_lmia')
+      .select('quarter')
+      .order('quarter', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+    return data?.quarter ?? null
+  } catch {
+    return null
+  }
+}
+
 function formatDate(iso: string): string {
   try {
     return new Date(iso).toLocaleDateString('en-CA', {
@@ -42,8 +61,9 @@ function formatDate(iso: string): string {
 }
 
 export default async function DataFreshness({ variant = 'inline', className = '' }: Props) {
-  const date = await getLastSyncDate()
+  const [date, latestQuarter] = await Promise.all([getLastSyncDate(), getLatestApprovalQuarter()])
   if (!date) return null
+  const approvalsThrough = latestQuarter ? quarterEndMonth(latestQuarter) : null
 
   const formatted = formatDate(date)
 
@@ -54,7 +74,8 @@ export default async function DataFreshness({ variant = 'inline', className = ''
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-60"></span>
           <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
         </span>
-        Data current as of {formatted}
+        Banned list current as of {formatted}
+        {approvalsThrough && <span className="text-green-800/70">· Approvals through {approvalsThrough}</span>}
       </div>
     )
   }
@@ -63,8 +84,9 @@ export default async function DataFreshness({ variant = 'inline', className = ''
     <p className={`text-xs text-gray-500 ${className}`}>
       <span className="inline-flex items-center gap-1.5">
         <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" aria-hidden="true" />
-        Updated {formatted}
+        Banned list updated {formatted}
       </span>
+      {approvalsThrough && <>{' · '}Approvals through {approvalsThrough}</>}
       {' · '}
       Direct from{' '}
       <a

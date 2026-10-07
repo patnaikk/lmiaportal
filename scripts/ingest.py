@@ -7,6 +7,7 @@ Loads government LMIA data into Supabase.
 Usage:
   # Positive LMIA employers (ESDC quarterly Excel):
   python scripts/ingest.py --file data/tfwp_2025q3_pos_en.xlsx --quarter 2025-Q3
+  (refuses a quarter that is already loaded — see ingest_positive_lmia)
 
   # Non-compliant employers (from scraper CSV or Excel):
   python scripts/ingest.py --file scraper/non_compliant_employers_2026-03-07_16-15.csv --type violators
@@ -189,6 +190,21 @@ def ingest_positive_lmia(file_path: str, quarter: str):
     - Row 1: Actual column headers (Province/Territory, Program Stream, Employer, ...)
     - Row 2+: Data rows
     """
+    # Rows are plain inserts (no natural key), so loading a quarter twice would
+    # double every approval and position for that quarter. Refuse instead.
+    if not re.fullmatch(r'\d{4}-Q[1-4]', quarter):
+        sys.exit(f'ERROR: --quarter must look like 2025-Q3 (got {quarter!r})')
+    existing = (
+        supabase_client.table('positive_lmia')
+        .select('id', count='exact')
+        .eq('quarter', quarter)
+        .limit(1)
+        .execute()
+    )
+    if existing.count:
+        sys.exit(f'ERROR: {existing.count} rows for {quarter} are already loaded. '
+                 'Delete them first if you really mean to reload this quarter.')
+
     print(f'Reading {file_path}...')
     df = pd.read_excel(file_path, header=None)
 

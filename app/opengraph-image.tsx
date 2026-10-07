@@ -67,7 +67,7 @@ export default function OpengraphImage() {
             }}
           >
             <div style={{ width: '12px', height: '12px', borderRadius: '999px', background: '#4ade80' }} />
-            Verified
+            Approved LMIAs
           </div>
           <div
             style={{

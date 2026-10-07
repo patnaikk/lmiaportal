@@ -2,20 +2,10 @@
 
 import { useState } from 'react'
 import type { PositiveLmia } from '@/lib/types'
+import { formatQuarter } from '@/lib/quarters'
 
 interface Props {
   matches: PositiveLmia[]
-}
-
-function formatQuarter(q?: string | null): string {
-  if (!q) return ''
-  const map: Record<string, string> = {
-    'Q1': 'Jan–Mar', 'Q2': 'Apr–Jun', 'Q3': 'Jul–Sep', 'Q4': 'Oct–Dec',
-  }
-  const m = q.match(/^(\d{4})-?(Q\d)$/i)
-  if (!m) return q
-  const [, year, quarter] = m
-  return `${map[quarter] ?? quarter} ${year}`
 }
 
 const PROVINCE_NAMES: Record<string, string> = {

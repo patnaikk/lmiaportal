@@ -23,7 +23,7 @@ import ServiceCanadaCallCard from '@/components/ServiceCanadaCallCard'
 import DataFreshness from '@/components/DataFreshness'
 
 const VERDICT_LABEL: Record<'GREEN' | 'YELLOW' | 'RED' | 'GREY', string> = {
-  GREEN: 'Verified',
+  GREEN: 'Has approved LMIAs',
   YELLOW: 'Caution',
   RED: 'Non-Compliant',
   GREY: 'Not found',

@@ -132,10 +132,11 @@ export default function AboutPage() {
           <h2 className="text-lg font-bold text-gray-900 mb-4">What the results mean</h2>
           <div className="space-y-3">
             <div className="rounded-xl px-4 py-3 bg-white ring-1 ring-green-100 shadow-sm">
-              <p className="text-sm font-bold text-gray-900 mb-0.5">🟢 Verified</p>
+              <p className="text-sm font-bold text-gray-900 mb-0.5">🟢 Has approved LMIAs</p>
               <p className="text-sm text-gray-600 leading-relaxed">
-                The employer is in government LMIA records with no flagged violations. A good sign — but always
-                request a copy of the actual LMIA approval letter and verify the employer directly with Service Canada.
+                The employer is in government LMIA records with no flagged violations. That confirms the employer
+                is real, not that your offer is — scammers often use real employers&rsquo; names. Check that the job
+                and city match, request a copy of the actual LMIA approval letter, and verify directly with Service Canada.
               </p>
             </div>
             <div className="rounded-xl px-4 py-3 bg-white ring-1 ring-amber-100 shadow-sm">

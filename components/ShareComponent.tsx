@@ -20,7 +20,7 @@ const VERDICT_EMOJI: Record<RiskResult, string> = {
 }
 
 const VERDICT_WORD: Record<RiskResult, string> = {
-  GREEN: 'Verified (approved LMIA on record)',
+  GREEN: 'Has approved LMIAs on record (check your offer matches)',
   YELLOW: 'Caution — review carefully',
   RED: 'BANNED by the Canadian government',
   GREY: 'Not found in ESDC records',

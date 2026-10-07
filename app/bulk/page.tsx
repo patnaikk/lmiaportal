@@ -20,7 +20,7 @@ interface ResultRow {
 const RISK_STYLE: Record<RiskLevel, { pill: string; label: string }> = {
   RED:    { pill: 'bg-red-100 text-red-700',     label: 'Banned' },
   YELLOW: { pill: 'bg-amber-100 text-amber-700', label: 'Caution' },
-  GREEN:  { pill: 'bg-green-100 text-green-700', label: 'Clean' },
+  GREEN:  { pill: 'bg-green-100 text-green-700', label: 'Approved LMIAs' },
   GREY:   { pill: 'bg-gray-100 text-gray-600',   label: 'Not found' },
 }
 
@@ -245,7 +245,7 @@ export default function BulkPage() {
 
         {/* Data freshness info */}
         <div className="mt-4 inline-flex items-center gap-4 px-4 py-2 bg-white rounded-lg border border-gray-100 text-xs text-gray-600">
-          <div>📊 Q3 2025 LMIA data</div>
+          <div>📊 Official ESDC LMIA data</div>
           <div className="w-px h-4 bg-gray-200" aria-hidden="true" />
           <div>🚫 1,262 violators on file</div>
           <div className="w-px h-4 bg-gray-200" aria-hidden="true" />

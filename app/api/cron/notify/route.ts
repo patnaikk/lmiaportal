@@ -22,7 +22,7 @@ const ALERTS_START = Date.parse('2026-11-01T00:00:00-04:00')
 const VERIFY_CONCURRENCY = 6
 
 const STATUS_LABEL: Record<string, string> = {
-  GREEN: 'Verified (Green)',
+  GREEN: 'Has approved LMIAs (Green)',
   YELLOW: 'Caution (Yellow)',
   RED: 'Flagged — Non-Compliant (Red)',
   GREY: 'Not Found (Grey)',

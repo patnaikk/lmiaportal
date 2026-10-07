@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import type { VerifyResult } from '@/lib/types'
 import RedCTA from '@/components/RedCTA'
+import { formatQuarter } from '@/lib/quarters'
 
 interface Props {
   result: VerifyResult
@@ -116,10 +117,30 @@ export default function RiskIndicator({ result }: Props) {
   const officialStatus = result.violatorMatches[0]?.status_raw?.trim() || undefined
 
   if (risk === 'GREEN') {
+    // Summarise the approvals for the matched employer only. A GREEN means the
+    // employer is real and has used the program; it says nothing about the
+    // specific offer in someone's hand, and scammers deliberately borrow real
+    // employers' names. The card must not read as "your offer is genuine".
+    const top = result.positiveMatches[0]
+    const same = result.positiveMatches.filter((m) => m.employer_normalized === top?.employer_normalized)
+    const quarters = Array.from(new Set(same.map((m) => m.quarter).filter(Boolean))).sort().reverse()
+    const positions = same.reduce((sum, m) => sum + (m.approved_positions || 0), 0)
+    const cities = Array.from(new Set(same.map((m) => m.city).filter(Boolean)))
+    const where = cities.length === 1 ? ` in ${cities[0]}` : cities.length > 1 ? ` in ${cities.length} locations` : ''
+    const when =
+      quarters.length > 1
+        ? ` across ${quarters.length} quarters, most recently ${formatQuarter(quarters[0])}`
+        : quarters.length === 1
+          ? ` in ${formatQuarter(quarters[0])}`
+          : ''
+    const approved = positions > 0
+      ? `Approved to hire ${positions} ${positions === 1 ? 'worker' : 'workers'}${where}${when}.`
+      : `Has approved LMIAs on record${where}${when}.`
+
     return (
-      <ResultCard role="status" ariaLabel="Verification result: Verified">
+      <ResultCard role="status" ariaLabel="Verification result: Has approved LMIAs">
         <VerdictLayout
-          verdict="Verified"
+          verdict="Has approved LMIAs"
           verdictColor="text-green-600"
           iconBg="bg-green-500"
           iconShadow="shadow-green-200"
@@ -130,7 +151,17 @@ export default function RiskIndicator({ result }: Props) {
           }
           employerName={matchedName}
           searchQuery={employerQuery}
-          description="Appears in official Canadian government LMIA records and has not been flagged for violations."
+          description={
+            <>
+              {approved} Not on the non-compliant employer list.
+              <span className="block mt-3 text-[13px] text-gray-500">
+                This confirms the employer is real and has used the program. It does not confirm your job
+                offer: scammers often use the names of real employers. Check that the job and city on your
+                offer match the records below, and contact the employer using details you find yourself,
+                not the ones on the offer.
+              </span>
+            </>
+          }
         />
       </ResultCard>
     )
@@ -144,7 +175,9 @@ export default function RiskIndicator({ result }: Props) {
       description = 'Found in government records, but the LMIA on file is for a different location than the one you specified. Confirm directly with the employer before proceeding.'
     } else if (reason === 'possible_match') {
       verdict = 'Possible match'
-      description = 'We found no exact match for your search. The closest government record has a different name and may be a different employer. Check that this is the company on your offer before relying on it — if not, search again using the exact legal name.'
+      description = result.violatorMatches.length > 0
+        ? 'A business on the government’s non-compliant employer list has a name very close to your search. It may be a different employer, or the same one recorded under a slightly different spelling. Do not pay anything until you have confirmed which business your offer is from, using its exact legal name.'
+        : 'We found no exact match for your search. The closest government record has a different name and may be a different employer. Check that this is the company on your offer before relying on it — if not, search again using the exact legal name.'
     } else if (reason === 'pr_only_stream') {
       verdict = 'Wrong stream'
       description = 'All approved LMIAs for this employer are under the Permanent Resident stream — not for temporary foreign workers. An offer claiming to be a TFW LMIA may not be legitimate.'

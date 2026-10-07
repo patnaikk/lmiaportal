@@ -23,20 +23,26 @@ async function fetchStats() {
   try {
     const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
 
-    const [{ count: employerCount }, { count: violatorCount }, { count: searchCount }] =
+    const [{ count: rowCount }, distinct, { count: violatorCount }, { count: searchCount }] =
       await Promise.all([
         supabase.from('positive_lmia').select('*', { count: 'exact', head: true }),
+        supabase.rpc('count_positive_employers'),
         supabase.from('violators').select('*', { count: 'exact', head: true }),
         supabase.from('search_logs').select('*', { count: 'exact', head: true }).gte('searched_at', oneWeekAgo),
       ])
 
+    // One row per employer x occupation x quarter, so rows overstate employers.
+    // count_positive_employers (20261007 migration) gives the distinct number;
+    // until it exists, show the row count under an honest label.
+    const distinctCount = !distinct.error && typeof distinct.data === 'number' ? distinct.data : null
     return {
-      employers: employerCount ?? 0,
+      employers: distinctCount ?? rowCount ?? 0,
+      employersLabel: distinctCount != null ? 'Employers' : 'LMIA records',
       violators: violatorCount ?? 0,
       searches: searchCount ?? 0,
     }
   } catch {
-    return { employers: 0, violators: 0, searches: 0 }
+    return { employers: 0, employersLabel: 'Employers', violators: 0, searches: 0 }
   }
 }
 
@@ -76,7 +82,7 @@ export default async function HomePage() {
         '@type': 'HowToStep',
         position: 3,
         name: 'Get a clear verdict',
-        text: 'You receive one of four verdicts: Verified (approved LMIA on record), Banned (employer is on the ESDC non-compliant list), Caution (partial match requiring review), or Not found (no record in either dataset).',
+        text: 'You receive one of four verdicts: Has approved LMIAs (approved LMIA on record), Banned (employer is on the ESDC non-compliant list), Caution (partial match requiring review), or Not found (no record in either dataset).',
         url: 'https://lmiacheck.ca/results',
       },
     ],
@@ -134,8 +140,8 @@ export default async function HomePage() {
       <div className="max-w-2xl mx-auto w-full px-4 mt-4">
         <div className="grid grid-cols-3 divide-x divide-gray-100 rounded-2xl bg-white ring-1 ring-black/[0.04] overflow-hidden shadow-sm">
           <div className="py-4 text-center">
-            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.employers > 0 ? formatCount(stats.employers) : '11K+'}</div>
-            <div className="text-[11px] text-gray-500 font-medium mt-1 uppercase tracking-wider">Employers</div>
+            <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.employers > 0 ? formatCount(stats.employers) : '10K+'}</div>
+            <div className="text-[11px] text-gray-500 font-medium mt-1 uppercase tracking-wider">{stats.employersLabel}</div>
           </div>
           <Link href="/banned" className="py-4 text-center hover:bg-gray-50 transition-colors group">
             <div className="text-2xl font-bold text-gray-900 leading-tight tracking-tight tabular-nums">{stats.violators > 0 ? stats.violators.toLocaleString() : '1,329'}</div>
@@ -190,7 +196,7 @@ export default async function HomePage() {
           {[
             { n: '1', label: 'Enter the employer name', sub: 'From your job offer or recruitment message' },
             { n: '2', label: 'We check government records', sub: 'Official ESDC data, updated quarterly' },
-            { n: '3', label: 'Get a clear result', sub: 'Verified · Caution · Not found · Banned' },
+            { n: '3', label: 'Get a clear result', sub: 'Approved LMIAs · Caution · Not found · Banned' },
           ].map(({ n, label, sub }) => (
             <div key={n} className="flex sm:flex-col items-start sm:items-center gap-3 sm:gap-3 sm:text-center">
               <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
