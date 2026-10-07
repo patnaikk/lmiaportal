@@ -1,6 +1,6 @@
 import { supabase, supabaseAdmin } from './supabase'
 import { normalizeEmployerName } from './normalize'
-import { isStrongNameMatch } from './match-strength'
+import { isStrongNameMatch, isNearIdenticalName } from './match-strength'
 import type { VerifyResult, PositiveLmia, ViolatorRecord } from './types'
 
 // DB stores full province names; the UI sends 2-letter codes.
@@ -205,6 +205,7 @@ export async function verifyEmployer(
       .from('positive_lmia')
       .select('*')
       .ilike('employer_normalized', `%${normalized}%`)
+      .order('quarter', { ascending: false })
       .limit(20)
     positiveMatches = (data as PositiveLmia[]) || []
   }
@@ -228,6 +229,7 @@ export async function verifyEmployer(
         .from('positive_lmia')
         .select('*')
         .ilike('employer_normalized', `%${shorter}%`)
+        .order('quarter', { ascending: false })
         .limit(20)
       if (ilikeData?.length) {
         positiveMatches = ilikeData as PositiveLmia[]
@@ -243,6 +245,28 @@ export async function verifyEmployer(
   positiveMatches = positiveMatches.filter((m) =>
     isStrongNameMatch(normalized, m.employer_normalized, m.employer_name)
   )
+
+  // A banned employer one typo away from the search must not disappear behind
+  // an approved one: "Randhawa Farms" is approved, "Randhava Farms" is banned,
+  // and they may be the same business spelled two ways. Report the possible
+  // match with the banned record first instead of a plain GREEN.
+  const nearIdenticalViolators = weakViolatorMatches.filter(
+    (v) =>
+      isNearIdenticalName(normalized, v.employer_normalized) ||
+      isNearIdenticalName(normalized, v.legal_name_normalized)
+  )
+  if (positiveMatches.length > 0 && nearIdenticalViolators.length > 0) {
+    await logSearch(employerName, city, province, 'YELLOW', undefined, origin)
+    return {
+      risk: 'YELLOW',
+      reason: 'possible_match',
+      positiveMatches: [],
+      violatorMatches: nearIdenticalViolators,
+      retractedMatches,
+      source: 'violators',
+      employerQuery: employerName,
+    }
+  }
 
   if (positiveMatches.length === 0 && (weakViolatorMatches.length > 0 || weakPositiveMatches.length > 0)) {
     // A non-compliant record is the one the user most needs to see, so it
