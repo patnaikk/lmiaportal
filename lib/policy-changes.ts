@@ -178,8 +178,9 @@ export const POLICY_CHANGES: PolicyChange[] = [
     fraudAngle:
       'Fewer available positions and longer waits mean more pressure — and more people willing to sell offers that do not exist. Scarcity is exactly when fraud rises.',
     impact: 'context',
-    sourceLabel: 'CIC News — TFWP admissions',
-    sourceUrl: 'https://www.cicnews.com/2026/08/lmia-processing-times-edge-higher-0879065.html',
+    sourceLabel: 'IRCC — 2026–2028 temporary resident targets',
+    sourceUrl:
+      'https://www.canada.ca/en/immigration-refugees-citizenship/corporate/transparency/committees/cimm-mar-23-2026/temporary-resident-targets.html',
   },
 ]
 
