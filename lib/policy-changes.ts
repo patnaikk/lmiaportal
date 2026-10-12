@@ -42,26 +42,39 @@ export const WAGE_THRESHOLDS_2026_07_17: { province: string; current: number; pr
 
 /**
  * Census metropolitan areas where ESDC will NOT process low-wage LMIA
- * applications, 2026-07-10 through 2026-10-08 (unemployment >= 6%).
- * Refreshed quarterly — ESDC publishes the next list on 2026-10-09; it MUST be
+ * applications, 2026-10-09 through 2027-01-07 (unemployment >= 6%).
+ * Refreshed quarterly — ESDC publishes the next list on 2027-01-08; it MUST be
  * re-verified then or removed.
  */
-export const RESTRICTED_CMAS_TO_2026_10_08 = [
-  "St. John's, NL", 'Moncton, NB', 'Montréal, QC', 'Ottawa-Gatineau, ON/QC',
-  'Belleville–Quinte West, ON', 'Peterborough, ON', 'Oshawa, ON', 'Toronto, ON',
-  'Hamilton, ON', 'Kitchener-Cambridge-Waterloo, ON', 'Brantford, ON', 'Guelph, ON',
+export const RESTRICTED_CMAS_TO_2027_01_07 = [
+  "St. John's, NL", 'Halifax, NS', 'Moncton, NB', 'Fredericton, NB',
+  'Montréal, QC', 'Ottawa-Gatineau, ON/QC', 'Kingston, ON', 'Belleville–Quinte West, ON',
+  'Peterborough, ON', 'Oshawa, ON', 'Toronto, ON', 'Hamilton, ON',
+  'St. Catharines-Niagara, ON', 'Kitchener-Cambridge-Waterloo, ON', 'Brantford, ON', 'Guelph, ON',
   'London, ON', 'Windsor, ON', 'Barrie, ON', 'Greater Sudbury, ON',
-  'Saskatoon, SK', 'Calgary, AB', 'Red Deer, AB', 'Edmonton, AB',
-  'Kelowna, BC', 'Kamloops, BC', 'Chilliwack, BC', 'Abbotsford-Mission, BC',
+  'Regina, SK', 'Saskatoon, SK', 'Lethbridge, AB', 'Calgary, AB',
+  'Red Deer, AB', 'Edmonton, AB', 'Kelowna, BC', 'Abbotsford-Mission, BC',
   'Vancouver, BC', 'Nanaimo, BC',
 ] as const
 
 /** Last day the list above applies (per ESDC's refusal-to-process page). */
-export const RESTRICTED_CMAS_VALID_UNTIL = '2026-10-08'
+export const RESTRICTED_CMAS_VALID_UNTIL = '2027-01-07'
 /** Day ESDC publishes the next quarterly list. */
-export const RESTRICTED_CMAS_NEXT_UPDATE = '2026-10-09'
+export const RESTRICTED_CMAS_NEXT_UPDATE = '2027-01-08'
 
 export const POLICY_CHANGES: PolicyChange[] = [
+  {
+    date: '2026-10-09',
+    title: '30 cities are closed to low-wage LMIA applications through January 7, 2027',
+    meaning:
+      'ESDC will not process low-wage LMIA applications in census metropolitan areas where unemployment is 6% or higher. That currently includes Toronto, Vancouver, Calgary, Edmonton and Montréal. Halifax, Fredericton, Kingston, St. Catharines-Niagara, Regina and Lethbridge were newly added. Kamloops and Chilliwack reopened.',
+    fraudAngle:
+      'This is the clearest test on this page. If someone is selling you a low-wage job in one of these cities right now, an LMIA cannot legally be issued for it. The offer cannot be what they say it is.',
+    impact: 'critical',
+    sourceLabel: 'ESDC — refusal to process',
+    sourceUrl: 'https://www.canada.ca/en/employment-social-development/services/foreign-workers/refusal.html',
+    nextReview: '2027-01-08',
+  },
   {
     date: '2026-09-18',
     title: 'Staffing agencies can no longer be the employer on an LMIA',
@@ -98,9 +111,9 @@ export const POLICY_CHANGES: PolicyChange[] = [
   },
   {
     date: '2026-07-10',
-    title: '26 cities are closed to low-wage LMIA applications through October 8',
+    title: '26 cities were closed to low-wage LMIA applications from July 10 to October 8',
     meaning:
-      'ESDC will not process low-wage LMIA applications in census metropolitan areas where unemployment is 6% or higher. That currently includes Toronto, Vancouver, Calgary, Edmonton and Montréal. Saskatoon, Red Deer, Kamloops and Chilliwack were newly added. Halifax, Winnipeg, Regina, Saint John, Fredericton, Kingston, St. Catharines-Niagara and Drummondville reopened.',
+      'ESDC would not process low-wage LMIA applications in census metropolitan areas where unemployment was 6% or higher. That included Toronto, Vancouver, Calgary, Edmonton and Montréal. Saskatoon, Red Deer, Kamloops and Chilliwack were newly added. Halifax, Winnipeg, Regina, Saint John, Fredericton, Kingston, St. Catharines-Niagara and Drummondville reopened.',
     fraudAngle:
       'This is the clearest test on this page. If someone is selling you a low-wage job in one of these cities right now, an LMIA cannot legally be issued for it. The offer cannot be what they say it is.',
     impact: 'critical',
