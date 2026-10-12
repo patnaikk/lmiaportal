@@ -356,6 +356,96 @@ def canonical_name(name: Optional[str]) -> str:
     return re.sub(r"\s+", " ", n).strip().casefold()
 
 
+# ── Status history ────────────────────────────────────────────
+# The upsert overwrites rows in place, so without this the database only knows
+# what ESDC says today. See supabase/migrations/20261012_violator_status_history.sql.
+HISTORY_FIELDS = ("compliance_status", "ineligible_until_date", "penalty_amount", "status_raw")
+
+
+def snapshot_violators(supabase) -> dict[int, dict]:
+    """Every violators row keyed by id. Paginated: PostgREST caps responses at 1000 rows."""
+    cols = "id, business_operating_name, decision_date, removed_from_source, " + ", ".join(HISTORY_FIELDS)
+    rows: dict[int, dict] = {}
+    PAGE = 1000
+    offset = 0
+    while True:
+        batch = (
+            supabase.table("violators").select(cols)
+            .order("id").range(offset, offset + PAGE - 1).execute()
+        ).data or []
+        for r in batch:
+            rows[r["id"]] = r
+        if len(batch) < PAGE:
+            return rows
+        offset += PAGE
+
+
+def build_history_events(before: dict[int, dict], after: dict[int, dict],
+                         withdrawn_ids: list[int], restored_ids: list[int]) -> list[dict]:
+    def event(row: dict, kind: str, prev: Optional[dict] = None) -> dict:
+        e = {
+            "violator_id":             row["id"],
+            "business_operating_name": row["business_operating_name"],
+            "decision_date":           row.get("decision_date"),
+            "event":                   kind,
+            **{f: row.get(f) for f in HISTORY_FIELDS},
+        }
+        if prev is not None:
+            e.update({f"prev_{f}": prev.get(f) for f in HISTORY_FIELDS})
+        return e
+
+    events: list[dict] = []
+    for vid, row in after.items():
+        if not row.get("business_operating_name"):
+            continue
+        prev = before.get(vid)
+        if prev is None:
+            events.append(event(row, "first_seen"))
+        elif any(str(prev.get(f) or "") != str(row.get(f) or "") for f in HISTORY_FIELDS):
+            events.append(event(row, "changed", prev))
+    events += [event(after[i], "withdrawn") for i in withdrawn_ids if i in after]
+    events += [event(after[i], "restored") for i in restored_ids if i in after]
+    return events
+
+
+def record_history(supabase, before: Optional[dict[int, dict]],
+                   withdrawn_ids: list[int], restored_ids: list[int]) -> int:
+    """Write this sync's status changes. Never fails the sync — history is best-effort."""
+    if before is None:
+        return 0
+    try:
+        after = snapshot_violators(supabase)
+        # Ids are stable under ON CONFLICT upsert. If most of them are new, the
+        # upsert fell back to delete-and-reinsert and every row would read as
+        # first_seen — skip rather than write a history of noise.
+        new_ids = after.keys() - before.keys()
+        if before and len(new_ids) > len(after) * 0.5:
+            log.warning(f"History skipped: {len(new_ids)}/{len(after)} ids are new (full re-insert?).")
+            return 0
+        events = build_history_events(before, after, withdrawn_ids, restored_ids)
+        for i in range(0, len(events), 500):
+            supabase.table("violator_status_history").insert(events[i : i + 500]).execute()
+        counts = {k: sum(e["event"] == k for e in events) for k in ("first_seen", "changed", "withdrawn", "restored")}
+        log.info(f"History: {len(events)} event(s) {counts}")
+        for e in events:
+            if e["event"] == "changed":
+                log.info(
+                    f"  changed: {e['business_operating_name']} ({e['decision_date']}): "
+                    f"{e['prev_compliance_status']} {e['prev_ineligible_until_date'] or ''} → "
+                    f"{e['compliance_status']} {e['ineligible_until_date'] or ''}".rstrip()
+                )
+        return len(events)
+    except Exception as e:
+        if "PGRST205" in str(e) or "violator_status_history" in str(e):
+            log.warning(
+                "Table 'violator_status_history' not in DB yet — status changes NOT recorded.\n"
+                "  ACTION NEEDED: Run supabase/migrations/20261012_violator_status_history.sql."
+            )
+        else:
+            log.warning(f"Could not record status history: {e}")
+        return 0
+
+
 # ── DB helpers ────────────────────────────────────────────────
 def get_last_known_count(supabase) -> Optional[int]:
     """Read the most recent successful sync's record count from sync_logs."""
@@ -396,7 +486,7 @@ def get_last_fingerprint(supabase) -> Optional[str]:
     return None
 
 
-def reconcile_removals(supabase, feed_records: list[dict]) -> tuple[int, int]:
+def reconcile_removals(supabase, feed_records: list[dict]) -> tuple[list[int], list[int]]:
     """
     ESDC withdraws records as well as adding them — a decision can be published
     and pulled days later. Our upsert never deletes, so without this pass a
@@ -420,7 +510,7 @@ def reconcile_removals(supabase, feed_records: list[dict]) -> tuple[int, int]:
     """
     if not feed_records:
         log.warning("No feed records available — skipping reconciliation.")
-        return 0, 0
+        return [], []
 
     live_names = {canonical_name(r.get("bn_operating")) for r in feed_records}
     live_names.discard("")
@@ -446,7 +536,7 @@ def reconcile_removals(supabase, feed_records: list[dict]) -> tuple[int, int]:
             offset += PAGE
     except Exception as e:
         log.warning(f"Could not read violators for reconciliation: {e}")
-        return 0, 0
+        return [], []
 
     to_flag, to_clear = [], []
     for r in rows:
@@ -463,7 +553,7 @@ def reconcile_removals(supabase, feed_records: list[dict]) -> tuple[int, int]:
             f"Reconciliation aborted: {len(to_flag)}/{len(rows)} rows look absent from the "
             "feed (>5%). Refusing to mass-flag — check the scrape and canonical_name()."
         )
-        return 0, 0
+        return [], []
 
     by_id = {r["id"]: r for r in rows}
 
@@ -491,9 +581,9 @@ def reconcile_removals(supabase, feed_records: list[dict]) -> tuple[int, int]:
             )
         else:
             log.warning(f"Could not update removal flags: {e}")
-        return 0, 0
+        return [], []
 
-    return len(to_flag), len(to_clear)
+    return to_flag, to_clear
 
 
 def write_sync_log(supabase, *, status: str, total_scraped: Optional[int],
@@ -881,6 +971,13 @@ def run_sync():
         if duplicate_count:
             log.warning(f"Dropped {duplicate_count} duplicate row(s) repeated in the source feed.")
 
+        # Snapshot before the upsert overwrites anything, for the status history.
+        try:
+            before = snapshot_violators(supabase)
+        except Exception as e:
+            log.warning(f"Could not snapshot violators for history: {e}")
+            before = None
+
         log.info(f"Upserting {len(records)} parsed records...")
         inserted, updated = upsert_records(supabase, records)
         log.info(f"Done: {inserted} new, {updated} updated.")
@@ -888,9 +985,11 @@ def run_sync():
         # The upsert only ever adds and edits. Records ESDC has WITHDRAWN have
         # to be flagged separately or they linger on the site as live
         # accusations — see reconcile_removals().
-        withdrawn, restored = reconcile_removals(
+        withdrawn_ids, restored_ids = reconcile_removals(
             supabase, feed_records if feed_records is not None else []
         )
+        withdrawn, restored = len(withdrawn_ids), len(restored_ids)
+        history_events = record_history(supabase, before, withdrawn_ids, restored_ids)
 
     except Exception as e:
         duration = time.monotonic() - started
@@ -918,6 +1017,7 @@ def run_sync():
         f"  Updated:   {updated}\n"
         f"  Withdrawn: {withdrawn}\n"
         f"  Restored:  {restored}\n"
+        f"  History:   {history_events} event(s)\n"
         f"  Duration:  {duration:.1f}s"
     )
     log.info(summary)
