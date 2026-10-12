@@ -858,13 +858,28 @@ def run_sync():
     # ── Step 4 & 5: Parse + upsert ────────────────────────────
     try:
         records = []
+        seen_keys: set[tuple[str, Optional[str]]] = set()
+        duplicate_count = 0
         for row in all_rows:
             while len(row) < len(headers):
                 row.append("")
             raw = {headers[i]: row[i] for i in range(len(headers))}
             rec = build_record(raw, headers)
-            if rec["business_operating_name"]:
-                records.append(rec)
+            if not rec["business_operating_name"]:
+                continue
+            # The source feed occasionally repeats a row verbatim (seen for
+            # "Zobel & Zobel Inc." / 2019-04-18 and "Zomer Gardens" /
+            # 2019-01-04). ON CONFLICT can't touch the same row twice in one
+            # upsert statement, so drop exact repeats of the unique key here.
+            key = (rec["business_operating_name"], rec["decision_date"])
+            if key in seen_keys:
+                duplicate_count += 1
+                continue
+            seen_keys.add(key)
+            records.append(rec)
+
+        if duplicate_count:
+            log.warning(f"Dropped {duplicate_count} duplicate row(s) repeated in the source feed.")
 
         log.info(f"Upserting {len(records)} parsed records...")
         inserted, updated = upsert_records(supabase, records)

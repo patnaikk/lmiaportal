@@ -12,13 +12,14 @@ import {
   Text,
 } from '@react-email/components'
 import * as React from 'react'
+import { RESTRICTED_CMAS_TO_2027_01_07 } from '@/lib/policy-changes'
 
 /**
  * Subject line for the current issue. Lives here, beside the copy it belongs
  * to, because it was previously duplicated in the send route and the preview
  * page and silently drifted out of sync between them.
  */
-export const SUBJECT = 'August 2026: 29 employers fined $627,750 \u2014 and no new bans'
+export const SUBJECT = 'September 2026: 2 new hiring bans, 16 fines \u2014 and an update on August'
 
 export interface BanHighlight {
   name: string
@@ -35,6 +36,44 @@ export interface ProvinceCount {
 export interface ReportStat {
   value: string
   label: string
+}
+
+export interface RuleChangeCities {
+  province: string
+  cities: string[]
+}
+
+/**
+ * A government rule change worth a card of its own. Optional: most months won't
+ * have one, and the card disappears when `paragraphs` is empty.
+ */
+export interface RuleChange {
+  eyebrow: string
+  title: string
+  paragraphs: string[]
+  /** Grouped city list, e.g. the restricted-CMA list. Omit for a text-only rule change. */
+  cityGroups?: RuleChangeCities[]
+  linkUrl: string
+  linkLabel: string
+}
+
+const PROVINCE_NAMES: Record<string, string> = {
+  NL: 'Newfoundland and Labrador', NS: 'Nova Scotia', NB: 'New Brunswick', QC: 'Quebec',
+  ON: 'Ontario', MB: 'Manitoba', SK: 'Saskatchewan', AB: 'Alberta', BC: 'British Columbia',
+}
+
+/** Groups "Toronto, ON" style entries by province, keeping list order. "ON/QC" files under the first. */
+function groupCitiesByProvince(entries: readonly string[]): RuleChangeCities[] {
+  const groups: RuleChangeCities[] = []
+  for (const entry of entries) {
+    const i = entry.lastIndexOf(', ')
+    const code = entry.slice(i + 2).split('/')[0]
+    const province = PROVINCE_NAMES[code] ?? code
+    let g = groups.find((x) => x.province === province)
+    if (!g) groups.push((g = { province, cities: [] }))
+    g.cities.push(entry.slice(0, i))
+  }
+  return groups
 }
 
 export interface MonthlyReportProps {
@@ -83,104 +122,125 @@ export interface MonthlyReportProps {
    * it so the row leads with whatever the month actually did.
    */
   stats?: ReportStat[]
+  ruleChange?: RuleChange | null
 }
 
-const defaults: Required<Omit<MonthlyReportProps, 'highlights' | 'headsUpHighlights' | 'stats'>> & {
+const defaults: Required<Omit<MonthlyReportProps, 'highlights' | 'headsUpHighlights' | 'stats' | 'ruleChange'>> & {
+  ruleChange: RuleChange | null
   highlights: BanHighlight[]
   headsUpHighlights: BanHighlight[]
   stats: ReportStat[]
 } = {
-  monthLabel: 'August 2026',
-  newBansCount: 0,
-  topProvince: 'AB',
+  // DRAFT 2026-10-04, re-pulled 2026-10-12 for send on 2026-10-13. Every figure below comes from the
+  // live ESDC feed as of 2026-10-12 (1,425 records, 18 September decisions; was 14 on 2026-10-03). ESDC publishes 5-14 days late, so RE-PULL
+  // buildMonthlyReport('2026-09') on send day and update counts, totals and highlights.
+  monthLabel: 'September 2026',
+  newBansCount: 2,
+  topProvince: 'BC',
   expiringCount: 0,
   stats: [
-    { value: '29', label: 'Employers fined' },
-    { value: '$627,750', label: 'In penalties' },
-    { value: '0', label: 'New bans' },
+    { value: '2', label: 'New hiring bans' },
+    { value: '16', label: 'Employers fined' },
+    { value: '$939,750', label: 'In penalties' },
   ],
   highlights: [
     {
-      name: 'Smart Greenhouse Ltd.',
-      penalty: '$180,000',
-      note: 'Edmonton, AB \u2014 business was not actually operating',
-      url: 'https://lmiacheck.ca/employer/smart-greenhouse-ltd',
+      name: '1366043 BC Ltd.',
+      penalty: '$268,000',
+      note: 'Mission, BC — fined, the largest penalty this month; was not actually operating the business, and pay or conditions did not match the offer',
+      url: 'https://lmiacheck.ca/employer/1366043-bc-ltd',
     },
     {
-      name: 'Royal Greenhouse Ltd.',
-      penalty: '$100,000',
-      note: 'Beaumont, AB \u2014 business was not actually operating',
-      url: 'https://lmiacheck.ca/employer/royal-greenhouse-ltd',
+      name: 'Ship Eazy Logistics',
+      penalty: '$203,000',
+      note: 'Winnipeg, MB — banned until September 2027; job not as offered, business not actually operating',
+      url: 'https://lmiacheck.ca/employer/ship-eazy-logistics',
     },
     {
-      name: 'Baseline Trucking Ltd.',
-      penalty: '$63,000',
-      note: 'Sherwood Park, AB \u2014 pay or conditions did not match the offer',
-      url: 'https://lmiacheck.ca/employer/baseline-trucking-ltd',
+      name: 'Peels Nurseries Ltd.',
+      penalty: '$152,000',
+      note: 'Langley, BC — banned for five years, until 2031; pay or conditions did not match the offer, no health insurance for workers',
+      url: 'https://lmiacheck.ca/employer/peels-nurseries-ltd',
     },
     {
-      name: 'BCM Farms Ltd.',
-      penalty: '$60,000',
-      note: 'Surrey, BC \u2014 business was not actually operating',
-      url: 'https://lmiacheck.ca/employer/bcm-farms-ltd',
+      name: 'Ô Saine Terre',
+      penalty: '$127,750',
+      note: 'L’Assomption, QC — fined; included a finding of abuse in the workplace',
+      url: 'https://lmiacheck.ca/employer/saine-terre',
     },
     {
-      name: 'Earan Janitorial Services Ltd.',
-      penalty: '$46,000',
-      note: 'Surrey, BC \u2014 business was not actually operating',
-      url: 'https://lmiacheck.ca/employer/earan-janitorial-services-ltd',
+      name: 'Africa Mart Inc',
+      penalty: '$40,000',
+      note: 'Scarborough, ON — fined; did not give inspectors the documents they asked for',
+      url: 'https://lmiacheck.ca/employer/africa-mart-inc',
     },
   ],
-  highlightsLabel: 'AUGUST DECISIONS \u00b7 29 FINED \u00b7 NO NEW BANS',
+  highlightsLabel: 'SEPTEMBER DECISIONS · 2 BANNED · 16 FINED',
   highlightsNote:
-    'August brought more enforcement decisions than any month since March: 29 employers, penalised $627,750 between them. Not one was banned from hiring foreign workers. That combination is normal and worth understanding \u2014 ESDC reserves a hiring ban for the most serious or repeated violations, so an employer can be fined heavily and still be free to recruit you tomorrow. The five largest are below; the full list of 29 is on the site.',
-  reportUrl: 'https://lmiacheck.ca/reports/2026-08',
+    'Two employers were banned from hiring foreign workers in September, and sixteen more were fined. Most hiring bans last one or two years; Peels Nurseries is barred for five. The sixteen fined employers can still legally hire today — but read the update on August below before you treat that as good news. A fine that goes unpaid becomes a ban. The five largest penalties are below; the full list is on the site.',
+  reportUrl: 'https://lmiacheck.ca/reports/2026-09',
   siteUrl: 'https://lmiacheck.ca',
   unsubscribeUrl: 'https://lmiacheck.ca/unsubscribe',
   helpOrgName: 'Migrant Workers Alliance for Change',
   helpOrgUrl: 'https://migrantworkersalliance.org',
   logoUrl: 'https://lmiacheck.ca/email/canada-flag.png',
   patternText:
-    'Seven of August\u2019s 29 employers \u2014 including the two largest fines of the month, $180,000 and $100,000 \u2014 were penalised under the same rule: they were not actually operating the business the foreign worker had been hired for. Together those seven account for $407,000 of the month\u2019s total. In plain terms, this is the closest thing in the enforcement record to the job not being real. It is the same harm as a recruitment scam, except the employer here was a registered company with a genuine LMIA. The other striking number is 20: that is how many of the 29 were penalised for not handing inspectors the documents they asked for. An employer who cannot produce payroll records when the government asks is unlikely to produce them for you either. Before you pay anyone or board a flight, ask for the job offer and the LMIA number in writing, and check that the company is genuinely operating at the address on the offer \u2014 a phone number that works, a real premises, staff who have heard of it.',
+    'Eight of September’s eighteen employers were penalised under the same rule: the pay or working conditions were not what the job offer promised. That includes both employers banned this month and the largest fine — together $801,250 of the month’s $939,750. This is the most common way a real job goes wrong, and the one you are best placed to prove. Keep your signed job offer and your LMIA number somewhere safe, outside your employer’s reach. When your first payslip arrives, compare it line by line with the offer: hourly wage, hours, overtime, and any deductions you never agreed to. If they don’t match, write down the dates and amounts. That record is what an inspector, a lawyer or a worker organisation will ask you for first.',
   previewText:
-    '29 employers fined $627,750 \u2014 and two banned employers can hire again this week.',
-  scamTitle: 'The \u201cconsultant\u201d who isn\u2019t allowed to charge you',
+    'Two new hiring bans, sixteen fines — and why most of August’s “fined only” employers are now banned.',
+  scamTitle: 'Being asked to pay for your own LMIA or recruitment',
   scamParagraphs: [
-    'Only three kinds of people may legally charge you for immigration advice in Canada: a consultant licensed by the College of Immigration and Citizenship Consultants, a lawyer (or, in Ontario, a licensed paralegal) in good standing with a provincial or territorial law society, or a Quebec notary. Anyone else who takes your money for it \u2014 an agent, a \u201cvisa consultancy\u201d, a friend of a friend with an office and a printer \u2014 is acting illegally, whatever the business card says.',
-    'The check takes two minutes: ask for the person\u2019s full legal name and licence number, then look them up yourself in the College\u2019s public register or the law society\u2019s directory. Two more signs worth knowing: no authorized representative can guarantee you an LMIA or a visa, and none of them need to be paid in cryptocurrency, gift cards, or a transfer to someone\u2019s personal account.',
+    'An employer in Canada is not allowed to charge you, or take back from your wages, the cost of getting an LMIA. They are also not allowed to charge you recruitment fees, and since 2022 they are responsible for making sure any recruiter or agency they use doesn’t charge you either. These rules apply to the employer whether the request comes from them, from a recruiter in your home country, or from a “partner agency”.',
+    'The request is rarely called a fee. It shows up as a “processing charge”, a “deposit” you’ll get back after you arrive, a cut of your first months’ pay, or money for a “job guarantee”. If anyone connected to a Canadian job asks you for money to get the job or the LMIA, treat it as a warning sign, keep every message and receipt, and check the employer before you pay anything.',
   ],
   sinceLastIssueParagraphs: [
-    'Last month we told you July had three decisions and one hiring ban. The real figure is sixteen decisions and twelve employers now ineligible to hire \u2014 $502,760 in penalties. Nothing was withdrawn and no employer we named has been cleared \u2014 the rest of July simply had not reached us when we went to press. It has now, and we would rather show you a number that moved than quietly leave the old one standing.',
-    'Ten of those twelve are ineligible for a specific reason worth knowing: they have not paid their fine. That status lasts until they pay, with no fixed end date, and it is the most common form of ineligibility by far. The practical lesson is the one we keep coming back to, and July is the sharpest example of it yet: an employer who looked clean when you checked in August may not look clean today. Check again in the week you actually sign, not once at the start of your search.',
+    'Last month we told you that August’s 29 employers had been fined, not banned. That was what the government list said when we sent it. It has changed since: 15 of those 29 employers — including all five we named — are now listed as “Ineligible – unpaid monetary penalty”. They did not pay their fines, so they can no longer hire foreign workers. Between them they owe $515,750.',
+    'We also told you that Kowalski Accounting & Bookkeeping (White Rock, BC) and Rock Rover Transport (Calgary, AB) would be free to hire again in September, when their bans ended. That turned out to be wrong. Their bans did end, but neither has paid its fine, so both are still ineligible and have no end date. We should have said “if the fine has been paid”, and from now on we will.',
+    'The lesson for you is the same one we have repeated since July, and August proves it again: an employer’s status can change after you check it, in either direction. A fine today can be a ban next month. Check again in the week you actually sign.',
   ],
   headsUpText:
-    'Two hiring bans end this month, and both employers become free to recruit foreign workers again. We promised in July to name them before it happened. A finished ban is not a clean record \u2014 it means the penalty has been served. In October two more end: Polar Bear Ice Services in Surrey, BC on the 25th and R\u00e9sidence Le Coulongeois in Qu\u00e9bec City on the 31st.',
+    'No hiring bans ended in September. In October, two ban periods are due to end: Polar Bear Ice Services in Surrey, BC on the 25th and Résidence Le Coulongeois in Québec City on the 31st. They can hire again only if their fines have been paid — as Kowalski and Rock Rover showed this month, that is not guaranteed. Check their status after the date, not before.',
   headsUpHighlights: [
     {
-      name: 'Kowalski Accounting & Bookkeeping Inc.',
-      penalty: '$43,000',
-      note: 'White Rock, BC \u2014 free to hire again from 13 September',
-      url: 'https://lmiacheck.ca/employer/kowalski-accounting-bookkeeping-inc',
+      name: 'Polar Bear Ice Services Inc.',
+      penalty: '$60,000',
+      note: 'Surrey, BC — ban period ends 25 October; still barred if the fine is unpaid',
+      url: 'https://lmiacheck.ca/employer/polar-bear-ice-services-inc',
     },
     {
-      name: 'Rock Rover Transport',
-      penalty: '$155,000',
-      note: 'Calgary, AB \u2014 free to hire again from 17 September',
-      url: 'https://lmiacheck.ca/employer/rock-rover-transport',
+      name: 'Résidence Le Coulongeois',
+      penalty: '$60,000',
+      note: 'Québec City, QC — ban period ends 31 October; still barred if the fine is unpaid',
+      url: 'https://lmiacheck.ca/employer/r-sidence-le-coulongeois',
     },
   ],
-  positiveCount: '10,000',
-  positiveQuarter: 'Q3 2025',
+  ruleChange: {
+    eyebrow: 'RULE CHANGE · LOW-WAGE JOBS',
+    title: '30 cities where a new low-wage LMIA can’t be processed until January 8',
+    paragraphs: [
+      'From October 9, 2026 to January 7, 2027, the government will not process a new LMIA application for a low-wage job in any of the 30 cities below, because unemployment there is 6% or higher. A job is low-wage if it pays less than the threshold for its province — for example $36.92 an hour in Ontario, $38.40 in British Columbia and $37.50 in Alberta. Each city includes the surrounding towns in its metropolitan area.',
+      'Halifax, Fredericton, Kingston, St. Catharines-Niagara, Regina and Lethbridge were added this time. Kamloops and Chilliwack were removed.',
+      'Some jobs are exempt: farm work, construction, food manufacturing, hospitals, nursing homes and some in-home caregivers. For any other low-wage job in these cities, if someone tells you they are starting your LMIA now, it cannot be processed before January 8. Ask what the job pays and exactly where you would work, and check before you pay anyone.',
+    ],
+    cityGroups: groupCitiesByProvince(RESTRICTED_CMAS_TO_2027_01_07),
+    linkUrl: 'https://lmiacheck.ca/rule-changes',
+    linkLabel: 'See every rule change and the wage thresholds',
+  },
+  positiveCount: '40,000',
+  positiveQuarter: 'January 2025 to March 2026',
   expiringNextMonthCount: 2,
   nextMonthLabel: 'October',
-  provincialBreakdownLabel: 'EMPLOYERS FINED BY PROVINCE',
+  provincialBreakdownLabel: 'EMPLOYERS PENALISED BY PROVINCE',
   provincialBreakdown: [
-    { province: 'BC', count: 10 },
-    { province: 'AB', count: 8 },
-    { province: 'ON', count: 6 },
+    { province: 'BC', count: 6 },
+    { province: 'ON', count: 5 },
+    { province: 'AB', count: 3 },
     { province: 'QC', count: 2 },
+    { province: 'MB', count: 1 },
+    { province: 'YT', count: 1 },
   ],
 }
+
 
 function Eyebrow({ children, color = '#9ca3af' }: { children: React.ReactNode; color?: string }) {
   return <Text style={{ ...eyebrow, color }}>{children}</Text>
@@ -199,6 +259,7 @@ export default function MonthlyReport(props: MonthlyReportProps) {
     headsUpHighlights: props.headsUpHighlights ?? defaults.headsUpHighlights,
     stats: props.stats ?? defaults.stats,
     provincialBreakdown: props.provincialBreakdown ?? defaults.provincialBreakdown,
+    ruleChange: props.ruleChange === undefined ? defaults.ruleChange : props.ruleChange,
   }
   const campaign = `monthly_${p.monthLabel.toLowerCase().replace(/\s+/g, '_')}` // e.g. monthly_may_2026
   const reportHref = withUtm(p.reportUrl, 'report', campaign)
@@ -453,12 +514,46 @@ export default function MonthlyReport(props: MonthlyReportProps) {
             </table>
           </Section>
 
+          {/* Rule change — government policy that changes what an offer can be (sky card) */}
+          {p.ruleChange && p.ruleChange.paragraphs.length > 0 && (
+            <Section style={outer}>
+              <table width="100%" cellPadding={0} cellSpacing={0} role="presentation" style={{ ...card, backgroundColor: '#f0f9ff' }}>
+                <tr>
+                  <td style={cardPad}>
+                    <Eyebrow color="#0369a1">{p.ruleChange.eyebrow}</Eyebrow>
+                    <Text style={{ ...cardText, fontSize: '18px', lineHeight: '25px', fontWeight: 700, color: '#0c4a6e' }}>
+                      {p.ruleChange.title}
+                    </Text>
+                    {p.ruleChange.paragraphs.map((para, i) => (
+                      <Text key={i} style={{ ...cardText, color: '#075985' }}>{para}</Text>
+                    ))}
+                    {p.ruleChange.cityGroups && p.ruleChange.cityGroups.length > 0 && (
+                      <table width="100%" cellPadding={0} cellSpacing={0} role="presentation" style={{ margin: '4px 0 14px' }}>
+                        {p.ruleChange.cityGroups.flatMap((g) => [
+                          <tr key={g.province}>
+                            <td style={cityProvince}>{g.province}</td>
+                          </tr>,
+                          <tr key={`${g.province}-cities`}>
+                            <td style={cityList}>{g.cities.join(' · ')}</td>
+                          </tr>,
+                        ])}
+                      </table>
+                    )}
+                    <Link href={withUtm(p.ruleChange.linkUrl, 'rule_change', campaign)} style={{ ...inlineLink, color: '#0369a1' }}>
+                      {p.ruleChange.linkLabel} &rsaquo;
+                    </Link>
+                  </td>
+                </tr>
+              </table>
+            </Section>
+          )}
+
           {/* Opportunity — honest evergreen pointer to positive data */}
           <Section style={hero}>
             <Eyebrow color="#15803d">LOOKING FOR LEGITIMATE WORK?</Eyebrow>
             <Text style={{ ...cardText, marginBottom: '4px' }}>
-              Over <strong>{p.positiveCount} Canadian employers</strong> currently hold approved LMIAs
-              to hire foreign workers legally. Search by job type or province at{' '}
+              Over <strong>{p.positiveCount} Canadian employers</strong> have been approved for LMIAs
+              to hire foreign workers legally since January 2025. Search by job type or province at{' '}
               <Link href={siteHref} style={inlineLink}>lmiacheck.ca</Link>.
             </Text>
             <Text style={muted}>Latest government data: {p.positiveQuarter}.</Text>
@@ -619,6 +714,8 @@ const provLabel: React.CSSProperties = { fontSize: '13px', fontWeight: 700, colo
 const provBarCell: React.CSSProperties = { paddingBottom: '8px', verticalAlign: 'middle' }
 const provBar: React.CSSProperties = { height: '8px', backgroundColor: '#d1d5db', borderRadius: '4px', minWidth: '8px' }
 const provCount: React.CSSProperties = { fontSize: '13px', fontWeight: 600, color: '#6b7280', width: '24px', textAlign: 'right', paddingBottom: '8px', paddingLeft: '10px', verticalAlign: 'middle' }
+const cityProvince: React.CSSProperties = { fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#0369a1', paddingTop: '8px' }
+const cityList: React.CSSProperties = { fontSize: '15px', lineHeight: '22px', color: '#0c4a6e', paddingBottom: '4px' }
 const footer: React.CSSProperties = { padding: '18px 32px 26px' }
 const footerText: React.CSSProperties = { fontSize: '12px', lineHeight: '18px', color: '#9ca3af', margin: '0 0 8px' }
 const footerLink: React.CSSProperties = { color: '#6b7280', textDecoration: 'underline' }

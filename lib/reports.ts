@@ -159,7 +159,7 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
 
   // 1. New bans this month
   const { data: newBansRaw } = await supabase.from('violators')
-    .select('business_operating_name, province, decision_date, penalty_amount, ineligible_until_date, compliance_status, reasons')
+    .select('business_operating_name, province, address, decision_date, penalty_amount, ineligible_until_date, compliance_status, reasons')
     .is('removed_from_source', null)
     .gte('decision_date', start)
     .lte('decision_date', end)
@@ -168,7 +168,7 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
 
   const newBans: NewBan[] = (newBansRaw ?? []).map((r) => ({
     name: r.business_operating_name ?? 'Unknown',
-    province: r.province ?? '',
+    province: r.province || extractProvinceFromAddress(r.address) || '',
     decisionDate: r.decision_date ?? '',
     penalty: r.penalty_amount ?? null,
     banUntil: r.ineligible_until_date ?? null,
@@ -246,7 +246,7 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
 
   // 4a. Bans expiring THIS month
   const { data: expiringThisRaw } = await supabase.from('violators')
-    .select('business_operating_name, province, ineligible_until_date, penalty_amount')
+    .select('business_operating_name, province, address, ineligible_until_date, penalty_amount')
     .is('removed_from_source', null)
     .eq('compliance_status', 'INELIGIBLE_UNTIL')
     .gte('ineligible_until_date', start)
@@ -255,14 +255,14 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
 
   const expiringThisMonth: ExpiringBan[] = (expiringThisRaw ?? []).map((r) => ({
     name: r.business_operating_name ?? 'Unknown',
-    province: r.province ?? '',
+    province: r.province || extractProvinceFromAddress(r.address) || '',
     banUntil: r.ineligible_until_date ?? '',
     penalty: r.penalty_amount ?? null,
   }))
 
   // 4b. Bans expiring next month
   const { data: expiringRaw } = await supabase.from('violators')
-    .select('business_operating_name, province, ineligible_until_date, penalty_amount')
+    .select('business_operating_name, province, address, ineligible_until_date, penalty_amount')
     .is('removed_from_source', null)
     .eq('compliance_status', 'INELIGIBLE_UNTIL')
     .gte('ineligible_until_date', nextStart)
@@ -271,7 +271,7 @@ export async function buildMonthlyReport(yearMonth: string): Promise<MonthlyRepo
 
   const expiringNextMonth: ExpiringBan[] = (expiringRaw ?? []).map((r) => ({
     name: r.business_operating_name ?? 'Unknown',
-    province: r.province ?? '',
+    province: r.province || extractProvinceFromAddress(r.address) || '',
     banUntil: r.ineligible_until_date ?? '',
     penalty: r.penalty_amount ?? null,
   }))
