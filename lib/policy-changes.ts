@@ -69,7 +69,7 @@ export const POLICY_CHANGES: PolicyChange[] = [
     meaning:
       'ESDC will not process low-wage LMIA applications in census metropolitan areas where unemployment is 6% or higher. That currently includes Toronto, Vancouver, Calgary, Edmonton and Montréal. Halifax, Fredericton, Kingston, St. Catharines-Niagara, Regina and Lethbridge were newly added. Kamloops and Chilliwack reopened.',
     fraudAngle:
-      'This is the clearest test on this page. If someone is selling you a low-wage job in one of these cities right now, an LMIA cannot legally be issued for it. The offer cannot be what they say it is.',
+      'This is the clearest test on this page. If someone is selling you a low-wage job in one of these cities and says the LMIA application is being made now, it cannot be processed until at least January 8 — unless the job is in an exempt sector such as farm work, construction, food manufacturing, hospitals or nursing homes. Applications submitted before October 9 can still go ahead, so ask when it was submitted and check before you pay anyone.',
     impact: 'critical',
     sourceLabel: 'ESDC — refusal to process',
     sourceUrl: 'https://www.canada.ca/en/employment-social-development/services/foreign-workers/refusal.html',
