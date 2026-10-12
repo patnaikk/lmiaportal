@@ -3,7 +3,7 @@
 // Distinct from app/updates (the product changelog). This tracks what ESDC/IRCC
 // changed, for workers who need to know how the rules moved — not what we shipped.
 //
-// Each entry is dated and carries an official source. Verified 2026-10-06.
+// Each entry is dated and carries an official source. Verified 2026-10-12.
 
 export type PolicyImpact = 'critical' | 'important' | 'context'
 
@@ -88,15 +88,40 @@ export const POLICY_CHANGES: PolicyChange[] = [
       'https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html',
   },
   {
-    date: '2026-08-07',
-    title: 'LMIA processing times rose again across almost every stream',
+    date: '2026-10-07',
+    title: 'High-wage LMIAs now take about 98 business days to process',
     meaning:
-      'ESDC published updated processing times. The high-wage stream now averages 88 days — up from 60 days in February. Times rose in every stream except Seasonal Agricultural and the Permanent Residence stream.',
+      'ESDC publishes average LMIA processing times every month. For September 2026: high-wage stream 98 business days, low-wage stream 82, permanent residence stream 79, agricultural stream 22, Seasonal Agricultural Worker Program 7, Global Talent Stream 9. Business days exclude weekends and holidays, so 98 business days is roughly four and a half months. The required advertising period is not counted in these times.',
     fraudAngle:
-      'Nobody can get you an LMIA in two weeks. If a recruiter promises a fast LMIA, that promise does not match how long the government is actually taking.',
+      'Outside the Global Talent Stream — which is limited to specialized, mostly tech, roles — nobody can get you an LMIA in two weeks. If a recruiter promises a fast LMIA for an ordinary job, that promise does not match how long the government is actually taking.',
     impact: 'important',
-    sourceLabel: 'CIC News — LMIA processing times',
-    sourceUrl: 'https://www.cicnews.com/2026/08/lmia-processing-times-edge-higher-0879065.html',
+    sourceLabel: 'ESDC — LMIA processing times',
+    sourceUrl:
+      'https://www.canada.ca/en/employment-social-development/services/foreign-workers/labour-market-impact-assessment-processing-times.html',
+  },
+  {
+    date: '2026-08-21',
+    title: 'Workers already in Canada get a 90-day window while their employer\'s LMIA is pending',
+    meaning:
+      'If your work permit expires within 2 weeks and your employer has already submitted a complete LMIA application, IRCC will hold your new work permit application for up to 90 days (up from 60) while the LMIA is decided. Applicants are asked to put the code CPTS2026 in the intended occupation field. An LMIA filed at the last minute only qualifies in exceptional cases.',
+    fraudAngle:
+      'This only works if a real LMIA application has already been submitted by a real employer. Ask for the LMIA application details before you rely on it — a recruiter who says "apply now, the LMIA is coming" may leave you without status.',
+    impact: 'context',
+    sourceLabel: 'IRCC — LMIA review officer instructions',
+    sourceUrl:
+      'https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals/temporary-residents/foreign-workers/exemption-codes/validity-suspension-duration-employment.html',
+  },
+  {
+    date: '2026-08-18',
+    title: 'ESDC clarified the low-wage cap for employers with fewer than 10 employees',
+    meaning:
+      'For a work location with fewer than 10 employees, ESDC calculates the low-wage cap as if the location had 10. That means at most 1 low-wage temporary foreign worker under a 10% cap, or 2 under a 20% cap, at that location. Part-time staff count as half an employee. Positions with no cap, such as on-farm primary agriculture, are not affected.',
+    fraudAngle:
+      'A small business — a single restaurant, shop or household — cannot bring in a group of low-wage foreign workers at one location. If a tiny employer is offering several low-wage LMIA jobs at the same place, the numbers do not add up.',
+    impact: 'important',
+    sourceLabel: 'ESDC — program requirements for low-wage positions',
+    sourceUrl:
+      'https://www.canada.ca/en/employment-social-development/services/foreign-workers/median-wage/low/requirements.html',
   },
   {
     date: '2026-07-17',

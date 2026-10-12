@@ -12,7 +12,7 @@ import {
   type PolicyImpact,
 } from '@/lib/policy-changes'
 
-const LAST_VERIFIED = '2026-10-11'
+const LAST_VERIFIED = '2026-10-12'
 
 export const metadata: Metadata = {
   title: 'LMIA Rule Changes 2026 — What Changed and What It Means',
