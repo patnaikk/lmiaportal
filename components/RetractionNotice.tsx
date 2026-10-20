@@ -7,8 +7,10 @@ interface Props {
 function formatLongDate(iso?: string | null) {
   if (!iso) return null
   try {
+    // Date-only values parse as UTC midnight; format in UTC or they show a
+    // day early west of Greenwich (all of Canada).
     return new Date(iso).toLocaleDateString('en-CA', {
-      year: 'numeric', month: 'long', day: 'numeric',
+      year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
     })
   } catch {
     return null

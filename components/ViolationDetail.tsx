@@ -11,8 +11,10 @@ interface Props {
 function formatLongDate(iso?: string | null) {
   if (!iso) return null
   try {
+    // Date-only values parse as UTC midnight; format in UTC or they show a
+    // day early west of Greenwich (all of Canada).
     return new Date(iso).toLocaleDateString('en-CA', {
-      year: 'numeric', month: 'long', day: 'numeric',
+      year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
     })
   } catch {
     return null
@@ -36,13 +38,14 @@ export default function ViolationDetail({ violators }: Props) {
   // Build the prose summary
   const employerName = v.business_operating_name
   const isBanned = v.compliance_status === 'INELIGIBLE_UNTIL' && banUntil
-  const hasUnpaidPenalty = v.compliance_status === 'INELIGIBLE_UNPAID' || v.compliance_status === 'INELIGIBLE'
+  const hasUnpaidPenalty = v.compliance_status === 'INELIGIBLE_UNPAID'
+  const isIneligible = v.compliance_status === 'INELIGIBLE'
 
   return (
     <div className="mt-4 card-elevated overflow-hidden">
       {/* Prose summary */}
       <div className="p-6 sm:p-7">
-        <h2 className="text-lg font-bold text-gray-900 mb-3">Why this employer was found non-compliant</h2>
+        <h2 className="text-lg font-bold text-gray-900 mb-3">Why {employerName}{hasDistinctLegalName ? ` (${v.business_legal_name})` : ''} was found non-compliant</h2>
 
         <p className="text-[15px] text-gray-700 leading-relaxed">
           {decisionDate ? <>On <span className="font-semibold text-gray-900">{decisionDate}</span>, the </> : 'The '}
@@ -53,6 +56,9 @@ export default function ViolationDetail({ violators }: Props) {
           )}
           {hasUnpaidPenalty && (
             <> They have an <span className="font-semibold text-red-600">outstanding monetary penalty</span> and are ineligible to hire temporary foreign workers until it is paid.</>
+          )}
+          {isIneligible && (
+            <> They are listed as <span className="font-semibold text-red-600">ineligible to hire</span> temporary foreign workers.</>
           )}
           {v.penalty_amount && (
             <> A fine of <span className="font-semibold text-gray-900">{v.penalty_amount}</span>{v.ban_duration ? <> and a <span className="font-semibold text-gray-900">{v.ban_duration}</span> hiring ban</> : ''} was issued.</>

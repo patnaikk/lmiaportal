@@ -268,7 +268,7 @@ export default async function ResultsContent({ employer, city, province, canonic
             banUntil={
               result.ban_end_date
                 ? new Date(result.ban_end_date).toLocaleDateString('en-CA', {
-                    year: 'numeric', month: 'long', day: 'numeric',
+                    year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
                   })
                 : null
             }

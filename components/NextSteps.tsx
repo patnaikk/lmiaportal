@@ -70,6 +70,7 @@ export default function NextSteps({ result }: Props) {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
+          timeZone: 'UTC',
         })
       : 'an active date'
     steps = [
@@ -101,7 +102,13 @@ export default function NextSteps({ result }: Props) {
     ]
   } else if (risk === 'RED') {
     steps = [
-      { icon: '1', text: 'This employer has an outstanding government penalty and cannot legally hire temporary workers' },
+      {
+        icon: '1',
+        text:
+          result.violatorMatches[0]?.compliance_status === 'INELIGIBLE_UNPAID'
+            ? 'This employer has an outstanding government penalty and cannot legally hire temporary workers'
+            : 'This employer is listed by the government as ineligible to hire temporary foreign workers',
+      },
       {
         icon: '2',
         text: (

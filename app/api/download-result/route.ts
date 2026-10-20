@@ -5,7 +5,7 @@ import { expandViolationReasons, VIOLATION_CODES } from '@/lib/violation-codes'
 
 function fmtDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-CA', {
-    year: 'numeric', month: 'long', day: 'numeric',
+    year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
   })
 }
 
@@ -41,6 +41,10 @@ export async function GET(request: NextRequest): Promise<Response> {
       GREY:   [100, 100, 100],
     }
     const badgeColor = COLORS[result.risk] || COLORS.GREY
+    // A possible match is a different, similarly named business. The report is
+    // headed with the name the user searched, so it must never read as that
+    // employer's violation record.
+    const possibleMatch = result.risk === 'YELLOW' && result.reason === 'possible_match'
 
     let y = M
 
@@ -110,7 +114,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     doc.setFontSize(13)
     doc.setFont('helvetica', 'bold')
     doc.setTextColor(255, 255, 255)
-    doc.text(LABELS[result.risk] || 'UNKNOWN', M + 6, y + 9)
+    doc.text(possibleMatch ? 'NO EXACT MATCH — VERIFY FURTHER' : LABELS[result.risk] || 'UNKNOWN', M + 6, y + 9)
     y += 20
 
     // Status summary
@@ -123,7 +127,12 @@ export async function GET(request: NextRequest): Promise<Response> {
     doc.setFontSize(9.5)
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(60, 60, 60)
-    const statusLines = doc.splitTextToSize(STATUS[result.risk] || '', CW)
+    const statusText = possibleMatch
+      ? result.violatorMatches.length > 0
+        ? 'This search is not an exact match for any employer on the government non-compliant employer list. A business with a similar name is listed below; it may be a different employer. Confirm the exact legal name on your offer.'
+        : 'No exact match was found. The closest government record has a different name and may be a different employer.'
+      : STATUS[result.risk] || ''
+    const statusLines = doc.splitTextToSize(statusText, CW)
     doc.text(statusLines, M, y)
     y += statusLines.length * 5 + 10
 
@@ -140,7 +149,7 @@ export async function GET(request: NextRequest): Promise<Response> {
       doc.setFontSize(9)
       doc.setFont('helvetica', 'bold')
       doc.setTextColor(120, 120, 120)
-      doc.text('GOVERNMENT VIOLATION RECORD', M, y)
+      doc.text(possibleMatch ? 'SIMILARLY NAMED RECORD — MAY BE A DIFFERENT EMPLOYER' : 'GOVERNMENT VIOLATION RECORD', M, y)
       y += 9
 
       // Operating name
@@ -187,7 +196,9 @@ export async function GET(request: NextRequest): Promise<Response> {
         ? `INELIGIBLE UNTIL ${v.ineligible_until_date ? fmtDate(v.ineligible_until_date) : ''}`
         : v.compliance_status === 'ELIGIBLE'
         ? 'ELIGIBLE (PREVIOUSLY PENALISED)'
-        : 'INELIGIBLE — UNPAID PENALTY'
+        : v.compliance_status === 'INELIGIBLE_UNPAID'
+        ? 'INELIGIBLE — UNPAID PENALTY'
+        : 'INELIGIBLE'
 
       doc.setFontSize(10.5)
       doc.setFont('helvetica', 'bold')

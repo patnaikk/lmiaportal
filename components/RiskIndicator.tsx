@@ -105,8 +105,17 @@ export default function RiskIndicator({ result }: Props) {
   // The name we show in the verdict card must be the matched GOVERNMENT RECORD
   // name, not the raw search term. Searching "Indian" must not render as
   // "Indian — Penalised"; it must render the actual matched business name.
+  // A trade name alone ("Tim Hortons") would tar every business using it, so
+  // name the legal entity ESDC listed alongside it.
+  const topViolator = result.violatorMatches[0]
+  const violatorName =
+    topViolator?.business_operating_name &&
+    topViolator.business_legal_name &&
+    topViolator.business_legal_name.toLowerCase().trim() !== topViolator.business_operating_name.toLowerCase().trim()
+      ? `${topViolator.business_operating_name} (${topViolator.business_legal_name})`
+      : topViolator?.business_operating_name
   const matchedName =
-    result.violatorMatches[0]?.business_operating_name ||
+    violatorName ||
     result.positiveMatches[0]?.employer_name ||
     employerQuery
 
@@ -176,7 +185,7 @@ export default function RiskIndicator({ result }: Props) {
     } else if (reason === 'possible_match') {
       verdict = 'Possible match'
       description = result.violatorMatches.length > 0
-        ? 'A business on the government’s non-compliant employer list has a name very close to your search. It may be a different employer, or the same one recorded under a slightly different spelling. Do not pay anything until you have confirmed which business your offer is from, using its exact legal name.'
+        ? 'Your search is not an exact match for anyone on the government’s non-compliant employer list, but a business with a similar name is on it. It may be a different employer — including another franchise of the same brand — or the same one recorded under a different spelling. Do not pay anything until you have confirmed which business your offer is from, using its exact legal name.'
         : 'We found no exact match for your search. The closest government record has a different name and may be a different employer. Check that this is the company on your offer before relying on it — if not, search again using the exact legal name.'
     } else if (reason === 'pr_only_stream') {
       verdict = 'Wrong stream'
@@ -221,13 +230,16 @@ export default function RiskIndicator({ result }: Props) {
     let description: ReactNode = ''
     if (isBannedTemporary && ban_end_date) {
       const formatted = new Date(ban_end_date).toLocaleDateString('en-CA', {
-        year: 'numeric', month: 'long', day: 'numeric',
+        year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
       })
       description = <>Found non-compliant and <span className="font-semibold text-gray-700">ineligible to hire</span> temporary foreign workers until <span className="font-semibold text-gray-700">{formatted}</span>. This ineligibility is active.</>
     } else if (isBannedTemporary) {
       description = 'Found non-compliant and ineligible to hire temporary foreign workers. This ineligibility is active.'
-    } else {
+    } else if (result.violatorMatches[0]?.compliance_status === 'INELIGIBLE_UNPAID') {
       description = 'Has an outstanding unpaid monetary penalty from the Canadian government and cannot hire temporary foreign workers until it is paid.'
+    } else {
+      // Plain "Ineligible" on the ESDC list says nothing about an unpaid penalty.
+      description = 'Found non-compliant and listed by the Government of Canada as ineligible to hire temporary foreign workers.'
     }
 
     return (

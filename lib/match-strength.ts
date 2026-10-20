@@ -51,6 +51,12 @@ const GENERIC_TOKENS = new Set([
   'welding', 'fabrication', 'fabricating', 'manufacturing', 'products',
   'technologies', 'technology', 'consulting', 'staffing', 'cleaning',
   'foods', 'food', 'auto', 'roofing', 'painting', 'landscaping', 'homes',
+  // recruiting and placement agencies, English and French: "Agence de placement
+  // en soins infirmiers" shares only these with "Agence de recrutement et de
+  // placement des employés Iris", a different, banned agency
+  'agence', 'agency', 'agencies', 'placement', 'placements', 'recrutement',
+  'recruitment', 'recruiting', 'employment', 'emploi', 'emplois', 'personnel',
+  'immigration', 'consultant', 'consultants',
 ])
 
 const CONNECTIVES = new Set([
@@ -213,6 +219,66 @@ export function isStrongNameMatch(
   if (wholeNameInside(query, q, candidate)) return true
   if (wholeNameInside(candidate, c, query)) return true
   return false
+}
+
+// Words that never tell two employers apart, so "Malwa Tires & Services" is
+// the same name as "Malwa Tires" and "Royal Hotel Group" the same as "Royal
+// Hotel". Deliberately far shorter than GENERIC_TOKENS: trade words stay, or
+// "Thind Transport" would be the same name as "Thind Construction".
+const DESCRIPTOR_TOKENS = new Set([
+  ...Array.from(CONNECTIVES),
+  'company', 'corporation', 'enterprise', 'enterprises', 'group', 'groupe',
+  'holding', 'holdings', 'international', 'service', 'services',
+])
+
+function nameKey(normalized: string): { key: string; words: number } {
+  const tokens = normalized.split(' ').filter((t) => t && !DESCRIPTOR_TOKENS.has(t)).map(singular)
+  return { key: tokens.join(''), words: tokens.length }
+}
+
+/**
+ * True only if `query` names the same employer as the record — the bar for
+ * calling a business non-compliant. isStrongNameMatch is not enough for that:
+ * containment, typos and dropped words let it pair "JJ Thind Transport" with
+ * "Thind Transport", "Sandhu Farm" with "Dhaliwal & Sandhu Farms", "Golden
+ * Food" with "Golden Koi Food" and "Neels Nurseries" with "Peels Nurseries".
+ * Those are possible matches to show with a caveat, never a verdict.
+ *
+ * Allowed differences: legal suffixes, punctuation, spacing, plurals, the
+ * descriptor words above, and letters lost in transit — accented letters
+ * ("r sidence" for "Résidence") and apostrophes split into a stray "s"
+ * ("selyan s flooring" for "Selyan’s Flooring").
+ */
+export function isSameEmployerName(
+  query: string,
+  candidate: string | null | undefined,
+  candidateRaw?: string | null
+): boolean {
+  if (!query || !candidate) return false
+  const variants: string[] = [candidate]
+  if (candidateRaw) {
+    variants.push(
+      normalizeEmployerName(candidateRaw.replace(/[^\x00-\x7F]/g, '')),
+      normalizeEmployerName(candidateRaw.replace(/[’']/g, ' ')),
+      normalizeEmployerName(candidateRaw.replace(/[’']/g, ' ').replace(/[^\x00-\x7F]/g, ''))
+    )
+  }
+  const q = nameKey(query)
+  return variants.some((v) => {
+    if (!v) return false
+    if (compact(v) === compact(query)) return true
+    // Equal once descriptors are dropped — but a lone remaining word is too
+    // thin to rest an accusation on ("ABC Services" vs "ABC Group").
+    const c = nameKey(v)
+    return c.key === q.key && q.words >= 2 && c.words >= 2
+  })
+}
+
+/** Distinctive words the two names have in common. */
+export function sharedDistinctiveTokens(query: string, candidate: string | null | undefined): number {
+  if (!candidate) return 0
+  const c = new Set(distinctiveTokens(candidate).map(singular))
+  return Array.from(new Set(distinctiveTokens(query).map(singular))).filter((t) => c.has(t)).length
 }
 
 /**

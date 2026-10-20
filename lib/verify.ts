@@ -1,6 +1,11 @@
 import { supabase, supabaseAdmin } from './supabase'
 import { normalizeEmployerName } from './normalize'
-import { isStrongNameMatch, isNearIdenticalName } from './match-strength'
+import {
+  isStrongNameMatch,
+  isNearIdenticalName,
+  isSameEmployerName,
+  sharedDistinctiveTokens,
+} from './match-strength'
 import type { VerifyResult, PositiveLmia, ViolatorRecord } from './types'
 
 // DB stores full province names; the UI sends 2-letter codes.
@@ -135,15 +140,74 @@ export async function verifyEmployer(
   }
 
   // The searches above are deliberately loose, so they also return unrelated
-  // companies that merely share a word. Only a strong name match may produce a
-  // RED; weak ones are held back and, if nothing better turns up, reported as
-  // a "possible match" rather than accusing an employer the user never named.
+  // companies that merely share a word. Never call a business non-compliant
+  // unless the user typed that record's own name. Three tiers:
+  //   same name           → the verdict below (RED, or YELLOW if now eligible)
+  //   close (strong) name → "possible match", shown with a caveat
+  //   anything looser     → shown as a possible match only if it shares two
+  //                         distinctive words and nothing better turns up
   const isStrongViolator = (v: ViolatorRecord) =>
     isStrongNameMatch(normalized, v.employer_normalized, v.business_operating_name) ||
     isStrongNameMatch(normalized, v.legal_name_normalized, v.business_legal_name)
-  const weakViolatorMatches = violatorMatches.filter((v) => !isStrongViolator(v))
-  violatorMatches = violatorMatches.filter(isStrongViolator)
-  retractedMatches = retractedMatches.filter(isStrongViolator)
+  const matchesLegalName = (v: ViolatorRecord) =>
+    isSameEmployerName(normalized, v.legal_name_normalized, v.business_legal_name)
+  const matchesOperatingName = (v: ViolatorRecord) =>
+    isSameEmployerName(normalized, v.employer_normalized, v.business_operating_name)
+  let sameName = violatorMatches.filter((v) => matchesLegalName(v) || matchesOperatingName(v))
+
+  // A shared trade name is not the same employer. ESDC lists franchisees by
+  // the brand they trade as — two numbered companies "operating as" Tim
+  // Hortons — so a search for "Tim Hortons" must not call every Tim Hortons
+  // banned. When the search matches only the trade name, and other employers
+  // trade under it too (approved LMIAs, or other legal entities on this list),
+  // report a possible match and let the legal name settle it.
+  const tradeNameOnly = sameName.filter((v) => !matchesLegalName(v))
+  if (tradeNameOnly.length > 0) {
+    const tradeNames = Array.from(new Set(tradeNameOnly.map((v) => v.employer_normalized)))
+    const [{ data: approved, error: approvedErr }, { data: listed, error: listedErr }] = await Promise.all([
+      supabase.from('positive_lmia').select('employer_normalized').in('employer_normalized', tradeNames).limit(1),
+      supabase
+        .from('violators')
+        .select('employer_normalized,legal_name_normalized')
+        .in('employer_normalized', tradeNames)
+        .is('removed_from_source', null),
+    ])
+    guard(approvedErr)
+    guard(listedErr)
+    const shared = new Set<string>((approved ?? []).map((r) => r.employer_normalized))
+    const legalNames = new Map<string, Set<string>>()
+    for (const r of listed ?? []) {
+      if (!legalNames.has(r.employer_normalized)) legalNames.set(r.employer_normalized, new Set())
+      legalNames.get(r.employer_normalized)!.add(r.legal_name_normalized)
+    }
+    legalNames.forEach((names, trade) => {
+      if (names.size > 1) shared.add(trade)
+    })
+    // A failed lookup must not hand out a RED it could not justify.
+    const lookupFailed = !!approvedErr || !!listedErr
+    sameName = sameName.filter(
+      (v) => matchesLegalName(v) || (!lookupFailed && !shared.has(v.employer_normalized))
+    )
+  }
+
+  const closeViolatorMatches = violatorMatches.filter((v) => !sameName.includes(v) && isStrongViolator(v))
+  const weakViolatorMatches = violatorMatches.filter(
+    (v) =>
+      !sameName.includes(v) &&
+      !isStrongViolator(v) &&
+      (Math.max(
+        sharedDistinctiveTokens(normalized, v.employer_normalized),
+        sharedDistinctiveTokens(normalized, v.legal_name_normalized)
+      ) >= 2 ||
+        isNearIdenticalName(normalized, v.employer_normalized) ||
+        isNearIdenticalName(normalized, v.legal_name_normalized))
+  )
+  violatorMatches = sameName
+  retractedMatches = retractedMatches.filter(
+    (v) =>
+      isSameEmployerName(normalized, v.employer_normalized, v.business_operating_name) ||
+      isSameEmployerName(normalized, v.legal_name_normalized, v.business_legal_name)
+  )
 
   if (violatorMatches.length > 0) {
     // Evaluate worst compliance status across all matches (not just first).
@@ -156,6 +220,23 @@ export async function verifyEmployer(
     // Ensure the worst match is first so the UI displays it prominently.
     if (v !== violatorMatches[0]) {
       violatorMatches = [v, ...violatorMatches.filter((m) => m !== v)]
+    }
+
+    // Another employer trading under the same name is still ineligible (the
+    // eligible "Basil Pasta Bar Corp." and the banned Domb Enterprises, both
+    // "Basil Pasta Bar"). Don't let the clean record hide it.
+    const ineligibleNamesakes = closeViolatorMatches.filter((m) => m.compliance_status !== 'ELIGIBLE')
+    if (v.compliance_status === 'ELIGIBLE' && ineligibleNamesakes.length > 0) {
+      await logSearch(employerName, city, province, 'YELLOW', undefined, origin)
+      return {
+        risk: 'YELLOW',
+        reason: 'possible_match',
+        positiveMatches: [],
+        violatorMatches: [...ineligibleNamesakes, ...violatorMatches],
+        retractedMatches,
+        source: 'violators',
+        employerQuery: employerName,
+      }
     }
 
     if (v.compliance_status === 'ELIGIBLE') {
@@ -258,8 +339,13 @@ export async function verifyEmployer(
   }
 
   // Same rule for approvals: a weak match must not produce a GREEN.
+  // A "possible match" must at least share a distinctive word: "Agence de
+  // placement en soins infirmiers" has nothing in common with "Agence de
+  // communication Gipsy" beyond "agence de".
   const weakPositiveMatches = positiveMatches.filter(
-    (m) => !isStrongNameMatch(normalized, m.employer_normalized, m.employer_name)
+    (m) =>
+      !isStrongNameMatch(normalized, m.employer_normalized, m.employer_name) &&
+      sharedDistinctiveTokens(normalized, m.employer_normalized) >= 1
   )
   positiveMatches = positiveMatches.filter((m) =>
     isStrongNameMatch(normalized, m.employer_normalized, m.employer_name)
@@ -269,18 +355,21 @@ export async function verifyEmployer(
   // an approved one: "Randhawa Farms" is approved, "Randhava Farms" is banned,
   // and they may be the same business spelled two ways. Report the possible
   // match with the banned record first instead of a plain GREEN.
+  // The same goes for a close name that fell short of the same name ("Tim
+  // Hortons" when the banned record is one franchisee trading as Tim Hortons).
   const nearIdenticalViolators = weakViolatorMatches.filter(
     (v) =>
       isNearIdenticalName(normalized, v.employer_normalized) ||
       isNearIdenticalName(normalized, v.legal_name_normalized)
   )
-  if (positiveMatches.length > 0 && nearIdenticalViolators.length > 0) {
+  const possibleViolators = [...closeViolatorMatches, ...nearIdenticalViolators]
+  if (possibleViolators.length > 0) {
     await logSearch(employerName, city, province, 'YELLOW', undefined, origin)
     return {
       risk: 'YELLOW',
       reason: 'possible_match',
       positiveMatches: [],
-      violatorMatches: nearIdenticalViolators,
+      violatorMatches: possibleViolators,
       retractedMatches,
       source: 'violators',
       employerQuery: employerName,
