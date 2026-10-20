@@ -3,6 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase'
 import { normalizeEmployerName } from '@/lib/normalize'
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const RISKS = ['GREEN', 'YELLOW', 'RED', 'GREY']
 
 export async function POST(request: NextRequest) {
   let body: {
@@ -10,6 +11,8 @@ export async function POST(request: NextRequest) {
     employer_query?: string
     employer_normalized?: string
     last_result?: string
+    city?: string
+    province?: string
   }
 
   try {
@@ -18,7 +21,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
   }
 
-  const { email, employer_query, last_result } = body
+  const { email, employer_query } = body
+  // The cron emails whenever this differs from a fresh verdict, so anything that
+  // isn't a real verdict would trigger a bogus "Unknown → …" alert.
+  const last_result = body.last_result && RISKS.includes(body.last_result) ? body.last_result : null
+  const city = body.city?.trim().slice(0, 120) || null
+  const province = body.province?.trim().slice(0, 40) || null
 
   if (!email || !EMAIL_REGEX.test(email)) {
     return NextResponse.json({ error: 'Valid email address required' }, { status: 400 })
@@ -63,12 +71,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true })
   }
 
-  const { error } = await supabaseAdmin.from('search_subscriptions').insert({
+  const row = {
     email: email.toLowerCase().trim(),
     employer_query,
     employer_normalized,
-    last_result: last_result || null,
-  })
+    last_result,
+  }
+  // city/province arrive with 20261017_alert_subscription_context.sql. Until that
+  // has run, save the watch without them rather than losing the signup.
+  let { error } = await supabaseAdmin.from('search_subscriptions').insert({ ...row, city, province })
+  if (error?.code === 'PGRST204') {
+    ;({ error } = await supabaseAdmin.from('search_subscriptions').insert(row))
+  }
 
   if (error) {
     console.error('Subscribe insert error:', error)

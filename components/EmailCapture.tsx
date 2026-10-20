@@ -8,9 +8,11 @@ interface Props {
   employerQuery: string
   employerNormalized: string
   lastResult: RiskResult
+  city?: string
+  province?: string
 }
 
-export default function EmailCapture({ employerQuery, employerNormalized, lastResult }: Props) {
+export default function EmailCapture({ employerQuery, employerNormalized, lastResult, city, province }: Props) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -32,6 +34,8 @@ export default function EmailCapture({ employerQuery, employerNormalized, lastRe
           employer_query: employerQuery,
           employer_normalized: employerNormalized,
           last_result: lastResult,
+          city,
+          province,
         }),
       })
 

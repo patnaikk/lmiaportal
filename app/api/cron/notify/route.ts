@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { supabaseAdmin } from '@/lib/supabase'
 import { verifyEmployer } from '@/lib/verify'
+import { normalizeEmployerName } from '@/lib/normalize'
 import { alertUnsubscribeUrl, allAlertsUnsubscribeUrl } from '@/lib/unsubscribe'
 import type { VerifyResult } from '@/lib/types'
 
@@ -17,9 +18,25 @@ const FROM = process.env.ALERT_FROM || process.env.NEWSLETTER_FROM || process.en
 // whatever genuinely changed since. ?dryRun=1 still works for testing.
 const ALERTS_START = Date.parse('2026-11-01T00:00:00-04:00')
 
-// verifyEmployer makes several Supabase round-trips; run a handful at once so
-// ~100 subscriptions finish well inside maxDuration.
+// verifyEmployer makes several Supabase round-trips; run a handful at once.
 const VERIFY_CONCURRENCY = 6
+
+// Vercel kills the function at maxDuration, and a run killed mid-verify sends
+// nothing at all — every day, silently. So verification stops starting new work
+// after this budget and the rest of the minute goes to sending. Watches are
+// checked least-recently-checked first, so a list too long for one run is
+// covered over the next few days instead of never. (Measured 2026-10-17: ~0.3 s
+// per watch, so roughly 110 distinct searches per run.)
+const VERIFY_BUDGET_MS = 35_000
+
+// A real week of ESDC updates moves a handful of watches. A large share moving at
+// once means our data or matching changed (a reload, a half-finished sync, a
+// verify.ts edit), and emailing on it would tell people things that aren't true.
+// Above this the run sends nothing and emails the admin; ?force=1 overrides.
+const BREAKER_MIN_CHANGES = 10
+const BREAKER_SHARE = 0.2
+
+const PAGE = 1000 // PostgREST's silent row cap
 
 const STATUS_LABEL: Record<string, string> = {
   GREEN: 'Has approved LMIAs (Green)',
@@ -43,6 +60,8 @@ type Subscription = {
   email: string
   employer_query: string
   last_result: string | null
+  city?: string | null
+  province?: string | null
 }
 
 type Change = { sub: Subscription; newStatus: string; matched: string | null }
@@ -59,55 +78,133 @@ function describeMatch(result: VerifyResult): string | null {
   return null
 }
 
-// Vercel Cron (see vercel.json) hits this daily. Re-verifies every active subscription
-// and emails each subscriber ONE digest listing only the employers whose risk result
+// Same search, same verdict: one person can watch 76 employers and several people
+// can watch the same one, so each distinct question is verified once.
+function searchKey(sub: Subscription): string {
+  return [normalizeEmployerName(sub.employer_query), sub.city ?? '', sub.province ?? ''].join('|').toLowerCase()
+}
+
+// Every active watch, least recently checked first. Falls back to the pre-migration
+// columns (and id order) until 20261017_alert_subscription_context.sql has run.
+async function loadSubscriptions(): Promise<{ subs: Subscription[]; hasContext: boolean }> {
+  const fetchAll = async (columns: string, rotate: boolean) => {
+    const rows: Subscription[] = []
+    for (let from = 0; ; from += PAGE) {
+      let q = supabaseAdmin.from('search_subscriptions').select(columns).is('unsubscribed_at', null)
+      if (rotate) q = q.order('last_checked_at', { ascending: true, nullsFirst: true })
+      const { data, error } = await q.order('id').range(from, from + PAGE - 1)
+      if (error) return { rows, error }
+      rows.push(...((data ?? []) as unknown as Subscription[]))
+      if (!data || data.length < PAGE) return { rows, error: null }
+    }
+  }
+  const base = 'id, email, employer_query, last_result'
+  const withContext = await fetchAll(`${base}, city, province, last_checked_at`, true)
+  if (!withContext.error) return { subs: withContext.rows, hasContext: true }
+  if (withContext.error.code !== '42703') throw withContext.error
+  const plain = await fetchAll(base, false)
+  if (plain.error) throw plain.error
+  return { subs: plain.rows, hasContext: false }
+}
+
+async function markChecked(ids: number[], extra: Record<string, unknown> = {}) {
+  const now = new Date().toISOString()
+  for (let i = 0; i < ids.length; i += 200) {
+    const { error } = await supabaseAdmin
+      .from('search_subscriptions')
+      .update({ last_checked_at: now, ...extra })
+      .in('id', ids.slice(i, i + 200))
+    if (error) console.error('cron/notify: could not mark subscriptions checked', error)
+  }
+}
+
+async function notifyAdmin(resend: Resend | null, subject: string, body: string) {
+  console.error(`cron/notify: ${subject}\n${body}`)
+  const to = process.env.SYNC_EMAIL_TO
+  if (!resend || !to) return
+  try {
+    await resend.emails.send({ from: FROM, to, subject: `[LMIA Check] ${subject}`, text: body })
+  } catch (err) {
+    console.error('cron/notify: admin email failed', err)
+  }
+}
+
+// Vercel Cron (see vercel.json) hits this daily. Re-verifies active subscriptions and
+// emails each subscriber ONE digest listing only the employers whose risk result
 // changed since we last told them.
 //
 // Add ?dryRun=1 to see what would be sent without sending anything or updating rows.
 export async function GET(request: NextRequest) {
+  const startedAt = Date.now()
   if (!process.env.CRON_SECRET || request.headers.get('authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   const dryRun = request.nextUrl.searchParams.get('dryRun') === '1'
+  const force = request.nextUrl.searchParams.get('force') === '1'
 
   if (!dryRun && Date.now() < ALERTS_START) {
     return NextResponse.json({ ok: true, skipped: 'alerts start 2026-11-01' })
   }
 
-  const { data: subscriptions, error } = await supabaseAdmin
-    .from('search_subscriptions')
-    .select('id, email, employer_query, last_result')
-    .is('unsubscribed_at', null)
-    .order('id')
+  if (!dryRun && !process.env.RESEND_API_KEY) {
+    return NextResponse.json({ error: 'RESEND_API_KEY not set' }, { status: 500 })
+  }
+  const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
-  if (error) {
+  let subs: Subscription[]
+  let hasContext: boolean
+  try {
+    ;({ subs, hasContext } = await loadSubscriptions())
+  } catch (error) {
     console.error('cron/notify: DB fetch error', error)
     return NextResponse.json({ error: 'DB error' }, { status: 500 })
   }
 
-  if (!dryRun && !process.env.RESEND_API_KEY) {
-    return NextResponse.json({ error: 'RESEND_API_KEY not set' }, { status: 500 })
+  // 1. Re-verify each distinct search, a few at a time, until the budget runs out.
+  //    A failed verify (strict mode throws on any DB error) leaves its watches
+  //    untouched so they are retried next run, never reported as a change.
+  const groups = new Map<string, Subscription[]>()
+  for (const sub of subs) {
+    const key = searchKey(sub)
+    groups.set(key, [...(groups.get(key) ?? []), sub])
   }
-
-  // 1. Re-verify everything, a few at a time.
-  const subs = (subscriptions ?? []) as Subscription[]
-  const changes: Change[] = []
+  const keys = Array.from(groups.keys())
+  const results = new Map<string, VerifyResult>()
   let failed = 0
-  for (let i = 0; i < subs.length; i += VERIFY_CONCURRENCY) {
-    const batch = subs.slice(i, i + VERIFY_CONCURRENCY)
-    const results = await Promise.allSettled(
-      batch.map((sub) => verifyEmployer(sub.employer_query, undefined, undefined, 'cron'))
+  let attempted = 0
+  while (attempted < keys.length && Date.now() - startedAt < VERIFY_BUDGET_MS) {
+    const batch = keys.slice(attempted, attempted + VERIFY_CONCURRENCY)
+    attempted += batch.length
+    const settled = await Promise.allSettled(
+      batch.map((key) => {
+        const sub = groups.get(key)![0]
+        return verifyEmployer(sub.employer_query, sub.city ?? undefined, sub.province ?? undefined, 'cron')
+      })
     )
-    results.forEach((r, j) => {
-      const sub = batch[j]
-      if (r.status === 'rejected') {
+    settled.forEach((r, j) => {
+      if (r.status === 'fulfilled') results.set(batch[j], r.value)
+      else {
         failed++
-        console.error(`cron/notify: verify failed for subscription ${sub.id}`, r.reason)
-      } else if (r.value.risk !== sub.last_result) {
-        changes.push({ sub, newStatus: r.value.risk, matched: describeMatch(r.value) })
+        console.error(`cron/notify: verify failed for "${batch[j]}"`, r.reason)
       }
     })
   }
+
+  const changes: Change[] = []
+  const unchangedIds: number[] = []
+  let checked = 0
+  results.forEach((result, key) => {
+    for (const sub of groups.get(key)!) {
+      checked++
+      if (result.risk !== sub.last_result) {
+        changes.push({ sub, newStatus: result.risk, matched: describeMatch(result) })
+      } else {
+        unchangedIds.push(sub.id)
+      }
+    }
+  })
+  // Watches the budget didn't reach this run; they are first in line next run.
+  const notReached = keys.slice(attempted).reduce((n, k) => n + groups.get(k)!.length, 0)
 
   // 2. One email per recipient.
   const byEmail = new Map<string, Change[]>()
@@ -117,13 +214,24 @@ export async function GET(request: NextRequest) {
     byEmail.set(c.sub.email, list)
   }
 
+  const tripped = changes.length >= BREAKER_MIN_CHANGES && changes.length > checked * BREAKER_SHARE
+  const summary = {
+    watches: subs.length,
+    searches: keys.length,
+    checked,
+    notReached,
+    failed,
+    changed: changes.length,
+    recipients: byEmail.size,
+    breaker: tripped ? (force ? 'overridden' : 'tripped') : 'ok',
+    migrated: hasContext,
+  }
+
   if (dryRun) {
     return NextResponse.json({
       ok: true,
       dryRun: true,
-      checked: subs.length,
-      failed,
-      recipients: byEmail.size,
+      ...summary,
       changes: changes.map((c) => ({
         id: c.sub.id,
         employer: c.sub.employer_query,
@@ -134,7 +242,21 @@ export async function GET(request: NextRequest) {
     })
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY)
+  if (tripped && !force) {
+    const sample = changes
+      .slice(0, 25)
+      .map((c) => `#${c.sub.id} ${c.sub.employer_query}: ${c.sub.last_result} -> ${c.newStatus}`)
+      .join('\n')
+    await notifyAdmin(
+      resend,
+      `Alert run held: ${changes.length} of ${checked} watches changed at once`,
+      `Nothing was sent and no subscription was updated. This many changes in one run usually means the data or matching changed, not the employers.\n\nCheck with ?dryRun=1. If the changes are real, re-run with ?force=1. If they are not, set last_result to the new verdicts (the baseline) before the next run.\n\n${sample}`
+    )
+    return NextResponse.json({ ok: false, held: true, ...summary }, { status: 409 })
+  }
+
+  if (hasContext) await markChecked(unchangedIds)
+
   let emailed = 0
   for (const [email, list] of Array.from(byEmail)) {
     try {
@@ -146,7 +268,7 @@ export async function GET(request: NextRequest) {
           ? `Status change: ${list[0].sub.employer_query}`
           : `Status changes for ${list.length} employers you're watching`
 
-      const { error: sendError } = await resend.emails.send({
+      const { error: sendError } = await resend!.emails.send({
         from: FROM,
         to: email,
         subject,
@@ -161,10 +283,13 @@ export async function GET(request: NextRequest) {
       // Only advance last_result once the subscriber has actually been told,
       // so a failed send is retried on the next run.
       for (const c of list) {
-        await supabaseAdmin
+        const { error } = await supabaseAdmin
           .from('search_subscriptions')
-          .update({ last_result: c.newStatus })
+          .update(hasContext ? { last_result: c.newStatus, last_checked_at: new Date().toISOString() } : { last_result: c.newStatus })
           .eq('id', c.sub.id)
+        // The email went out; if this write is lost the same change is sent again
+        // tomorrow. Log it loudly rather than silently repeating ourselves.
+        if (error) console.error(`cron/notify: sent but could not record subscription ${c.sub.id}`, error)
       }
       emailed++
     } catch (err) {
@@ -172,7 +297,11 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  return NextResponse.json({ ok: true, checked: subs.length, failed, changed: changes.length, emailed })
+  if (failed > 0 && failed >= attempted / 4) {
+    await notifyAdmin(resend, `Alert run: ${failed} of ${attempted} verifications failed`, 'Those watches were skipped and will be retried next run. Check Supabase health and the Vercel function logs.')
+  }
+
+  return NextResponse.json({ ok: true, ...summary, emailed })
 }
 
 const COLOR: Record<string, string> = { GREEN: '#16a34a', YELLOW: '#d97706', RED: '#dc2626', GREY: '#6b7280' }
@@ -241,7 +370,7 @@ function buildEmail(list: Change[], unsubAllUrl: string): string {
           <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.6">
             You asked to be told when the status of ${list.length === 1 ? 'this employer' : 'these employers'} changes on
             <a href="${SITE_URL}" style="color:#9ca3af">lmiacheck.ca</a> — a free tool to help foreign workers verify Canadian employer legitimacy.
-            Status is re-checked daily against official ESDC records.
+            Status is re-checked regularly against official ESDC records.
             <br>
             <a href="${unsubAllUrl}" style="color:#9ca3af">Unsubscribe from all employer alerts</a>
           </p>

@@ -43,6 +43,15 @@ export async function verifyEmployer(
 ): Promise<VerifyResult> {
   const normalized = normalizeEmployerName(employerName)
 
+  // The alert cron compares this verdict with the last one a subscriber was told,
+  // so it must never mistake a database error for "no match" — that would turn a
+  // Supabase hiccup into a wave of false status-change emails. Interactive callers
+  // keep the old forgiving behaviour.
+  const strict = origin === 'cron'
+  const guard = (error: unknown) => {
+    if (strict && error) throw error
+  }
+
   // Matches ESDC has since pulled from its published list. Collected below and
   // returned for transparency, but never allowed to influence `risk`.
   let retractedMatches: ViolatorRecord[] = []
@@ -65,22 +74,25 @@ export async function verifyEmployer(
       query_normalized: normalized,
       sim_threshold: 0.65,
     })
+    guard(error)
     if (!error && data) {
       violatorMatches = data as ViolatorRecord[]
     }
-  } catch {
+  } catch (e) {
+    guard(e)
     // RPC not available — skip to ILIKE below
   }
   // Always run ILIKE contains search as a supplement.
   // Searches BOTH operating name and legal name so "2771482 Ontario Inc" finds the record.
   // Order by exact prefix match first, then by name length (shorter = closer match).
   if (violatorMatches.length === 0) {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('violators')
       .select('*')
       .or(`employer_normalized.ilike.%${normalized}%,legal_name_normalized.ilike.%${normalized}%`)
       .order('employer_normalized', { ascending: true })
       .limit(5)
+    guard(error)
     violatorMatches = (data as ViolatorRecord[]) || []
   }
   // Truncation fallback for violators: drop trailing descriptor words one at a time.
@@ -93,16 +105,18 @@ export async function verifyEmployer(
         query_normalized: shorter,
         sim_threshold: 0.65,
       })
+      guard(rpcErr)
       if (!rpcErr && rpcData?.length) {
         violatorMatches = rpcData as ViolatorRecord[]
         break
       }
-      const { data: ilikeData } = await supabase
+      const { data: ilikeData, error: ilikeErr } = await supabase
         .from('violators')
         .select('*')
         .or(`employer_normalized.ilike.%${shorter}%,legal_name_normalized.ilike.%${shorter}%`)
         .order('employer_normalized', { ascending: true })
         .limit(5)
+      guard(ilikeErr)
       if (ilikeData?.length) {
         violatorMatches = ilikeData as ViolatorRecord[]
         break
@@ -192,21 +206,24 @@ export async function verifyEmployer(
       query_normalized: normalized,
       sim_threshold: 0.55,
     })
+    guard(error)
     if (!error && data) {
       positiveMatches = data as PositiveLmia[]
     }
-  } catch {
+  } catch (e) {
+    guard(e)
     // RPC not available — skip to ILIKE below
   }
   // ILIKE fallback: catches partial/short matches the trigram RPC misses (e.g. "amazon").
   // NOTE: positive_lmia has no legal_name_normalized column — search employer_normalized only.
   if (positiveMatches.length === 0) {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('positive_lmia')
       .select('*')
       .ilike('employer_normalized', `%${normalized}%`)
       .order('quarter', { ascending: false })
       .limit(20)
+    guard(error)
     positiveMatches = (data as PositiveLmia[]) || []
   }
 
@@ -221,16 +238,18 @@ export async function verifyEmployer(
         query_normalized: shorter,
         sim_threshold: 0.55,
       })
+      guard(rpcErr)
       if (!rpcErr && rpcData?.length) {
         positiveMatches = rpcData as PositiveLmia[]
         break
       }
-      const { data: ilikeData } = await supabase
+      const { data: ilikeData, error: ilikeErr } = await supabase
         .from('positive_lmia')
         .select('*')
         .ilike('employer_normalized', `%${shorter}%`)
         .order('quarter', { ascending: false })
         .limit(20)
+      guard(ilikeErr)
       if (ilikeData?.length) {
         positiveMatches = ilikeData as PositiveLmia[]
         break

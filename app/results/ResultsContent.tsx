@@ -256,6 +256,8 @@ export default async function ResultsContent({ employer, city, province, canonic
           employerQuery={employer}
           employerNormalized={employerNormalized}
           lastResult={result.risk}
+          city={city}
+          province={province}
         />
 
         {/* Ready-to-send templates — all result types */}
